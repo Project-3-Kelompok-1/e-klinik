@@ -15,7 +15,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+// Route::post('/register', [AkunController::class, 'register']);
+Route::controller(AkunController::class)->group(function () {
+    Route::post("/register", 'register');
+    Route::post("/login", 'login');
 });
-Route::post('/register', [AkunController::class, 'register']);
+// Route::middleware('auth:sanctum')->group(function(){
+//     Route::get("/user", function(){
+//         return response()->json([
+//             'message' => "Hello Wolrd"
+//         ]);
+//     });
+// });
+Route::get("/hello", function(){
+    return response()->json([
+        'message' => "Hello World"
+    ]);
+});

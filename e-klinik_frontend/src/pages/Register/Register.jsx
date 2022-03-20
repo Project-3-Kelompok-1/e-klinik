@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { DOMAIN_SERVER } from "../../config";
 const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [konfirmasiPassword, setKonfirmasiPassword] = useState('');
-    const url = 'http://127.0.0.1:8000/api/register';
+    const url = DOMAIN_SERVER + '/api/register';
     const submitForm = async (e) => {
         e.preventDefault();
         if (!username || !password || !konfirmasiPassword) {
@@ -22,7 +23,8 @@ const Register = () => {
             method: 'POST',
             body: JSON.stringify(data),
             headers: new Headers({
-                'Content-type': 'application/json; charset=UTF-8'
+                'Content-type': 'application/json; charset=UTF-8',
+                'Accept': 'application/json',
             })
         };
         let response = await fetch(url, fetchData);
@@ -47,7 +49,7 @@ const Register = () => {
 
             alert("Pendaftaran sukses");
         }
-        // console.log(result.status);
+        // console.log(response);
     }
     return (
         <div>

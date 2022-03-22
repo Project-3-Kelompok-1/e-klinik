@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('pasien', function (Blueprint $table) {
 
-            $table->string('nik')->unique();
+            $table->string('nik')->primary();
             $table->foreignId('id_user');
             $table->string('nama_depan');
             $table->string('nama_belakang');

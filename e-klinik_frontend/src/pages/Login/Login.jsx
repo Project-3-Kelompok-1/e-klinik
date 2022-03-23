@@ -9,6 +9,9 @@ const Login = () => {
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     useEffect(() => {
+        document.title = "Dr Rezka - Login"
+    }, [])
+    useEffect(() => {
         let isCancelled = false;
         if (user?.role === 'resepsionis') {
             navigate('/resepsionis');

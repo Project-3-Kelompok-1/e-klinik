@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Dashboard from "../../../components/Layouts/Dashoard/Dashboard";
 import { DOMAIN_SERVER } from "../../../config";
 import { UserContext } from "../../../Helpers/Context";
 const Resepsionis = () => {
@@ -18,13 +19,15 @@ const Resepsionis = () => {
             }
         }
     }, [user])
-    // useEffect(()=>{
-    //     console.log(user);
-    // }, [setUser, user])
+
     return (
-        <div>
-            Halaman Resepsionis
-        </div>
+        <Dashboard
+            halaman="Dashboard Resepsionis"
+        >
+            <div>
+                Halaman Resepsionis
+            </div>
+        </Dashboard>
     )
 }
 export default Resepsionis;

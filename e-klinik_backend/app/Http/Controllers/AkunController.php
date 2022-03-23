@@ -23,7 +23,7 @@ class AkunController extends Controller
             return response()->json([
                 'status' => 'failed',
                 'errors' => $validator->failed()
-            ]);
+            ], 400);
         }
         $validated = $validator->validated();
         $user = new User();

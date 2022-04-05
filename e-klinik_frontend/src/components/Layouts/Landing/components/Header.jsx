@@ -49,7 +49,8 @@ const Header = ({ active }) => {
                                     <a className="nav-link" href="contact.html">Contact</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="btn btn-primary ml-lg-3" href="#">Login / Register</a>
+                                    {/* <a className="btn btn-primary ml-lg-3" href="#">Login / Register</a> */}
+                                    <NavLink className="btn btn-primary ml-lg-3" to="/login">Login / Register</NavLink>
                                 </li>
                             </ul>
                         </div>

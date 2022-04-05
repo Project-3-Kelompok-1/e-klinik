@@ -264,7 +264,7 @@ a.text-dark:hover, a.text-dark:focus {
 /* Buttons */
 .btn-primary {
   color: #fff;
-  background-color: #00D9A5;
+  background-color: #1976d2;
   border-color: transparent;
 }
 
@@ -1700,7 +1700,7 @@ a.text-dark:hover, a.text-dark:focus {
 
 .banner-home {
   padding: 0;
-  background-color: #00D9A5;
+  background-color: #1976d2;
   color: #fff;
 }
 

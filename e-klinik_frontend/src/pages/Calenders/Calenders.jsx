@@ -3,6 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid"
+import { Button } from "@mui/material";
 const Calenders = () => {
     return (
         <>
@@ -14,11 +15,14 @@ const Calenders = () => {
                         title: 'Event 1', date: '2022-03-24'
                     }
                 ]}
-                
+                weekends={false}
                 dateClick={(arg) => {
                     alert(arg.dateStr)
                 }}
                 eventContent={EventContent}
+                eventMouseEnter={(info) => {
+                    alert(info.event.title);
+                }}
             />
         </>
     )

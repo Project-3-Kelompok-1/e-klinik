@@ -13,8 +13,10 @@ class Dokter extends Model
         'nama_depan',
         'nama_belakang',
         'jenis_kelamin',
+        'tempat_lahir',
+        'alamat',
+        'tgl_lahir',
         'no_hp',
-        'no_wa',
         'foto_dokter'
     ];
 }

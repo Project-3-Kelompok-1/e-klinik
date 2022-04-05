@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Helpers/Context";
 
 // Import Image Assets
@@ -19,16 +19,27 @@ import appStore from "../assets/img/app_store.svg"
 
 import Landing from "../../components/Layouts/Landing/Landing";
 import Calenders from "../Calenders/Calenders";
+import { DOMAIN_SERVER } from "../../config";
 
 const Home = () => {
+    const [hello, setHello] = useState(null);
     const { user } = useContext(UserContext);
+    const fetchHello = async () => {
+        let response = await fetch(DOMAIN_SERVER + '/api/hello')
+        response = await response.json()
+        setHello(response);
+    }
     useEffect(() => {
         document.title = "Klinik Dokter Rezka"
+        fetchHello();
     }, [])
     useEffect(() => {
         console.log(user);
     }, [user])
 
+    useEffect(() => {
+        console.log(hello);
+    }, [hello])
     return (
         <>
             <Landing halaman="home">
@@ -80,91 +91,10 @@ const Home = () => {
                         <div className="container">
                             <h1 className="text-center mb-5 wow fadeInUp">Make Appointment</h1>
 
-                            <div className="row mt-5" style={{display: 'flex', justifyContent: 'center'}}>
-                                
+                            <div className="row mt-5" style={{ display: 'flex', justifyContent: 'center' }}>
                                 <div className="col-lg-6">
                                     <Calenders />
                                 </div>
-
-                                {/* <div className="col-lg-4 py-2 wow zoomIn">
-                                    <div className="card-blog">
-                                        <div className="header">
-                                            <div className="post-category">
-                                                <a href="#">Covid19</a>
-                                            </div>
-                                            <a href="blog-details.html" className="post-thumb">
-                                                <img src={blog1} alt="" />
-                                            </a>
-                                        </div>
-                                        <div className="body">
-                                            <h5 className="post-title"><a href="blog-details.html">List of Countries without Coronavirus case</a></h5>
-                                            <div className="site-info">
-                                                <div className="avatar mr-2">
-                                                    <div className="avatar-img">
-                                                        <img src={person1} alt="" />
-                                                    </div>
-                                                    <span>Roger Adams</span>
-                                                </div>
-                                                <span className="mai-time"></span> 1 week ago
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4 py-2 wow zoomIn">
-                                    <div className="card-blog">
-                                        <div className="header">
-                                            <div className="post-category">
-                                                <a href="#">Covid19</a>
-                                            </div>
-                                            <a href="blog-details.html" className="post-thumb">
-                                                <img src={blog2} alt="" />
-                                            </a>
-                                        </div>
-                                        <div className="body">
-                                            <h5 className="post-title"><a href="blog-details.html">Recovery Room: News beyond the pandemic</a></h5>
-                                            <div className="site-info">
-                                                <div className="avatar mr-2">
-                                                    <div className="avatar-img">
-                                                        <img src={person1} alt="" />
-                                                    </div>
-                                                    <span>Roger Adams</span>
-                                                </div>
-                                                <span className="mai-time"></span> 4 weeks ago
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4 py-2 wow zoomIn">
-                                    <div className="card-blog">
-                                        <div className="header">
-                                            <div className="post-category">
-                                                <a href="#">Covid19</a>
-                                            </div>
-                                            <a href="blog-details.html" className="post-thumb">
-                                                <img src={blog3} alt="" />
-                                            </a>
-                                        </div>
-                                        <div className="body">
-                                            <h5 className="post-title">
-                                                <a href="blog-details.html">What is the impact of eating too much sugar?
-                                                </a>
-                                            </h5>
-                                            <div className="site-info">
-                                                <div className="avatar mr-2">
-                                                    <div className="avatar-img">
-                                                        <img src={person2} alt="" />
-                                                    </div>
-                                                    <span>Diego Simmons</span>
-                                                </div>
-                                                <span className="mai-time"></span> 2 months ago
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-12 text-center mt-4 wow zoomIn">
-                                    <a href="blog.html" className="btn btn-primary">Read More</a>
-                                </div> */}
                             </div>
                         </div>
                     </div>

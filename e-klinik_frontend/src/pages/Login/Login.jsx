@@ -43,7 +43,6 @@ const Login = () => {
         let response = await fetch(url, postLogin);
         let result = await response.json();
         if (result?.status === 'success' && result?.data) {
-            // setUser(result.data);
             localStorage.setItem('user', JSON.stringify(result.data))
             alert("Login berhasil");
             setUser(JSON.parse(localStorage.getItem('user')))

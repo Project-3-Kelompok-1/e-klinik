@@ -18,8 +18,10 @@ return new class extends Migration
             $table->string('nama_depan');
             $table->string('nama_belakang')->nullable();
             $table->string('jenis_kelamin');
+            $table->string('tempat_lahir')->nullable();
+            $table->text('alamat')->nullable();
+            $table->date('tgl_lahir')->nullable();
             $table->string('no_hp')->nullable();
-            $table->string('no_wa')->nullable();
             $table->text('foto_dokter')->nullable();
             $table->timestamps();
         });

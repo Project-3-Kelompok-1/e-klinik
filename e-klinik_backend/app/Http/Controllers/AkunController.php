@@ -58,6 +58,8 @@ class AkunController extends Controller
                 'message' => 'Username atau password salah !!!'
             ]);
         }
+
+        
         $data['token'] = $user->createToken('E-Klinik')->plainTextToken;
         $data['username'] = $validated['username'];
         $data['role'] = $user->role;

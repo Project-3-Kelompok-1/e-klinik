@@ -26,7 +26,8 @@ Route::controller(AkunController::class)->group(function () {
     Route::post("/login", 'login');
 });
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post("/tambah_dokter", [DokterController::class, 'tambah']);
+    Route::post("/tambah_dokter", [DokterController::class, 'addDokter']);
+    Route::get('/dokter', [DokterController::class, 'getDokter']);
     Route::post('/test_upload', [DokterController::class, 'testUpload']);
 });
 // Route::middleware('auth:sanctum')->group(function(){
@@ -36,8 +37,8 @@ Route::middleware('auth:sanctum')->group(function () {
 //         ]);
 //     });
 // });
-// Route::get("/hello", function () {
-//     return response()->json([
-//         'message' => "Hello World"
-//     ]);
-// });
+Route::get("/hello", function () {
+    return response()->json([
+        'message' => "Hello World"
+    ]);
+});

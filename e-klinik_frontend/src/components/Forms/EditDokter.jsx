@@ -26,9 +26,8 @@ const DraggAbleDialog = (props) => {
         </Draggable>
     )
 }
-const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBar, setOpenSnackBar, fetchData, selectDokter, closePopover }) => {
-
-    const [url, setUrl] = useState(DOMAIN_SERVER + '/api/tambah_dokter');
+const EditDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBar, setOpenSnackBar, fetchData }) => {
+    const url = DOMAIN_SERVER + '/api/tambah_dokter';
 
     const [namaDepan, setNamaDepan] = useState('');
     const [namaBelakang, setNamaBelakang] = useState('');
@@ -41,23 +40,6 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
 
     const [validationMessage, setValidationMessage] = useState({});
     // Data form dokter
-
-    useEffect(() => {
-        if (selectDokter.id) {
-            setNamaDepan(selectDokter.nama_depan);
-            setNamaBelakang(selectDokter.nama_depan);
-            setTempatLahir(selectDokter.tempat_lahir);
-            setTanggalLahir(new Date(selectDokter.tgl_lahir))
-            setJenisKelamin(selectDokter.jenis_kelamin);
-            setNoHp(selectDokter.no_hp);
-            setAlamat(selectDokter.alamat);
-            setUrl(DOMAIN_SERVER + `/api/dokter/update/${selectDokter.id}`)
-        }
-        else {
-            resetForm();
-            setUrl(DOMAIN_SERVER + '/api/tambah_dokter');
-        }
-    }, [selectDokter])
 
     const navigate = useNavigate();
     const [scroll, setScroll] = useState('paper')
@@ -83,6 +65,8 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
     }, [fullScreen])
 
     useEffect(() => {
+
+        console.log(fotoDokter);
         if (!fotoDokter) {
             setTampilFotoDokter(null)
             return;
@@ -112,6 +96,10 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
         setTampilFotoDokter(fotoUrl);
         return () => URL.revokeObjectURL(fotoUrl);
     }, [fotoDokter])
+
+    useEffect(() => {
+        console.log(validationMessage);
+    }, [validationMessage])
     const createData = () => {
         let newDate = '';
         if (tanggalLahir) {
@@ -133,6 +121,7 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
         formData.append('alamat', alamat);
         return formData;
     }
+
     const resetForm = () => {
         setNamaDepan('');
         setNamaBelakang('');
@@ -168,7 +157,6 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
             setOpenSnackBar(true);
             fetchData();
         }
-        closePopover();
     }
     const validasiFoto = (e) => {
         const formatTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/svg']
@@ -231,7 +219,9 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
                 </AppBar>
             ) : (
                 <DialogTitle id="alert-dialog-title" style={{ cursor: 'move' }} >
+                    {/* <Typography variant="h6" > */}
                     {"Tambah data dokter baru"}
+                    {/* </Typography> */}
                 </DialogTitle>
             )}
             <DialogContent dividers={scroll === 'paper'}>
@@ -482,4 +472,4 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
         </Dialog>
     )
 }
-export default TambahDokter;
+export default EditDokter;

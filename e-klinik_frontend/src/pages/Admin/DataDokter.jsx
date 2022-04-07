@@ -2,7 +2,6 @@ import {
     AddCircleOutline,
     NavigateNext,
     Search,
-    VisibilityOutlined
 } from "@mui/icons-material";
 import {
     Box, Breadcrumbs, Button, FormControl,
@@ -11,8 +10,7 @@ import {
     Stack, Table, TableBody,
     TableCell, TableContainer, TableHead,
     TableRow, Toolbar, Typography, Snackbar,
-    Alert as MuiAlert, Popover, Card,
-    CardContent, CardActions
+    Alert as MuiAlert, Popover
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -24,6 +22,8 @@ import { blue } from "@mui/material/colors";
 import TambahDokter from "../../components/Forms/TambahDokter";
 import { DOMAIN_SERVER } from "../../config";
 import CircularProgress from '@mui/material/CircularProgress';
+import ProfileDokter from "../../components/Popover/ProfileDokter";
+import HapusDokter from "../../components/Forms/HapusDokter";
 const useStyles = makeStyles({
     paper: {
         backgroundColor: blue['700']
@@ -52,11 +52,21 @@ const DataDokter = (props) => {
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState('');
     const [fetchUrl, setFetchUrl] = useState(url.getDokter);
+    const [selectDokter, setSelectDokter] = useState({});
+    const [openHapusDokter, setOpenHapusDokter] = useState(false);
+
+    const closeHapusDokter = () => {
+        setOpenHapusDokter(false);
+    }
+    const showSelectDokter = (dokter) => {
+        setSelectDokter(dokter);
+    }
     const openPopover = (event) => {
         setAnchorPopover(event.currentTarget);
     }
     const closePopover = () => {
         setAnchorPopover(null);
+        setSelectDokter({});
     }
     const open = Boolean(anchorPopover);
     const idPopover = open ? 'simple-popover' : undefined;
@@ -66,32 +76,6 @@ const DataDokter = (props) => {
             return;
         }
         setOpenSnackBar(false);
-    }
-    const fetchDataDokter = async () => {
-        if (search) {
-            setFetchUrl(url.getDokter + `?search=${search}`)
-        }
-        else {
-            setFetchUrl(url.getDokter)
-        }
-        try {
-            let response = await fetch(fetchUrl, {
-                method: 'GET',
-                headers: new Headers({
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${user.token}`
-                })
-            })
-            response = await response.json();
-            if (response?.status === 'success') {
-                console.log(response);
-                setDataDokter(response?.dokter);
-                setLoading(false);
-            }
-        } catch (error) {
-            setLoading(true);
-            setDataDokter([]);
-        }
     }
     const fetchData = () => {
         if (search) {
@@ -107,24 +91,16 @@ const DataDokter = (props) => {
                 'Authorization': `Bearer ${user.token}`
             })
         }).then(response => response.json())
-            .then(data => setDataDokter(data?.dokter))
-            .catch(error => setDataDokter([]))
+            .then(data => {
+                setDataDokter(data?.dokter)
+            })
+            .catch(error => {
+                setLoading(true)
+            })
     }
-    // useEffect(() => {
-    //     fetchDataDokter();
-    // }, [])
     useEffect(() => {
-        fetchDataDokter();
-        // fetchData();
+        fetchData();
     }, [search])
-    // useEffect(() => {
-    //     if (dataDokter.length > 0) {
-    //         setLoading(false);
-    //     }
-    //     else {
-    //         setLoading(true);
-    //     }
-    // }, [dataDokter])
     useEffect(() => {
         let unMounted = false;
         if (user?.role !== 'resepsionis' || !user) {
@@ -155,6 +131,7 @@ const DataDokter = (props) => {
 
     return (
         <>
+            {/* Component Snackbar alert */}
             <Snackbar
                 open={openSnackBar}
                 autoHideDuration={6000}
@@ -168,8 +145,20 @@ const DataDokter = (props) => {
                     Data dokter berhasil ditambahkan
                 </Alert>
             </Snackbar>
+
+            {/* Component dialog hapus dokter */}
+            <HapusDokter
+                open={openHapusDokter}
+                handleClose={closeHapusDokter}
+                selectDokter={selectDokter}
+                fetchData={fetchData}
+                user={user}
+                closePopover={closePopover}
+            />
+
+            {/* Component popover profil dokter */}
             <Popover
-                elevation={1}
+                elevation={5}
                 id={idPopover}
                 open={open}
                 anchorEl={anchorPopover}
@@ -178,45 +167,29 @@ const DataDokter = (props) => {
                     vertical: 'bottom',
                     horizontal: 'left',
                 }}
+                sx={{ display: openHapusDokter ? 'none' : 'initial' }}
             >
-                <Card
-                    sx={{ minWidth: 275 }}
-                >
-                    <CardContent>
-                        <Typography
-                            sx={{ fontSize: 14 }}
-                            color="text.secondary"
-                            gutterBottom
-                        >
-                            Profil dokter
-                        </Typography>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            Word of the Day
-                        </Typography>
-                        <Typography variant="h5" component="div">
-                            be{bull}nev{bull}o{bull}lent
-                        </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            adjective
-                        </Typography>
-                        <Typography variant="body2">
-                            well meaning and kindly.
-                            <br />
-                            {'"a benevolent smile"'}
-                        </Typography>
-                    </CardContent>
-                    <CardActions>
-                        <Button component="span">Learn More</Button>
-                    </CardActions>
-                </Card>
+                <ProfileDokter
+                    selectDokter={selectDokter}
+                    setOpenHapusDokter={setOpenHapusDokter}
+                    setShowFormDokter={setShowTambahDokter}
+                />
             </Popover>
+
+
+            {/* Component modal tambah dokter */}
             <TambahDokter
                 showTambahDokter={showTambahDokter}
                 setShowTambahDokter={setShowTambahDokter}
                 user={user}
                 openSnackBar={openSnackBar}
                 setOpenSnackBar={setOpenSnackBar}
+                fetchData={fetchData}
+                selectDokter={selectDokter}
+                closePopover={closePopover}
             />
+
+            {/* Componnet utama dashboard */}
             <Dashboard halaman="Data Dokter">
                 <Toolbar />
                 <Box
@@ -290,13 +263,14 @@ const DataDokter = (props) => {
                                 id="cari-dokter"
                                 type="text"
                                 value={search}
+                                autoComplete="off"
                                 onChange={(e) => {
                                     console.log(e.target.value);
                                     setSearch(e.target.value);
                                 }}
                                 endAdornment={
                                     <InputAdornment position="end">
-                                        <IconButton component="span">
+                                        <IconButton component="span" onClick={fetchData}>
                                             <Search />
                                         </IconButton>
                                     </InputAdornment>
@@ -323,6 +297,7 @@ const DataDokter = (props) => {
                     <TableContainer
                         component={Paper}
                     >
+                        {/* Table data dokter */}
                         <Table sx={{ minWidth: 650 }} aria-label="simple-table">
                             <TableHead>
                                 <TableRow sx={{ backgroundColor: 'primary.main' }}>
@@ -358,22 +333,34 @@ const DataDokter = (props) => {
                                             key={data.nama_lengkap}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer' }}
                                         >
-                                            <TableCell scope="row" component="th" onClick={openPopover} sx={{ maxWidth: '100px', minWidth: '100px' }}>
+                                            <TableCell scope="row" component="th" onClick={(e) => {
+                                                openPopover(e);
+                                                showSelectDokter(data);
+                                            }} sx={{ maxWidth: '100px', minWidth: '100px' }}>
                                                 <Typography variant="body1">
-                                                    {`${data.nama_depan} ${data.nama_belakang}`}
+                                                    {`${data.nama_depan} ${data.nama_belakang ? data.nama_belakang : ''}`}
                                                 </Typography>
                                             </TableCell>
-                                            <TableCell align="left" onClick={openPopover} sx={{ maxWidth: '200px', minWidth: '200px' }}>
+                                            <TableCell align="left" onClick={(e) => {
+                                                openPopover(e);
+                                                showSelectDokter(data);
+                                            }} sx={{ maxWidth: '200px', minWidth: '200px' }}>
                                                 <Typography variant="body1">
                                                     {data.alamat}
                                                 </Typography>
                                             </TableCell>
-                                            <TableCell align="left" onClick={openPopover} sx={{ maxWidth: '100px', minWidth: '100px' }}>
+                                            <TableCell align="left" onClick={(e) => {
+                                                openPopover(e);
+                                                showSelectDokter(data);
+                                            }} sx={{ maxWidth: '100px', minWidth: '100px' }}>
                                                 <Typography variant="body1">
                                                     {data.jenis_kelamin}
                                                 </Typography>
                                             </TableCell>
-                                            <TableCell align="left" onClick={openPopover} sx={{ maxWidth: '100px', minWidth: '100px' }}>
+                                            <TableCell align="left" onClick={(e) => {
+                                                openPopover(e);
+                                                showSelectDokter(data);
+                                            }} sx={{ maxWidth: '100px', minWidth: '100px' }}>
                                                 <Typography variant="body1">
                                                     {data.no_hp}
                                                 </Typography>

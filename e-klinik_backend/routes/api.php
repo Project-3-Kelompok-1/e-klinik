@@ -26,8 +26,11 @@ Route::controller(AkunController::class)->group(function () {
     Route::post("/login", 'login');
 });
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post("/tambah_dokter", [DokterController::class, 'addDokter']);
-    Route::get('/dokter', [DokterController::class, 'getDokter']);
+    // Kelola dokter
+    Route::get('/dokter', [DokterController::class, 'index']);
+    Route::post("/tambah_dokter", [DokterController::class, 'add']);
+    Route::delete('/dokter/hapus/{id}', [DokterController::class, 'destroy']);
+    Route::post('/dokter/update/{id}', [DokterController::class, 'update']);
     Route::post('/test_upload', [DokterController::class, 'testUpload']);
 });
 // Route::middleware('auth:sanctum')->group(function(){

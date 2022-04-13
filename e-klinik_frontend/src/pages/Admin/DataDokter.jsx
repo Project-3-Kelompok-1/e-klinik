@@ -24,6 +24,7 @@ import { DOMAIN_SERVER } from "../../config";
 import CircularProgress from '@mui/material/CircularProgress';
 import ProfileDokter from "../../components/Popover/ProfileDokter";
 import HapusDokter from "../../components/Forms/HapusDokter";
+import FormDokter from "../../components/Forms/FormDokter";
 const useStyles = makeStyles({
     paper: {
         backgroundColor: blue['700']
@@ -54,7 +55,7 @@ const DataDokter = (props) => {
     const [fetchUrl, setFetchUrl] = useState(url.getDokter);
     const [selectDokter, setSelectDokter] = useState({});
     const [openHapusDokter, setOpenHapusDokter] = useState(false);
-
+    const [messageAlert, setMessageAlert] = useState('');
     const closeHapusDokter = () => {
         setOpenHapusDokter(false);
     }
@@ -93,12 +94,14 @@ const DataDokter = (props) => {
         }).then(response => response.json())
             .then(data => {
                 setDataDokter(data?.dokter)
+                setLoading(false);
             })
             .catch(error => {
                 setLoading(true)
             })
     }
     useEffect(() => {
+        setLoading(true)
         fetchData();
     }, [search])
     useEffect(() => {
@@ -142,7 +145,7 @@ const DataDokter = (props) => {
                     severity="info"
                     sx={{ width: '100%' }}
                 >
-                    Data dokter berhasil ditambahkan
+                    {messageAlert}
                 </Alert>
             </Snackbar>
 
@@ -178,7 +181,7 @@ const DataDokter = (props) => {
 
 
             {/* Component modal tambah dokter */}
-            <TambahDokter
+            {/* <TambahDokter
                 showTambahDokter={showTambahDokter}
                 setShowTambahDokter={setShowTambahDokter}
                 user={user}
@@ -187,6 +190,17 @@ const DataDokter = (props) => {
                 fetchData={fetchData}
                 selectDokter={selectDokter}
                 closePopover={closePopover}
+            /> */}
+            <FormDokter
+                showFormDokter={showTambahDokter}
+                setShowFormDokter={setShowTambahDokter}
+                user={user}
+                openSnackBar={openSnackBar}
+                setOpenSnackBar={setOpenSnackBar}
+                fetchData={fetchData}
+                selectDokter={selectDokter}
+                closePopover={closePopover}
+                setMessageAlert={setMessageAlert}
             />
 
             {/* Componnet utama dashboard */}
@@ -330,7 +344,7 @@ const DataDokter = (props) => {
                                 <TableBody>
                                     {dataDokter.map((data) => (
                                         <TableRow
-                                            key={data.nama_lengkap}
+                                            key={data.id}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer' }}
                                         >
                                             <TableCell scope="row" component="th" onClick={(e) => {

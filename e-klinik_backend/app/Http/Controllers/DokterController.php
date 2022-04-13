@@ -162,12 +162,13 @@ class DokterController extends Controller
             ];
             return $this->responseFailed($response, 403);
         }
+
         $validator = Validator::make($request->all(), [
             'nama_depan' => ['required', 'max:255'],
             'nama_belakang' => ['max:255'],
             'jenis_kelamin' => ['required', 'max:10'],
             'tempat_lahir' => ['max:255'],
-            'tgl_lahir' => ['required', 'date'],
+            'tgl_lahir' => ['required'],
             'no_hp' => ['max:13'],
         ]); //validasi input
         if ($validator->fails()) {
@@ -177,7 +178,15 @@ class DokterController extends Controller
             ];
             return $this->responseFailed($response, 400);
         } //response error validasi
-        $dokter = Dokter::find($id)->update($request->all());
+        $dokter = Dokter::find($id)->update([
+            'nama_depan' => $request->nama_depan,
+            'nama_belakang' => $request->nama_belakang,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'no_hp' => $request->no_hp,
+            'tempat_lahir' => $request->tempat_lahir,
+            'alamat' => $request->alamat,
+            'tgl_lahir' => Carbon::createFromFormat('Y-m-d', $request->tgl_lahir)
+        ]);
         if ($request->hasFile('foto_dokter')) {
             $validator = Validator::make($request->all(), [
                 'foto_dokter' => ['image:jpeg,png,jpg,gif,svg']

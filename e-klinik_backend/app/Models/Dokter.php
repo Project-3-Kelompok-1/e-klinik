@@ -19,4 +19,8 @@ class Dokter extends Model
         'no_hp',
         'foto_dokter'
     ];
+    public function jadwal_praktek()
+    {
+        return $this->hasMany(JadwalPraktek::class, 'id_dokter', 'id');
+    }
 }

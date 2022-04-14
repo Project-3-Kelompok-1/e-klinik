@@ -4,7 +4,10 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
+use Database\Seeders\UserSeeder;
+use Database\Seeders\PasienSeeder;
+use Database\Seeders\DokterSeeder;
+use Database\Seeders\JadwalPraktekSeeder;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -15,5 +18,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        $this->call([
+            UserSeeder::class,
+            PasienSeeder::class,
+            DokterSeeder::class,
+            JadwalPraktekSeeder::class
+        ]);
     }
 }

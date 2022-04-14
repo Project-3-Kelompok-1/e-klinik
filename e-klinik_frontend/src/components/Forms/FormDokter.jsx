@@ -15,7 +15,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import Draggable from "react-draggable";
 import { useNavigate } from "react-router-dom";
 import { DOMAIN_SERVER } from "../../config";
-import { validasiTambahDokter } from "./validasi_form";
+import { validasiFormDokter } from "./validasi_form";
 const DraggAbleDialog = (props) => {
     return (
         <Draggable
@@ -26,7 +26,7 @@ const DraggAbleDialog = (props) => {
         </Draggable>
     )
 }
-const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBar, setOpenSnackBar, fetchData, selectDokter, closePopover }) => {
+const FormDokter = ({ showFormDokter, setShowFormDokter, user, openSnackBar, setOpenSnackBar, fetchData, selectDokter, closePopover, setMessageAlert }) => {
 
     const [url, setUrl] = useState(DOMAIN_SERVER + '/api/tambah_dokter');
 
@@ -44,6 +44,10 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
     // Data form dokter
 
     useEffect(() => {
+        console.log(validationMessage);
+    }, [validationMessage])
+
+    useEffect(() => {
         if (selectDokter.id) {
             setNamaDepan(selectDokter.nama_depan);
             setNamaBelakang(selectDokter.nama_belakang);
@@ -56,6 +60,7 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
             setTitleForm('Edit data dokter')
         }
         else {
+
             setTitleForm('Tambah data dokter baru')
             resetForm();
             setUrl(DOMAIN_SERVER + '/api/tambah_dokter');
@@ -65,8 +70,10 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
     const navigate = useNavigate();
     const [scroll, setScroll] = useState('paper')
     const [maxWidth, setMaxWidth] = useState("md");
-    const closeTambahDokter = () => {
-        setShowTambahDokter(false);
+    const closeFormDokter = () => {
+        setShowFormDokter(false);
+        setValidationMessage({})
+        closePopover();
     }
 
     const theme = useTheme();
@@ -76,8 +83,8 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
     useEffect(() => {
         let unMounted = false;
 
-        if (fullScreen && showTambahDokter) {
-            setShowTambahDokter(false)
+        if (fullScreen && showFormDokter) {
+            setShowFormDokter(false)
             navigate('/resepsionis/data-dokter');
             return () => {
                 unMounted = true
@@ -119,11 +126,17 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
         let newDate = '';
         if (tanggalLahir) {
             const year = tanggalLahir.getUTCFullYear();
-            const month = tanggalLahir.getUTCMonth();
-            const day = tanggalLahir.getUTCDate();
+            let month = tanggalLahir.getUTCMonth();
+            let day = tanggalLahir.getUTCDate();
+            if (month.length === 1) {
+                month = '0' + month;
+            }
+            if (day.length === 1) {
+                day = '0' + day;
+            }
             newDate = year + '-' + month + '-' + day;
-        }
 
+        }
         const formData = new FormData();
         formData.append('nama_depan', namaDepan);
         formData.append('nama_belakang', namaBelakang);
@@ -143,10 +156,17 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
         setTanggalLahir(new Date());
         setJenisKelamin('');
         setNoHp('');
+        setAlamat('');
         setFotoDokter(null);
     }
     const submitForm = async (e) => {
         e.preventDefault();
+        if (selectDokter.id) {
+            setMessageAlert('Data dokter berhasil di update')
+        }
+        else {
+            setMessageAlert('Data dokter berhasil ditambahkan')
+        }
         setValidationMessage({});
         const data = createData();
         const postData = {
@@ -160,18 +180,17 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
         }
         let response = await fetch(url, postData);
         let result = await response.json();
-        console.log(result);
-        if (result.status === 'failed') {
-            validasiTambahDokter(result, setValidationMessage, setFotoDokter);
+        if (result.status === 'validation failed') {
+            validasiFormDokter(result, setValidationMessage, setFotoDokter);
             // console.log(validationMessage);
+            console.log(result);
         }
         else {
             resetForm();
-            closeTambahDokter();
+            closeFormDokter();
             setOpenSnackBar(true);
             fetchData();
         }
-        closePopover();
     }
     const validasiFoto = (e) => {
         const formatTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/svg']
@@ -203,8 +222,8 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
     return (
         <Dialog
             TransitionComponent={Slide}
-            open={showTambahDokter}
-            onClose={closeTambahDokter}
+            open={showFormDokter}
+            onClose={closeFormDokter}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             fullScreen={fullScreen}
@@ -219,7 +238,7 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
                         <IconButton
                             edge="start"
                             color="inherit"
-                            onClick={closeTambahDokter}
+                            onClick={closeFormDokter}
                             aria-label="close"
                             component="span"
                         >
@@ -252,6 +271,8 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
                             fullWidth
                             variant="standard"
                             value={namaDepan}
+                            error={validationMessage.nama_depan && namaDepan === '' ? true : false}
+                            helperText={validationMessage.nama_depan ? validationMessage.nama_depan : 'Nama depan tidak boleh kosong'}
                             onChange={(e) => {
                                 setNamaDepan(e.target.value);
                             }}
@@ -266,6 +287,8 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
                             fullWidth
                             variant="standard"
                             value={namaBelakang}
+                            error={namaBelakang === '' && validationMessage.nama_belakang ? true : false}
+                            helperText={namaBelakang === '' && validationMessage.nama_belakang ? validationMessage.nama_belakang : ''}
                             onChange={(e) => {
                                 setNamaBelakang(e.target.value);
                             }}
@@ -286,6 +309,8 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
                             fullWidth
                             variant="standard"
                             value={tempatLahir}
+                            error={validationMessage.tempat_lahir ? true : false}
+                            helperText='Panjang karakter maksimal 255'
                             onChange={(e) => {
                                 setTempatLahir(e.target.value);
                             }}
@@ -340,7 +365,9 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
                     sx={{ marginBottom: '2rem' }}
                 >
                     <Grid item md={6} xs={12}>
-                        <FormControl>
+                        <FormControl
+                            error={validationMessage.jenis_kelamin && jenisKelamin === '' ? true : false}
+                        >
                             <FormLabel id="jenis-kelamin">Jenis kelamin</FormLabel>
                             <RadioGroup
                                 row
@@ -354,6 +381,9 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
                                 <FormControlLabel value="laki-laki" control={<Radio />} label="Laki-laki" />
                                 <FormControlLabel value="perempuan" control={<Radio />} label="Perempuan" />
                             </RadioGroup>
+                            <FormHelperText>
+                                {validationMessage.jenis_kelamin && jenisKelamin === '' ? validationMessage.jenis_kelamin : ''}
+                            </FormHelperText>
                         </FormControl>
                     </Grid>
                     <Grid item md={6} xs={12}>
@@ -365,6 +395,7 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
                             fullWidth
                             variant="standard"
                             value={noHp}
+                            helperText="Panjang karakter maksimal 13"
                             onChange={(e) => {
                                 setNoHp(e.target.value);
                             }}
@@ -475,7 +506,7 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button variant="text" color="inherit" component="span" onClick={closeTambahDokter}>
+                <Button variant="text" color="inherit" component="span" onClick={closeFormDokter}>
                     Batal
                 </Button>
                 {selectDokter.id ? (
@@ -491,4 +522,4 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
         </Dialog>
     )
 }
-export default TambahDokter;
+export default FormDokter;

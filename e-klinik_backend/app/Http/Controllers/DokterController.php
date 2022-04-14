@@ -110,7 +110,6 @@ class DokterController extends Controller
                 'dokter' => $dokter
             ];
         }
-
         return $this->responseSuccess($response);
     }
     public function testUpload(Request $request)

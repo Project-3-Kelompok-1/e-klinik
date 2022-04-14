@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\DokterController;
+use App\Http\Controllers\JadwalPraktekController;
+use App\Models\Dokter;
+use App\Models\JadwalPraktek;
 use App\Models\Pasien;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,8 +35,25 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post("/tambah_dokter", [DokterController::class, 'add']);
     Route::delete('/dokter/hapus/{id}', [DokterController::class, 'destroy']);
     Route::post('/dokter/update/{id}', [DokterController::class, 'update']);
-    Route::post('/test_upload', [DokterController::class, 'testUpload']);
+
+    Route::middleware('resepsionis')->group(function () {
+        // Kelola jadwal praktek 
+        Route::post('/jadwal-praktek', [JadwalPraktekController::class, 'store']);
+        Route::post('/jadwal-praktek/update/{id}', [JadwalPraktekController::class, 'update']);
+        Route::delete('/jadwal-praktek/{id}', [JadwalPraktekController::class, 'destroy']);
+    });
+    // Route::post('/test_upload', [DokterController::class, 'testUpload']);
 });
+// Get jadwal praktek selama 1 minggu
+Route::get('/jadwal-praktek', [JadwalPraktekController::class, 'index']);
+// Get jadwal praktek yang dimiliki dokter
+Route::get('/jadwal-praktek/{id}', [JadwalPraktekController::class, 'detail']);
+
+
+
+
+
+
 // Route::middleware('auth:sanctum')->group(function(){
 //     Route::get("/user", function(){
 //         return response()->json([

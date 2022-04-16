@@ -10,6 +10,7 @@ import Doctors from "./pages/Doctors/Doctors";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
+import JadwalPraktek from "./pages/Admin/Resepsionis/JadwalPraktek";
 // import env from "react-dotenv";
 const App = () => {
   const [user, setUser] = useState(() => {
@@ -52,6 +53,7 @@ const App = () => {
           <Route path="/doctors" element={<Doctors />} />
           <Route path="/calenders" element={<Calenders />} />
           <Route path="/resepsionis/data-dokter" element={<DataDokter />} />
+          <Route path="/resepsionis/jadwal-praktek" element={<JadwalPraktek />} />
         </Routes>
       </UserContext.Provider>
     </BrowserRouter>

@@ -49,13 +49,13 @@ const FormDokter = ({ showFormDokter, setShowFormDokter, user, openSnackBar, set
 
     useEffect(() => {
         if (selectDokter.id) {
-            setNamaDepan(selectDokter.nama_depan);
-            setNamaBelakang(selectDokter.nama_belakang);
-            setTempatLahir(selectDokter.tempat_lahir);
+            setNamaDepan(selectDokter.nama_depan ? selectDokter.nama_depan : '');
+            setNamaBelakang(selectDokter.nama_belakang ? selectDokter.nama_belakang : '');
+            setTempatLahir(selectDokter.tempat_lahir ? selectDokter.tempat_lahir : '');
             setTanggalLahir(new Date(selectDokter.tgl_lahir))
             setJenisKelamin(selectDokter.jenis_kelamin);
-            setNoHp(selectDokter.no_hp);
-            setAlamat(selectDokter.alamat);
+            setNoHp(selectDokter.no_hp ? selectDokter.no_hp : '');
+            setAlamat(selectDokter.alamat ? selectDokter.alamat : '');
             setUrl(DOMAIN_SERVER + `/api/dokter/update/${selectDokter.id}`)
             setTitleForm('Edit data dokter')
         }

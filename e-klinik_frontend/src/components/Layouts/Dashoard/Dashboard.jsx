@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { HealthAndSafety } from '@mui/icons-material';
+import { HealthAndSafety, EventAvailable } from '@mui/icons-material';
 import { UserContext } from '../../../Helpers/Context';
 import { useNavigate } from 'react-router-dom';
 import "./style.css";
@@ -64,6 +64,25 @@ const Dashboard = (props) => {
                         }}
                     >
                         <ListItemText primary="Data Dokter" />
+                    </Button>
+                </ListItem>
+                <ListItem>
+                    <Button
+                        color='primary'
+                        component="span"
+                        sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                        variant={`${props.halaman === 'Jadwal Praktek' ? 'contained' : 'text'}`}
+                        startIcon={<EventAvailable />}
+                        onClick={() => {
+                            if (user.role === 'resepsionis') {
+                                navigate('/resepsionis/jadwal-praktek')
+                            }
+                            else if (user.role === 'dokter') {
+                                navigate('/dokter/jadwal-praktek')
+                            }
+                        }}
+                    >
+                        <ListItemText primary="Jadwal Praktek" />
                     </Button>
                 </ListItem>
             </List>

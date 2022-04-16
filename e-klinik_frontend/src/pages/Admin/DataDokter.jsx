@@ -19,7 +19,6 @@ import { UserContext } from "../../Helpers/Context";
 import { makeStyles } from '@mui/styles';
 import "./data-dokter.css";
 import { blue } from "@mui/material/colors";
-import TambahDokter from "../../components/Forms/TambahDokter";
 import { DOMAIN_SERVER } from "../../config";
 import CircularProgress from '@mui/material/CircularProgress';
 import ProfileDokter from "../../components/Popover/ProfileDokter";
@@ -79,12 +78,6 @@ const DataDokter = (props) => {
         setOpenSnackBar(false);
     }
     const fetchData = () => {
-        if (search) {
-            setFetchUrl(url.getDokter + `?search=${search}`)
-        }
-        else {
-            setFetchUrl(url.getDokter)
-        }
         fetch(fetchUrl, {
             method: 'GET',
             headers: new Headers({
@@ -102,8 +95,17 @@ const DataDokter = (props) => {
     }
     useEffect(() => {
         setLoading(true)
-        fetchData();
+        if (search) {
+            setFetchUrl(url.getDokter + `?search=${search}`)
+        }
+        else {
+            setFetchUrl(url.getDokter)
+        }
+        // fetchData();
     }, [search])
+    useEffect(()=>{
+        fetchData();
+    }, [fetchUrl])
     useEffect(() => {
         let unMounted = false;
         if (user?.role !== 'resepsionis' || !user) {
@@ -179,18 +181,7 @@ const DataDokter = (props) => {
                 />
             </Popover>
 
-
-            {/* Component modal tambah dokter */}
-            {/* <TambahDokter
-                showTambahDokter={showTambahDokter}
-                setShowTambahDokter={setShowTambahDokter}
-                user={user}
-                openSnackBar={openSnackBar}
-                setOpenSnackBar={setOpenSnackBar}
-                fetchData={fetchData}
-                selectDokter={selectDokter}
-                closePopover={closePopover}
-            /> */}
+            {/* Component modal form dokter */}
             <FormDokter
                 showFormDokter={showTambahDokter}
                 setShowFormDokter={setShowTambahDokter}

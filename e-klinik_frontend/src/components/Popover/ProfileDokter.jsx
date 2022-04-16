@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Box, Avatar, Typography, Grid, Divider, CardActions, Button } from "@mui/material";
+import { DOMAIN_SERVER } from '../../config';
 const ProfileDokter = ({ selectDokter, setOpenHapusDokter, setShowFormDokter }) => {
     return (
         <>
@@ -15,7 +16,7 @@ const ProfileDokter = ({ selectDokter, setOpenHapusDokter, setShowFormDokter }) 
                             <Avatar
                                 alt={selectDokter.nama_depan + selectDokter.nama_belakang ? selectDokter.nama_belakang : ''}
                                 sx={{ width: 100, height: 100 }}
-                                src={selectDokter.foto_dokter ? `http://127.0.0.1:8000/storage/foto_dokter/${selectDokter.foto_dokter}`: ''}
+                                src={selectDokter.foto_dokter ? `${DOMAIN_SERVER}/storage/foto_dokter/${selectDokter.foto_dokter}` : ''}
                             />
                             <Typography
                                 variant="h6"

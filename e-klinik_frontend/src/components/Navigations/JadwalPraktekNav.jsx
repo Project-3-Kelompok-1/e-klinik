@@ -8,10 +8,8 @@ const JadwalPraktekNav = () => {
             sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                backgroundColor: '#fff',
-                border: 'solid 1px #E0E0E0',
                 alignItems: 'center',
-                padding: '1rem 2rem',
+                margin: '1rem 2rem',
                 flexWrap: 'wrap',
                 gap: '1rem'
             }}

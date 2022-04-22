@@ -44,7 +44,6 @@ const DataDokter = (props) => {
     const itemValue = [10, 20, 30, 40, 50];
     const [dataCount, setDataCount] = useState(itemValue[0]);
     const classes = useStyles(props);
-    const [hoverIndex, setHoverIndex] = useState(null);
     const [showTambahDokter, setShowTambahDokter] = useState(false);
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [anchorPopover, setAnchorPopover] = useState(null);
@@ -78,13 +77,8 @@ const DataDokter = (props) => {
         setOpenSnackBar(false);
     }
     const fetchData = () => {
-        fetch(fetchUrl, {
-            method: 'GET',
-            headers: new Headers({
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${user.token}`
-            })
-        }).then(response => response.json())
+        fetch(fetchUrl).
+            then(response => response.json())
             .then(data => {
                 setDataDokter(data?.dokter)
                 setLoading(false);
@@ -103,7 +97,7 @@ const DataDokter = (props) => {
         }
         // fetchData();
     }, [search])
-    useEffect(()=>{
+    useEffect(() => {
         fetchData();
     }, [fetchUrl])
     useEffect(() => {
@@ -118,22 +112,9 @@ const DataDokter = (props) => {
     const createData = (nama_lengkap, alamat, jenis_kelamin, no_hp) => {
         return { nama_lengkap, alamat, jenis_kelamin, no_hp };
     }
-    const rows = [
-        createData("Mar'i Adhari", "Cirebon", "Laki-laki", "083890282306"),
-        createData("Iin Nuryani", "Kuningan", "Perempuan", "083812342306"),
-        createData("Rahul Ken", "Cirebon", "Laki-laki", "08389321106"),
-        createData("Isa Ias", "Cirebon", "Laki-laki", "083814382306"),
-        createData("Indra", "Cirebon", "Laki-laki", "083890283712"),
-    ];
-    const bull = (
-        <Box
-            component="span"
-            sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-        >
-            •
-        </Box>
-    );
-
+    useEffect(() => {
+        console.log(dataDokter);
+    }, [dataDokter])
     return (
         <>
             {/* Component Snackbar alert */}
@@ -201,10 +182,11 @@ const DataDokter = (props) => {
                     sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
-                        backgroundColor: '#fff',
-                        border: 'solid 1px #E0E0E0',
+                        // backgroundColor: '#fff',
+                        // border: 'solid 1px #E0E0E0',
                         alignItems: 'center',
-                        padding: '1rem 2rem',
+                        // padding: '1rem 2rem',
+                        margin: '1rem 2rem',
                         flexWrap: 'wrap',
                         gap: '1rem'
                     }}
@@ -298,7 +280,7 @@ const DataDokter = (props) => {
                     </Button>
 
                 </Box>
-                <Box sx={{ margin: '2rem' }}>
+                <Box sx={{ margin: '1rem 2rem' }}>
                     <TableContainer
                         component={Paper}
                     >

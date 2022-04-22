@@ -22,12 +22,72 @@ class JadwalPraktekController extends Controller
             'status' => ['required']
         ]);
     }
-    public function index(Request $request)
+    public function seminggu(Request $request)
     {
         $jadwalPraktek = JadwalPraktek::whereBetween('tgl_praktek', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
         return response()->json([
             'jadwal_praktek' => $jadwalPraktek
         ]);
+    }
+    public function index()
+    {
+        $jadwalPraktek = JadwalPraktek::all()
+            ->groupBy(['tgl_praktek', "jam_mulai", "jam_selesai", "status"]);
+        return response()->json([
+            'jadwal_praktek' => $jadwalPraktek
+        ]);
+    }
+    public function validated($request)
+    {
+        return Validator::make($request->all(), [
+            'memberDokter' => ['required', 'array', 'min:1'],
+            'memberDokter.*' => ['required', 'integer'],
+            'tgl_praktek' => ['required', 'date_format:Y-m-d', 'after_or_equal:today'],
+            'jam_mulai' => ['required', 'date_format:H:i:s'],
+            'jam_selesai' => ['required', 'date_format:H:i:s', 'after:jam_mulai'],
+            'status' => ['required'],
+            'title' => ['required']
+        ]);
+    }
+    public function create(Request $request)
+    {
+        // 1. Validasi request
+        $validator = $this->validated($request);
+        // Validasi gagal
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'validation failed',
+                'errors' => $validator->failed()
+            ]);
+        }
+
+        // 2. {TODO} Cari semua dokter berdasarkan id
+        $listDokter = Dokter::find($request->memberDokter);
+        // Dokter tidak ditemukan
+        if (!$listDokter) {
+            $response = [
+                'status' => 'failed',
+                'message' => 'dokter tidak ditemukan'
+            ];
+            return $this->responseFailed($request);
+        }
+
+        // 3. Menyimpan jadwal praktek
+        foreach ($listDokter as $key => $dokter) {
+            JadwalPraktek::create([
+                'id_dokter' => $dokter->id,
+                'tgl_praktek' => $request->tgl_praktek,
+                'jam_mulai' => $request->jam_mulai,
+                'jam_selesai' => $request->jam_selesai,
+                'status' => $request->status
+            ]);
+        }
+
+        $response = [
+            'status' => 'success',
+            'message' => 'Jadwal berhasil ditambahkan'
+        ];
+        return $this->responseSuccess($response);
     }
     public function store(Request $request)
     {
@@ -41,7 +101,6 @@ class JadwalPraktekController extends Controller
             ];
             return $this->responseFailed($response, 400);
         }
-
         // 2. Cari data dokter
         $dokter = Dokter::find($request->id_dokter);
         // Dokter tidak ditemukan

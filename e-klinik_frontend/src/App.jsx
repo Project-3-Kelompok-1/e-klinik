@@ -11,7 +11,6 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import JadwalPraktek from "./pages/Admin/Resepsionis/JadwalPraktek";
-// import env from "react-dotenv";
 const App = () => {
   const [user, setUser] = useState(() => {
     return JSON.parse(localStorage.getItem('user'))

@@ -77,6 +77,7 @@ const DataDokter = (props) => {
         setOpenSnackBar(false);
     }
     const fetchData = () => {
+        setLoading(true)
         fetch(fetchUrl).
             then(response => response.json())
             .then(data => {
@@ -88,7 +89,7 @@ const DataDokter = (props) => {
             })
     }
     useEffect(() => {
-        setLoading(true)
+        // setLoading(true)
         if (search) {
             setFetchUrl(url.getDokter + `?search=${search}`)
         }

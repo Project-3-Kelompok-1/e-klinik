@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Dashboard from "../../../components/Layouts/Dashoard/Dashboard";
 import JadwalPraktekNav from "../../../components/Navigations/JadwalPraktekNav";
 import Paper from "@mui/material/Paper"
+import Backdrop from "@mui/material/Backdrop";
 import { EditingState, IntegratedEditing, ViewState } from '@devexpress/dx-react-scheduler';
 import blue from "@mui/material/colors/blue";
 import red from "@mui/material/colors/red";
@@ -22,12 +23,14 @@ import { useNavigate } from "react-router-dom";
 import BasicLayoutForm from "../../../components/Calender/BasicLayoutForm";
 import TextEditorForm from "../../../components/Calender/TextEditorForm";
 import useTheme from "@mui/material/styles/useTheme";
+import { CircularProgress } from "@mui/material";
 
 const url = {
     index: DOMAIN_SERVER + '/api/jadwal-praktek',
     seminggu: DOMAIN_SERVER + '/api/jadwal-praktek/seminggu',
     dokter: DOMAIN_SERVER + '/api/dokter',
     create_jadwal: DOMAIN_SERVER + '/api/jadwal-praktek/create',
+    update_jadwal: DOMAIN_SERVER + '/api/jadwal-praktek/update'
 }
 let memberDokter = []
 const JadwalPraktek = () => {
@@ -40,6 +43,12 @@ const JadwalPraktek = () => {
     const [membersDokter, setMembersDokter] = useState([])
     const [appointmentsData, setAppointmentsData] = useState([])
     const [resources, setResources] = useState()
+    const [loading, setLoading] = useState(false)
+    const [visibleForm, setVisibleForm] = useState(false)
+    const [selectedAppointment, setSelectedAppointment] = useState()
+    const formVisibilityChange = () => {
+        setVisibleForm(!visibleForm)
+    }
     const getDokter = () => {
         fetch(url.dokter)
             .then(response => response.json())
@@ -95,14 +104,14 @@ const JadwalPraktek = () => {
             }
         ])
     }, [membersDokter])
-    const changeMainResources = (newMainResources) => {
-        setMainResourceName(newMainResources)
-    }
     const fetchJadwal = () => {
+        setLoading(true)
         fetch(url.index)
             .then(response => response.json())
             .then(data => {
                 setListJadwal(data?.jadwal_praktek)
+                setLoading(false)
+
             })
             .catch(err => {
                 console.log(err);
@@ -123,7 +132,6 @@ const JadwalPraktek = () => {
                             itemAppointement.title = status;
                             itemAppointement.startDate = new Date(`${tgl_praktek} ${jam_mulai}`)
                             itemAppointement.endDate = new Date(`${tgl_praktek} ${jam_selesai}`)
-                            // itemAppointement.id = jadwalCollection[0].id
                             itemAppointement.status = status.toLocaleLowerCase();
                             itemAppointement.memberDokter = []
                             itemAppointement.id_jadwal = []
@@ -141,7 +149,8 @@ const JadwalPraktek = () => {
             })
         }
     }, [listJadwal])
-    const tambahJadwal = async (formData) => {
+    const postJadwal = async (formData, urlTarget = url.index) => {
+        setLoading(true)
         const postRequest = {
             method: 'POST',
             // body: formData,
@@ -152,11 +161,13 @@ const JadwalPraktek = () => {
                 'Authorization': `Bearer ${user.token}`
             })
         }
-        let response = await fetch(url.create_jadwal, postRequest);
+        let response = await fetch(urlTarget, postRequest);
         response = await response.json()
+        fetchJadwal()
         if (response?.status === 'success') {
-            fetchJadwal()
+            console.log(response.message);
         }
+        console.log(response);
     }
     const createDateFormat = (date) => {
         const year = date.getUTCFullYear()
@@ -197,16 +208,41 @@ const JadwalPraktek = () => {
 
         return formData;
     }
+    const updateFormData = (formData, newFormData) => {
+        Object.entries(newFormData).forEach(([key, value]) => {
+            Object.entries(value).forEach(([attribut, row]) => {
+                formData[`new_${attribut}`] = row
+            })
+            if (value.startDate) {
+                formData.new_tgl_praktek = createDateFormat(value.startDate)
+                formData.new_jam_mulai = createTimeFormat(value.startDate)
+            }
+            if (value.endDate) {
+                formData.new_jam_selesai = createTimeFormat(value.endDate)
+            }
+        })
+
+        return formData
+    }
     const commitChanges = ({ added, changed, deleted }) => {
         if (added) {
-            tambahJadwal(createFormData(added))
+            postJadwal(createFormData(added), url.create_jadwal)
         }
         if (changed) {
-            console.log(changed);
+            // console.log(changed);
+            let formData = createFormData(selectedAppointment);
+            formData = updateFormData(formData, changed)
+            postJadwal(formData, url.update_jadwal)
         }
         if (deleted !== undefined) {
             console.log(deleted);
         }
+    }
+    // Menangani perubahan pada nilai properti editingAppointment.
+    const editingAppointment = (appointment) => {
+        // Memliih appointment yang akan di update
+        console.log(appointment);
+        setSelectedAppointment(appointment)
     }
     const theme = useTheme()
     return (
@@ -214,7 +250,9 @@ const JadwalPraktek = () => {
             halaman="Jadwal Praktek"
         >
             <Toolbar />
-            <JadwalPraktekNav />
+            <JadwalPraktekNav
+                formVisibilityChange={formVisibilityChange}
+            />
             <Paper
                 sx={{ margin: '1rem 2rem' }}
             >
@@ -228,6 +266,7 @@ const JadwalPraktek = () => {
                     />
                     <EditingState
                         onCommitChanges={commitChanges}
+                        onEditingAppointmentChange={editingAppointment}
                     />
                     <IntegratedEditing />
                     <WeekView
@@ -248,6 +287,8 @@ const JadwalPraktek = () => {
                         showOpenButton
                     />
                     <AppointmentForm
+                        visible={visibleForm}
+                        onVisibilityChange={formVisibilityChange}
                         basicLayoutComponent={BasicLayoutForm}
                         textEditorComponent={TextEditorForm}
                     />
@@ -257,6 +298,12 @@ const JadwalPraktek = () => {
                     />
                 </Scheduler>
             </Paper>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </Dashboard>
     )
 }

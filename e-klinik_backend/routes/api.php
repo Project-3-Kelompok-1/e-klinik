@@ -45,6 +45,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/jadwal-praktek/{id}', [JadwalPraktekController::class, 'destroy']);
         // COBA POST JADWAL
         Route::post('/jadwal-praktek/create', [JadwalPraktekController::class, 'create']);
+        Route::post('/jadwal-praktek/update', function (Request $request) {
+            return response()->json([
+                'request' => $request->all()
+            ]);
+        });
     });
     // Route::post('/test_upload', [DokterController::class, 'testUpload']);
 });

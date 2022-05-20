@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Diagnosa extends Model
 {
     use HasFactory;
+
+    protected $table ='diagnosa';
+    protected $filable=[
+        'id_pemeriksaan',
+        'diagnosa_pasien',
+    ];
 }

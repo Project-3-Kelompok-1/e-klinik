@@ -16,8 +16,13 @@ return new class extends Migration
         Schema::create('dokter', function (Blueprint $table) {
             $table->id();
             $table->string('nama_depan');
-            $table->string('nama_belakang');
+            $table->string('nama_belakang')->nullable();
             $table->string('jenis_kelamin');
+            $table->string('tempat_lahir')->nullable();
+            $table->text('alamat')->nullable();
+            $table->date('tgl_lahir')->nullable();
+            $table->string('no_hp')->nullable();
+            $table->text('foto_dokter')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_dokter');
+        Schema::dropIfExists('dokter');
     }
 };

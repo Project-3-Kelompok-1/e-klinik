@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DOMAIN_SERVER } from "../../config";
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -51,6 +51,7 @@ const Register = () => {
         }
         // console.log(response);
     }
+   
     return (
         <div>
             <h1>Halaman Registrasi</h1>

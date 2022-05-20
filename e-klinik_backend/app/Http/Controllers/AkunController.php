@@ -23,7 +23,7 @@ class AkunController extends Controller
             return response()->json([
                 'status' => 'failed',
                 'errors' => $validator->failed()
-            ]);
+            ], 400);
         }
         $validated = $validator->validated();
         $user = new User();
@@ -58,6 +58,8 @@ class AkunController extends Controller
                 'message' => 'Username atau password salah !!!'
             ]);
         }
+
+        
         $data['token'] = $user->createToken('E-Klinik')->plainTextToken;
         $data['username'] = $validated['username'];
         $data['role'] = $user->role;

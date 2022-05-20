@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('resep_obat', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_obat');
+            $table->foreignId('id_berobat jalan');
+            $table->string('jumlah_penggunaan_dosis');
             $table->timestamps();
         });
     }

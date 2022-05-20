@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ruang_rawat_inapController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+
+
+route::group(['middleware'=> 'auth'], function() {
+    route::get('/ruang_rawat_inap/data', [ruang_rawat_inapController::class, 'data']);
+    route::resource('/ruang_rawat_inap', [ruang_rawat_inapController::class]);
 });

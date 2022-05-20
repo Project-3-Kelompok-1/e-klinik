@@ -9,6 +9,9 @@ const Login = () => {
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     useEffect(() => {
+        document.title = "Dr Rezka - Login"
+    }, [])
+    useEffect(() => {
         let isCancelled = false;
         if (user?.role === 'resepsionis') {
             navigate('/resepsionis');
@@ -40,7 +43,6 @@ const Login = () => {
         let response = await fetch(url, postLogin);
         let result = await response.json();
         if (result?.status === 'success' && result?.data) {
-            // setUser(result.data);
             localStorage.setItem('user', JSON.stringify(result.data))
             alert("Login berhasil");
             setUser(JSON.parse(localStorage.getItem('user')))

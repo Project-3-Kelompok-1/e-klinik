@@ -15,6 +15,12 @@ return new class extends Migration
     {
         Schema::create('pemeriksaan', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_appointment');
+            $table->datetime('tgl_periksa');
+            $table->datetime('jam_periksa');
+            $table->string('amnanesa');
+            $table->string('planning');
+            $table->string('keputusan');
             $table->timestamps();
         });
     }

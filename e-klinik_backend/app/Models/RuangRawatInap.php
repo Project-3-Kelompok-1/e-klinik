@@ -9,5 +9,7 @@ class RuangRawatInap extends Model
 {
     use HasFactory;
     protected $table ='ruang_rawat_inap';
-    protected $guarded = [];
+    protected $filable=[
+        'nama_ruangan'
+    ];
 }

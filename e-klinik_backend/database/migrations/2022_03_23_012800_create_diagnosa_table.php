@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('diagnosa', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_pemeriksaan');
+            $table->string('diagnosa_pasien');
             $table->timestamps();
         });
     }

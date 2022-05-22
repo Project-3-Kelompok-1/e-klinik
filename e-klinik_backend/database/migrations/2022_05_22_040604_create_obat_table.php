@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('jadwal_praktek', function (Blueprint $table) {
-
+        Schema::create('obat', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_dokter');
-            $table->string('title');
-            $table->date('tgl_praktek');
-            $table->time('jam_mulai');
-            $table->time('jam_selesai');
-            $table->string('status');
+            $table->string('nama_obat');
+            $table->string('dosis_obat');
+            $table->integer('stok_obat');
+            $table->string('jenis_obat');
+            $table->string('tipe_obat')->nullable();
+            $table->integer('harga_jual')->nullable();
+            $table->integer('harga_pabrik');
             $table->timestamps();
         });
     }
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jadwal_praktek');
+        Schema::dropIfExists('obat');
     }
 };

@@ -11,13 +11,13 @@ use Illuminate\Support\Str;
 
 class DokterController extends Controller
 {
-    public function responseValidatedFailed($validator)
-    {
-        return response()->json([
-            'status' => 'failed',
-            'errors' => $validator->failed()
-        ], 400);
-    }
+    // public function responseValidatedFailed($validator)
+    // {
+    //     return response()->json([
+    //         'status' => 'failed',
+    //         'errors' => $validator->failed()
+    //     ], 400);
+    // }
     public function responseFailed($response, $code = 404)
     {
         return response()->json($response, $code);

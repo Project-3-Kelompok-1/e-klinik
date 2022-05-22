@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,16 +41,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('resepsionis')->group(function () {
         // Kelola jadwal praktek 
-        Route::post('/jadwal-praktek', [JadwalPraktekController::class, 'store']);
-        Route::post('/jadwal-praktek/update/{id}', [JadwalPraktekController::class, 'update']);
-        Route::delete('/jadwal-praktek/{id}', [JadwalPraktekController::class, 'destroy']);
-        // COBA POST JADWAL
-        Route::post('/jadwal-praktek/create', [JadwalPraktekController::class, 'create']);
-        Route::post('/jadwal-praktek/update', function (Request $request) {
-            return response()->json([
-                'request' => $request->all()
-            ]);
-        });
+        Route::post('/jadwal-praktek/create', [JadwalPraktekController::class, 'store']);
+        Route::post('/jadwal-praktek/update', [JadwalPraktekController::class, 'update']);
     });
     // Route::post('/test_upload', [DokterController::class, 'testUpload']);
 });
@@ -71,13 +64,5 @@ Route::get('/jadwal-praktek/{id}', [JadwalPraktekController::class, 'detail']);
 // Route::get("/hello", function () {
 //     return response()->json([
 //         'message' => "Hello World"
-//     ]);
-// });
-// Route::get('/collection', function () {
-//     $jadwalPraktek = JadwalPraktek::all()
-//         ->groupBy(['tgl_praktek', "jam_mulai", "jam_selesai", "status"]);
-
-//     return response()->json([
-//         'collection' => $jadwalPraktek
 //     ]);
 // });

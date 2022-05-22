@@ -9,7 +9,6 @@ const BasicLayoutForm = ({ onFieldChange, appointmentData, ...restProps }) => {
             appointmentData={appointmentData}
             onFieldChange={onFieldChange}
             {...restProps}
-            
         />
     )
 }

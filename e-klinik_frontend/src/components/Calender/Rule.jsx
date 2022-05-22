@@ -4,7 +4,6 @@ const Rule = ({ ...restProps }) => {
     return (
         <AppointmentForm.WeeklyRecurrenceSelector 
             {...restProps}
-            
         />
     )
 }

@@ -113,9 +113,6 @@ const DataDokter = (props) => {
     const createData = (nama_lengkap, alamat, jenis_kelamin, no_hp) => {
         return { nama_lengkap, alamat, jenis_kelamin, no_hp };
     }
-    useEffect(() => {
-        console.log(dataDokter);
-    }, [dataDokter])
     return (
         <>
             {/* Component Snackbar alert */}
@@ -126,7 +123,7 @@ const DataDokter = (props) => {
             >
                 <Alert
                     onClose={closeSnackBar}
-                    severity="info"
+                    severity="success"
                     sx={{ width: '100%' }}
                 >
                     {messageAlert}

@@ -85,9 +85,27 @@ const Dashboard = (props) => {
                         <ListItemText primary="Jadwal Praktek" />
                     </Button>
                 </ListItem>
+                <ListItem>
+                    <Button
+                        color='primary'
+                        component="span"
+                        sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                        variant={`${props.halaman === 'Data Obat' ? 'contained' : 'text'}`}
+                        startIcon={<EventAvailable />}
+                        onClick={() => {
+                            if (user.role === 'resepsionis') {
+                                navigate('/resepsionis/data-obat')
+                            }
+                            else if (user.role === 'dokter') {
+                                navigate('/dokter/data-obat')
+                            }
+                        }}
+                    >
+                        <ListItemText primary="Data Obat" />
+                    </Button>
+                </ListItem>
             </List>
             <Divider />
-
         </div>
     );
 

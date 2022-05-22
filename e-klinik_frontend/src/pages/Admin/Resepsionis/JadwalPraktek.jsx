@@ -4,6 +4,8 @@ import Dashboard from "../../../components/Layouts/Dashoard/Dashboard";
 import JadwalPraktekNav from "../../../components/Navigations/JadwalPraktekNav";
 import Paper from "@mui/material/Paper"
 import Backdrop from "@mui/material/Backdrop";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "../../../components/Feedback/Alert";
 import { EditingState, IntegratedEditing, ViewState } from '@devexpress/dx-react-scheduler';
 import blue from "@mui/material/colors/blue";
 import red from "@mui/material/colors/red";
@@ -22,8 +24,10 @@ import { DOMAIN_SERVER } from "../../../config";
 import { useNavigate } from "react-router-dom";
 import BasicLayoutForm from "../../../components/Calender/BasicLayoutForm";
 import TextEditorForm from "../../../components/Calender/TextEditorForm";
+import BooleanEditorForm from "../../../components/Calender/BooleanEditorForm";
 import useTheme from "@mui/material/styles/useTheme";
 import { CircularProgress } from "@mui/material";
+import RecurrenceLayoutForm from "../../../components/Calender/RecurrenceLayout";
 
 const url = {
     index: DOMAIN_SERVER + '/api/jadwal-praktek',
@@ -33,6 +37,8 @@ const url = {
     update_jadwal: DOMAIN_SERVER + '/api/jadwal-praktek/update'
 }
 let memberDokter = []
+let severityAlert = "success";
+let alertMessage = "Success";
 const JadwalPraktek = () => {
     const { user } = useContext(UserContext)
     const navigate = useNavigate()
@@ -46,6 +52,16 @@ const JadwalPraktek = () => {
     const [loading, setLoading] = useState(false)
     const [visibleForm, setVisibleForm] = useState(false)
     const [selectedAppointment, setSelectedAppointment] = useState()
+    const [openAlert, setOpenAlert] = useState(false)
+    const showAlert = () => {
+        setOpenAlert(true)
+    }
+    const hideAlert = (event, reason) => {
+        if (reason === 'clickwat') {
+            return;
+        }
+        setOpenAlert(false)
+    }
     const formVisibilityChange = () => {
         setVisibleForm(!visibleForm)
     }
@@ -129,7 +145,7 @@ const JadwalPraktek = () => {
                         Object.keys(listJadwal[tgl_praktek][jam_mulai][jam_selesai]).forEach(status => {
                             const jadwalCollection = listJadwal[tgl_praktek][jam_mulai][jam_selesai][status]
                             let itemAppointement = {}
-                            itemAppointement.title = status;
+                            itemAppointement.title = jadwalCollection[0].title;
                             itemAppointement.startDate = new Date(`${tgl_praktek} ${jam_mulai}`)
                             itemAppointement.endDate = new Date(`${tgl_praktek} ${jam_selesai}`)
                             itemAppointement.status = status.toLocaleLowerCase();
@@ -164,8 +180,12 @@ const JadwalPraktek = () => {
         let response = await fetch(urlTarget, postRequest);
         response = await response.json()
         fetchJadwal()
-        if (response?.status === 'success') {
-            console.log(response.message);
+        if (response.message) {
+            if (response?.status === 'success') {
+                severityAlert = "success";
+                alertMessage = response.message;
+            }
+            showAlert();
         }
         console.log(response);
     }
@@ -236,6 +256,7 @@ const JadwalPraktek = () => {
         }
         if (deleted !== undefined) {
             console.log(deleted);
+            console.console.log(listJadwal[deleted - 1]);
         }
     }
     // Menangani perubahan pada nilai properti editingAppointment.
@@ -246,65 +267,84 @@ const JadwalPraktek = () => {
     }
     const theme = useTheme()
     return (
-        <Dashboard
-            halaman="Jadwal Praktek"
-        >
-            <Toolbar />
-            <JadwalPraktekNav
-                formVisibilityChange={formVisibilityChange}
-            />
-            <Paper
-                sx={{ margin: '1rem 2rem' }}
+        <>
+            <Snackbar
+                open={openAlert}
+                autoHideDuration={6000}
+                onClose={hideAlert}
             >
-                <Scheduler
-                    data={appointmentsData}
-                // height={500}
+                <Alert
+                    onClose={hideAlert}
+                    severity="success"
+                    sx={{ width: '100%' }}
                 >
-                    <ViewState
-                        currentDate={currentDate}
-                        onCurrentDateChange={e => setCurrentDate(e)}
-                    />
-                    <EditingState
-                        onCommitChanges={commitChanges}
-                        onEditingAppointmentChange={editingAppointment}
-                    />
-                    <IntegratedEditing />
-                    <WeekView
-                        cellDuration={60}
-                        startDayHour={7}
-                        endDayHour={17}
-                    />
-                    <ToolbarSchedule />
-                    <DateNavigator />
-                    <TodayButton
-                        component="span"
-                    />
-                    <ConfirmationDialog />
-                    <Appointments />
-                    <AppointmentTooltip
-                        showDeleteButton
-                        showCloseButton
-                        showOpenButton
-                    />
-                    <AppointmentForm
-                        visible={visibleForm}
-                        onVisibilityChange={formVisibilityChange}
-                        basicLayoutComponent={BasicLayoutForm}
-                        textEditorComponent={TextEditorForm}
-                    />
-                    <Resources
-                        data={resources}
-                        mainResourceName={mainResourcesName}
-                    />
-                </Scheduler>
-            </Paper>
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={loading}
+                    {alertMessage}
+                </Alert>
+            </Snackbar>
+            <Dashboard
+                halaman="Jadwal Praktek"
             >
-                <CircularProgress color="inherit" />
-            </Backdrop>
-        </Dashboard>
+                <Toolbar />
+                <JadwalPraktekNav
+                    formVisibilityChange={formVisibilityChange}
+                />
+                <Paper
+                    sx={{ margin: '1rem 2rem' }}
+                >
+                    <Scheduler
+                        data={appointmentsData}
+                    // height={500}
+                    >
+                        <ViewState
+                            currentDate={currentDate}
+                            onCurrentDateChange={e => setCurrentDate(e)}
+                        />
+                        <EditingState
+                            onCommitChanges={commitChanges}
+                            onEditingAppointmentChange={editingAppointment}
+                        />
+                        <IntegratedEditing />
+                        <WeekView
+                            cellDuration={60}
+                            startDayHour={7}
+                            endDayHour={17}
+                        />
+                        <ToolbarSchedule />
+                        <DateNavigator />
+                        <TodayButton
+                            component="span"
+                        />
+                        <ConfirmationDialog />
+                        <Appointments />
+
+                        <AppointmentTooltip
+                            showDeleteButton
+                            showCloseButton
+                            showOpenButton
+                        />
+                        <AppointmentForm
+                            visible={visibleForm}
+                            onVisibilityChange={formVisibilityChange}
+                            basicLayoutComponent={BasicLayoutForm}
+                            textEditorComponent={TextEditorForm}
+                            booleanEditorComponent={BooleanEditorForm}
+                            recurrenceLayoutComponent={RecurrenceLayoutForm}
+                            // messages={}
+                        />
+                        <Resources
+                            data={resources}
+                            mainResourceName={mainResourcesName}
+                        />
+                    </Scheduler>
+                </Paper>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={loading}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+            </Dashboard>
+        </>
     )
 }
 export default JadwalPraktek;

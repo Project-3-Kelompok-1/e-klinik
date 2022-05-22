@@ -152,7 +152,7 @@ class JadwalPraktekController extends Controller
                     $tgl_praktek = date('Y-m-d', strtotime($tgl_praktek . $next_schedule));
                 }
             }
-        } 
+        }
         // Membuat jadwal praktek hingga batas waktu tertentu
         else {
             $untilRequest = new Request();
@@ -232,22 +232,30 @@ class JadwalPraktekController extends Controller
         ];
         return $this->responseSuccess($response);
     }
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        // 1. Cari jadwal
-        $hapus = JadwalPraktek::find($id);
-        if (!$hapus) {
+        // 1. Validasi request
+        $validator = Validator::make($request->all(), [
+            'id' => ['required', 'array', 'min:1'],
+            'id.*' => ['required', 'integer'],
+        ]);
+        // Validasi gagal
+        if ($validator->fails()) {
+            return $this->responseValidationFailed($validator);
+        }
+        // 2. Hapus Jadwal
+        $deleted = JadwalPraktek::destroy($request->id);
+        if (!$deleted) {
             $response = [
                 'status' => 'failed',
-                'message' => 'Jadwal tidak ditemukan'
+                'message' => 'Gagal menghapus jadwal praktek'
             ];
-            return $this->responseFailed($response);
+            return $this->responseFailed($response, 400);
         }
-        // 2. Hapus jadwal
-        $hapus->delete();
+        // 3. Lakukan response
         $response = [
             'status' => 'success',
-            'message' => 'Jadwal berhasil dihapus'
+            'message' => 'Jadwal praktek berhasil dihapus'
         ];
         return $this->responseSuccess($response);
     }

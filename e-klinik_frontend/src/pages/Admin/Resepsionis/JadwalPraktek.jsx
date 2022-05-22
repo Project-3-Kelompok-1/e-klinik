@@ -34,7 +34,8 @@ const url = {
     seminggu: DOMAIN_SERVER + '/api/jadwal-praktek/seminggu',
     dokter: DOMAIN_SERVER + '/api/dokter',
     create_jadwal: DOMAIN_SERVER + '/api/jadwal-praktek/create',
-    update_jadwal: DOMAIN_SERVER + '/api/jadwal-praktek/update'
+    update_jadwal: DOMAIN_SERVER + '/api/jadwal-praktek/update',
+    delete_jadwal: DOMAIN_SERVER + '/api/jadwal-praktek/delete'
 }
 let memberDokter = []
 let severityAlert = "success";
@@ -221,10 +222,11 @@ const JadwalPraktek = () => {
         Object.entries(form).forEach(([key, value]) => {
             formData[key] = value
         })
-
-        formData.tgl_praktek = createDateFormat(form.startDate)
-        formData.jam_mulai = createTimeFormat(form.startDate)
-        formData.jam_selesai = createTimeFormat(form.endDate)
+        if (form.startDate && form.endDate) {
+            formData.tgl_praktek = createDateFormat(form.startDate)
+            formData.jam_mulai = createTimeFormat(form.startDate)
+            formData.jam_selesai = createTimeFormat(form.endDate)
+        }
 
         return formData;
     }
@@ -244,6 +246,9 @@ const JadwalPraktek = () => {
 
         return formData
     }
+    const deleteJadwal = async (jadwal) => {
+        console.log(jadwal)
+    }
     const commitChanges = ({ added, changed, deleted }) => {
         if (added) {
             postJadwal(createFormData(added), url.create_jadwal)
@@ -255,14 +260,21 @@ const JadwalPraktek = () => {
             postJadwal(formData, url.update_jadwal)
         }
         if (deleted !== undefined) {
-            console.log(deleted);
-            console.console.log(listJadwal[deleted - 1]);
+            // console.log(deleted);
+            // console.console.log(listJadwal[deleted - 1]);
+            let deleteSelected = {}
+            for (let i = 0; i < appointmentsData.length; i++) {
+                if (appointmentsData[i].id === deleted) {
+                    deleteSelected.id = appointmentsData[i].id_jadwal
+                    break
+                }
+            }
+            postJadwal(deleteSelected, url.delete_jadwal);
         }
     }
     // Menangani perubahan pada nilai properti editingAppointment.
     const editingAppointment = (appointment) => {
         // Memliih appointment yang akan di update
-        console.log(appointment);
         setSelectedAppointment(appointment)
     }
     const theme = useTheme()
@@ -329,7 +341,7 @@ const JadwalPraktek = () => {
                             textEditorComponent={TextEditorForm}
                             booleanEditorComponent={BooleanEditorForm}
                             recurrenceLayoutComponent={RecurrenceLayoutForm}
-                            // messages={}
+                        // messages={}
                         />
                         <Resources
                             data={resources}

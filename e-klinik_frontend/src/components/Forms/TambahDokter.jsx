@@ -123,7 +123,7 @@ const TambahDokter = ({ showTambahDokter, setShowTambahDokter, user, openSnackBa
             const day = tanggalLahir.getUTCDate();
             newDate = year + '-' + month + '-' + day;
         }
-
+        
         const formData = new FormData();
         formData.append('nama_depan', namaDepan);
         formData.append('nama_belakang', namaBelakang);

@@ -1,5 +1,6 @@
-import { Toolbar, Typography } from "@mui/material";
-import React, {  useEffect, useState } from "react";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dashboard from "../../../components/Layouts/Dashoard/Dashboard";
 const Resepsionis = () => {

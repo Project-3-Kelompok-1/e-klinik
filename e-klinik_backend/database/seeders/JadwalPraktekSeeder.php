@@ -18,17 +18,19 @@ class JadwalPraktekSeeder extends Seeder
     {
         JadwalPraktek::create([
             'id_dokter' => 1,
+            'title' => 'Kerja Lembur',
             'tgl_praktek' => Carbon::now()->format('Y-m-d'),
             'jam_mulai' => Carbon::now()->format('H:i:s'),
             'jam_selesai' => Carbon::now()->format('H:i:s'),
-            'status' => 'Selesai'
+            'status' => 'kerja'
         ]);
         JadwalPraktek::create([
             'id_dokter' => 2,
+            'title' => 'Hari minggu',
             'tgl_praktek' => Carbon::now()->format('Y-m-d'),
             'jam_mulai' => Carbon::now()->format('H:i:s'),
             'jam_selesai' => Carbon::now()->format('H:i:s'),
-            'status' => 'Selesai'
+            'status' => 'libur'
         ]);
     }
 }

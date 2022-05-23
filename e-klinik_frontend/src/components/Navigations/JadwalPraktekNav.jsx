@@ -2,16 +2,14 @@ import { AddCircleOutline, NavigateNext } from "@mui/icons-material";
 import { Box, Breadcrumbs, Button, Stack } from "@mui/material";
 import React from "react";
 import { NavLink } from "react-router-dom";
-const JadwalPraktekNav = () => {
+const JadwalPraktekNav = ({ formVisibilityChange }) => {
     return (
         <Box
             sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                backgroundColor: '#fff',
-                border: 'solid 1px #E0E0E0',
                 alignItems: 'center',
-                padding: '1rem 2rem',
+                margin: '1rem 2rem',
                 flexWrap: 'wrap',
                 gap: '1rem'
             }}
@@ -47,6 +45,7 @@ const JadwalPraktekNav = () => {
                     gap: '0.5rem',
                     fontWeight: 'bold'
                 }}
+                onClick={formVisibilityChange}
             >
                 Tambah jadwal
             </Button>

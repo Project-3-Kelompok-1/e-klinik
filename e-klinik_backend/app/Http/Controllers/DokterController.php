@@ -11,13 +11,13 @@ use Illuminate\Support\Str;
 
 class DokterController extends Controller
 {
-    public function responseValidatedFailed($validator)
-    {
-        return response()->json([
-            'status' => 'failed',
-            'errors' => $validator->failed()
-        ], 400);
-    }
+    // public function responseValidatedFailed($validator)
+    // {
+    //     return response()->json([
+    //         'status' => 'failed',
+    //         'errors' => $validator->failed()
+    //     ], 400);
+    // }
     public function responseFailed($response, $code = 404)
     {
         return response()->json($response, $code);
@@ -88,13 +88,6 @@ class DokterController extends Controller
     }
     public function index(Request $request)
     {
-        $user = $request->user();
-        if ($user->role !== 'resepsionis' && $user->role !== 'dokter') {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Permission denied'
-            ], 403);
-        }
         if ($request->search) {
             $dokter = Dokter::where('nama_depan', 'LIKE', '%' . $request->search . '%')
                 ->orWhere('nama_belakang', 'LIKE', '%' . $request->search . '%')->get();

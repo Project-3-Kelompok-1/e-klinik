@@ -4,7 +4,7 @@ namespace App\Http\Traits;
 
 trait ResponseTrait
 {
-    protected function responseValidatedFailed($validator)
+    protected function responseValidationFailed($validator)
     {
         return response()->json([
             'status' => 'failed',

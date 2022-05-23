@@ -44,7 +44,7 @@ const FormDokter = ({ showFormDokter, setShowFormDokter, user, openSnackBar, set
     // Data form dokter
 
     useEffect(() => {
-        console.log(validationMessage);
+        // console.log(validationMessage);
     }, [validationMessage])
 
     useEffect(() => {
@@ -183,7 +183,7 @@ const FormDokter = ({ showFormDokter, setShowFormDokter, user, openSnackBar, set
         if (result.status === 'validation failed') {
             validasiFormDokter(result, setValidationMessage, setFotoDokter);
             // console.log(validationMessage);
-            console.log(result);
+            // console.log(result);
         }
         else {
             resetForm();
@@ -391,7 +391,7 @@ const FormDokter = ({ showFormDokter, setShowFormDokter, user, openSnackBar, set
                             margin="dense"
                             id="no_hp"
                             label="No hp"
-                            type="number"
+                            type="tel"
                             fullWidth
                             variant="standard"
                             value={noHp}
@@ -454,7 +454,7 @@ const FormDokter = ({ showFormDokter, setShowFormDokter, user, openSnackBar, set
                                     onDrop={(e) => {
                                         e.preventDefault();
                                         setFotoDokter(e.dataTransfer.files[0])
-                                        console.log(e.dataTransfer);
+                                        // console.log(e.dataTransfer);
                                     }}
                                 >
                                     <Box

@@ -391,7 +391,7 @@ const FormDokter = ({ showFormDokter, setShowFormDokter, user, openSnackBar, set
                             margin="dense"
                             id="no_hp"
                             label="No hp"
-                            type="number"
+                            type="tel"
                             fullWidth
                             variant="standard"
                             value={noHp}

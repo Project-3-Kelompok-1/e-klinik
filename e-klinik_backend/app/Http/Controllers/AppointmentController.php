@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
@@ -13,7 +14,11 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        //
+        $apoin=Appointment::all();
+       return response()->json([
+           'status'=> 'succes',
+           'apoin'=> $apoin
+       ]);
     }
 
     /**
@@ -34,7 +39,11 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Appointment::create($request->all());
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Appoinment berhasil dibuat'
+        ]);
     }
 
     /**
@@ -45,7 +54,15 @@ class AppointmentController extends Controller
      */
     public function show($id)
     {
-        //
+        // 1. Cari ruangan berdasarkan id
+        $apoin = Appointment::find($id);
+
+        // appoinmen ditemukan
+        return response()->json([
+            $response = 
+                'status' => 'success',
+                'apoin_show' => $apoin
+            ]);
     }
 
     /**
@@ -68,7 +85,21 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // 2. Cari ruang rawat inap & update
+        $apoin = Appointment::find($id)->update($request->all());
+        // Ruangan tidak ditemukan
+        if (!$apoin) {
+            $response = [
+                'status' => 'failed',
+                'message' => 'appoinment tidak ditemukan'
+            ];
+            return $this->responseFailed($response);
+        }
+        $response = [
+            'status' => 'success',
+            'message' => 'appoinment berhasil diupdate'
+        ];
+        return $this->responseSuccess($response);
     }
 
     /**
@@ -79,6 +110,21 @@ class AppointmentController extends Controller
      */
     public function destroy($id)
     {
-        //
+         // 1. Cari ruangan
+         $hapus = Appointment::find($id);
+         if (!$hapus) {
+             $response = [
+                 'status' => 'failed',
+                 'message' => ' Appointment tidak ditemukan'
+             ];
+             return $this->responseFailed($response);
+         }
+         // 2. Hapus Appointment
+         $hapus->delete();
+         $response = [
+             'status' => 'success',
+             'message' => 'Appointment berhasil dihapus'
+         ];
+         return $this->responseSuccess($response);
+     }
     }
-}

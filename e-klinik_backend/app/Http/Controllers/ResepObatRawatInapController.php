@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ResepObatRawatInap;
 use Illuminate\Http\Request;
 
 class ResepObatRawatInapController extends Controller
@@ -13,7 +14,11 @@ class ResepObatRawatInapController extends Controller
      */
     public function index()
     {
-        //
+        $rori=ResepObatRawatInap::all();
+       return response()->json([
+           'status'=> 'succes',
+           'rori'=> $rori
+       ]);
     }
 
     /**
@@ -34,7 +39,11 @@ class ResepObatRawatInapController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        ResepObatRawatInap::create($request->all());
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Resep obat rawat inap berhasil ditambahkan'
+        ]);
     }
 
     /**
@@ -45,7 +54,14 @@ class ResepObatRawatInapController extends Controller
      */
     public function show($id)
     {
-        //
+        // 1. Cari rori berdasarkan id
+        $rori = ResepObatRawatInap::find($id);
+         // rori ditemukan
+         return response()->json([
+            $response = 
+                'status' => 'success',
+                'rori_show' => $rori
+            ]);
     }
 
     /**
@@ -68,7 +84,21 @@ class ResepObatRawatInapController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // 2. Cari rori & update
+        $rori = ResepObatRawatInap::find($id)->update($request->all());
+        // Rori tidak ditemukan
+        if (!$rori) {
+            $response = [
+                'status' => 'failed',
+                'message' => 'Resep Obat Rawat Inap tidak ditemukan'
+            ];
+            return $this->responseFailed($response);
+        }
+        $response = [
+            'status' => 'success',
+            'message' => 'Resep Obat Rawat Inap berhasil diupdate'
+        ];
+        return $this->responseSuccess($response);
     }
 
     /**
@@ -79,6 +109,21 @@ class ResepObatRawatInapController extends Controller
      */
     public function destroy($id)
     {
-        //
+     // 1. Cari rori
+     $hapus = ResepObatRawatInap::find($id);
+     if (!$hapus) {
+         $response = [
+             'status' => 'failed',
+             'message' => 'Resep Obat Rawat Inap tidak ditemukan'
+         ];
+         return $this->responseFailed($response);
+     }
+     // 2. Hapus ruangan
+     $hapus->delete();
+     $response = [
+         'status' => 'success',
+         'message' => 'Resep Obat Rawat Inap berhasil dihapus'
+     ];
+     return $this->responseSuccess($response);
     }
 }

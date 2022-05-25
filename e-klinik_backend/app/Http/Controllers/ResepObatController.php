@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ResepObat;
 use Illuminate\Http\Request;
 
 class ResepObatController extends Controller
@@ -13,7 +14,11 @@ class ResepObatController extends Controller
      */
     public function index()
     {
-        //
+        $resep=ResepObat::all();
+        return response()->json([
+            'status'=> 'succes',
+            'resep'=> $resep
+        ]);
     }
 
     /**
@@ -34,7 +39,11 @@ class ResepObatController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        ResepObat::create($request->all());
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Resep Obat berhasil ditambahkan'
+        ]);
     }
 
     /**
@@ -45,7 +54,13 @@ class ResepObatController extends Controller
      */
     public function show($id)
     {
-        //
+        // 1. Cari Resep.O berdasarkan id
+        $resep = ResepObat::find($id);
+        return response()->json([
+            $response = 
+                'status' => 'success',
+                'resep_show' => $resep
+            ]);
     }
 
     /**
@@ -68,7 +83,21 @@ class ResepObatController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // 2. Cari resep.O & update
+        $resep = ResepObat::find($id)->update($request->all());
+        //  tidak ditemukan
+        if (!$resep) {
+            $response = [
+                'status' => 'failed',
+                'message' => 'Resep tidak ditemukan'
+            ];
+            return $this->responseFailed($response);
+        }
+        $response = [
+            'status' => 'success',
+            'message' => 'Resep berhasil diupdate'
+        ];
+        return $this->responseSuccess($response);
     }
 
     /**
@@ -79,6 +108,21 @@ class ResepObatController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // 1. Cari resep
+        $hapus = ResepObat::find($id);
+        if (!$hapus) {
+            $response = [
+                'status' => 'failed',
+                'message' => 'Resep tidak ditemukan'
+            ];
+            return $this->responseFailed($response);
+        }
+        // 2. Hapus resep
+        $hapus->delete();
+        $response = [
+            'status' => 'success',
+            'message' => 'resep berhasil dihapus'
+        ];
+        return $this->responseSuccess($response);
     }
 }

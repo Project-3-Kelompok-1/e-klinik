@@ -10,8 +10,8 @@ class RawatInap extends Model
     use HasFactory;
     protected $table ='rawat_inap';
     protected $fillable = [
-        'ruang_rawat_inap',
-        'pemeriksaan',
+        'id_ruang_rawat_inap',
+        'id_pemeriksaan',
         'tanggal_masuk',
         'tanggal_keluar',
         'status'

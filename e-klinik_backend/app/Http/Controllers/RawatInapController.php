@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RawatInap;
 use Illuminate\Http\Request;
 
 class RawatInapController extends Controller
@@ -13,7 +14,11 @@ class RawatInapController extends Controller
      */
     public function index()
     {
-        //
+        $ranap=RawatInap::all();
+        return response()->json([
+            'status'=> 'succes',
+            'ranap'=> $ranap
+        ]);
     }
 
     /**
@@ -34,7 +39,11 @@ class RawatInapController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        RawatInap::create($request->all());
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Pasien rawat inap berhasil ditambahkan'
+        ]);
     }
 
     /**
@@ -45,7 +54,16 @@ class RawatInapController extends Controller
      */
     public function show($id)
     {
-        //
+         // 1. Cari pasien ranap berdasarkan id
+        $ranap = RawatInap::find($id);
+
+
+        //pasien ranap ditemukan
+        return response()->json([
+            $response = 
+                'status' => 'success',
+                'ranap_show' => $ranap
+            ]);
     }
 
     /**
@@ -68,7 +86,21 @@ class RawatInapController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // 2. Cari pasien rawat inap & update
+        $ranap = RawatInap::find($id)->update($request->all());
+        // pasien ranap tidak ditemukan
+        if (!$ranap) {
+            $response = [
+                'status' => 'failed',
+                'message' => 'Pasien rawat inap tidak ditemukan'
+            ];
+            return $this->responseFailed($response);
+        }
+        $response = [
+            'status' => 'success',
+            'message' => 'Ruangan berhasil diupdate'
+        ];
+        return $this->responseSuccess($response);
     }
 
     /**
@@ -79,6 +111,21 @@ class RawatInapController extends Controller
      */
     public function destroy($id)
     {
-        //
+         // 1. Cari pasien ranap
+         $hapus = RawatInap::find($id);
+         if (!$hapus) {
+             $response = [
+                 'status' => 'failed',
+                 'message' => 'Pasien rawat inap tidak ditemukan'
+             ];
+             return $this->responseFailed($response);
+         }
+         // 2. Hapus ranap
+         $hapus->delete();
+         $response = [
+             'status' => 'success',
+             'message' => 'rawat inap berhasil dihapus'
+         ];
+         return $this->responseSuccess($response);
     }
 }

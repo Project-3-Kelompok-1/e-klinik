@@ -46,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/data-obat/update/{id}', [ObatController::class, 'update']);
         Route::delete('/data-obat/delete/{id}', [ObatController::class, 'destroy']);
         Route::delete('/data-obat/delete', [ObatController::class, 'deleteSelected']);
+        Route::post('/data-obat/update/{id}', [ObatController::class, 'update']);
     });
 });
 // Get semua jadwal praktek

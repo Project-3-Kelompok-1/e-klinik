@@ -64,11 +64,13 @@ const DataObat = () => {
         setShowDelete(false);
         setSelectedObat(null);
     }
-    const handleShowForm = () => {
+    const handleShowForm = (e, column = null) => {
         setShowForm(true);
+        setSelectedObat(column)
     }
     const handleHideForm = () => {
         setShowForm(false);
+        setSelectedObat(null)
     }
     const handleShowAlert = (type, message) => {
         setSeverity(type);
@@ -103,6 +105,7 @@ const DataObat = () => {
                     dataObat={dataObat}
                     loading={loading}
                     handleShowDelete={handleShowDelete}
+                    handleShowForm={handleShowForm}
                 />
             </Dashboard>
             <FormObat
@@ -112,6 +115,7 @@ const DataObat = () => {
                 fetchData={fetchData}
                 user={user}
                 handleShowAlert={handleShowAlert}
+                selectedObat={selectedObat}
             />
             <HapusObat
                 showDelete={showDelete}

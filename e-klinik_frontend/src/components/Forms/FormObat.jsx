@@ -6,9 +6,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />
 })
 const url = {
-    create: DOMAIN_SERVER + '/api/data-obat/create'
+    create: DOMAIN_SERVER + '/api/data-obat/create',
+    update: DOMAIN_SERVER + '/api/data-obat/update'
 }
-const FormObat = ({ fullScreen, showForm, handleHideForm, fetchData, user, handleShowAlert }) => {
+const FormObat = ({ fullScreen, showForm, handleHideForm, fetchData, user, handleShowAlert, selectedObat }) => {
+    const [id, setId] = useState(null);
     const [namaObat, setNamaObat] = useState('');
     const [stokObat, setStokObat] = useState(0);
     const [jenisObat, setJenisObat] = useState('');
@@ -27,6 +29,34 @@ const FormObat = ({ fullScreen, showForm, handleHideForm, fetchData, user, handl
             setHargaPabrik(0);
         }
     }, [stokObat, hargaJual, hargaPabrik])
+    const assignData = () => {
+        setId(selectedObat.id)
+        setNamaObat(selectedObat.nama_obat)
+        setStokObat(selectedObat.stok_obat)
+        setJenisObat(selectedObat.jenis_obat)
+        setTipeObat(selectedObat.tipe_obat)
+        setHargaPabrik(selectedObat.harga_pabrik)
+        setHargaJual(selectedObat.harga_jual)
+        setDosisObat(selectedObat.dosis_obat)
+    }
+    const resetData = () => {
+        setId(null)
+        setNamaObat('')
+        setStokObat(0)
+        setJenisObat('')
+        setTipeObat('')
+        setHargaPabrik(0)
+        setHargaJual(0)
+        setDosisObat('')
+    }
+    useEffect(() => {
+        if (selectedObat !== null) {
+            assignData()
+        }
+        else {
+            resetData()
+        }
+    }, [selectedObat])
     const createFormData = () => {
         const formData = new FormData();
         formData.append('nama_obat', namaObat);
@@ -50,19 +80,37 @@ const FormObat = ({ fullScreen, showForm, handleHideForm, fetchData, user, handl
                 'Authorization': `Bearer ${user.token}`
             })
         }
-        fetch(url.create, postData)
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    handleShowAlert("success", data.message)
-                }
-                else {
-                    handleShowAlert("error", data.message)
-                }
-            })
-            .catch(error => {
-                console.log(error)
-            })
+        if (!id) {
+            fetch(url.create, postData)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        handleShowAlert("success", data.message)
+                    }
+                    else {
+                        handleShowAlert("error", data.message)
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        }
+        else {
+            fetch(`${url.update}/${id}`, postData)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        handleShowAlert("success", data.message)
+                    }
+                    else {
+                        handleShowAlert("error", data.message)
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        }
+
         fetchData();
         handleHideForm();
     }
@@ -272,13 +320,25 @@ const FormObat = ({ fullScreen, showForm, handleHideForm, fetchData, user, handl
                 >
                     Batal
                 </Button>
-                <Button
-                    component="span"
-                    variant="contained"
-                    onClick={submitForm}
-                >
-                    Simpan
-                </Button>
+                {id ? (
+                    <Button
+                        component="span"
+                        variant="contained"
+                        color="warning"
+                        onClick={submitForm}
+                    >
+                        Ubah
+                    </Button>
+                ) : (
+                    <Button
+                        component="span"
+                        variant="contained"
+                        onClick={submitForm}
+                    >
+                        Simpan
+                    </Button>
+                )}
+
             </DialogActions>
         </Dialog>
     )

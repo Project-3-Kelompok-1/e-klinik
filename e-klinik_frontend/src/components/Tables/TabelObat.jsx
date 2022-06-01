@@ -31,7 +31,7 @@ const Toolbar = ({ showDeleteIcon, selectedDelete, handleShowDelete }) => {
         </MuiToolbar>
     );
 };
-const columns = (handleShowDelete) => {
+const columns = (handleShowDelete, handleShowForm) => {
     return [
         { field: 'nama_obat', headerName: 'Nama Obat', width: 130 },
         { field: 'dosis_obat', headerName: 'Dosis Obat', width: 160, sortable: false },
@@ -54,6 +54,9 @@ const columns = (handleShowDelete) => {
                         size="small"
                         component="span"
                         sx={{ textTransform: 'capitalize' }}
+                        onClick={(e) => {
+                            handleShowForm(e, params.row)
+                        }}
                     >
                         Edit
                     </Button>
@@ -75,7 +78,7 @@ const columns = (handleShowDelete) => {
         }
     ]
 }
-const TabelObat = ({ dataObat, loading, handleShowDelete }) => {
+const TabelObat = ({ dataObat, loading, handleShowDelete, handleShowForm }) => {
     const [selectedData, setSelectedData] = useState([]);
     const removeSelection = (target) => {
         // setSelectedData(selectedData => selectedData.filter(x => x.id !== item))
@@ -84,13 +87,15 @@ const TabelObat = ({ dataObat, loading, handleShowDelete }) => {
     const pushSelection = (item) => {
         setSelectedData(selectedData => [...selectedData, item])
     }
-    const updateSelectedData = (item) => {
-        const search = selectedData.filter(data => data.id === item.id)
-        if (search.length < 1) {
-            pushSelection(item.row)
-        }
-        else {
-            removeSelection(item.id)
+    const updateSelectedData = (item, e, details) => {
+        if (item.field === '__check__') {
+            const search = selectedData.filter(data => data.id === item.id)
+            if (search.length < 1) {
+                pushSelection(item.row)
+            }
+            else {
+                removeSelection(item.id)
+            }
         }
     }
     useEffect(() => {
@@ -113,11 +118,12 @@ const TabelObat = ({ dataObat, loading, handleShowDelete }) => {
         >
             <DataGrid
                 rows={dataObat}
-                columns={columns(handleShowDelete)}
+                columns={columns(handleShowDelete, handleShowForm)}
                 pageSize={10}
                 rowsPerPageOptions={[10]}
                 checkboxSelection
                 loading={loading}
+                disableSelectionOnClick
                 components={{
                     LoadingOverlay: LinearProgress,
                     Toolbar,
@@ -126,10 +132,7 @@ const TabelObat = ({ dataObat, loading, handleShowDelete }) => {
                 componentsProps={{
                     toolbar: { showDeleteIcon: selectedData.length > 0, selectedDelete: selectedData, handleShowDelete: handleShowDelete }
                 }}
-                onCellClick={(item, e, details) => {
-                    // console.log(item)
-                    updateSelectedData(item)
-                }}
+                onCellClick={updateSelectedData}
                 onColumnHeaderClick={handleSelectedAll}
             />
         </Box>

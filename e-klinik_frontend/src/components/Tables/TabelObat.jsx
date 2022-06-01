@@ -134,7 +134,6 @@ const TabelObat = ({ dataObat, loading, handleShowDelete, handleShowForm }) => {
                 }}
                 onCellClick={updateSelectedData}
                 onColumnHeaderClick={handleSelectedAll}
-                initialState={{pinnedColumns: {left: ['__check__']}}}
             />
         </Box>
     )

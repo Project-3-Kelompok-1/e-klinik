@@ -230,7 +230,7 @@ const FormDokter = ({ showFormDokter, setShowFormDokter, user, openSnackBar, set
             maxWidth="md"
             fullWidth
             scroll={scroll}
-            PaperComponent={DraggAbleDialog}
+            // PaperComponent={DraggAbleDialog}
         >
             {fullScreen ? (
                 <AppBar position="relative">

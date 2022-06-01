@@ -22,24 +22,14 @@ import Calenders from "../Calenders/Calenders";
 import { DOMAIN_SERVER } from "../../config";
 
 const Home = () => {
-    const [hello, setHello] = useState(null);
     const { user } = useContext(UserContext);
-    const fetchHello = async () => {
-        let response = await fetch(DOMAIN_SERVER + '/api/hello')
-        response = await response.json()
-        setHello(response);
-    }
     useEffect(() => {
         document.title = "Klinik Dokter Rezka"
-        fetchHello();
     }, [])
     useEffect(() => {
         console.log(user);
     }, [user])
 
-    useEffect(() => {
-        console.log(hello);
-    }, [hello])
     return (
         <>
             <Landing halaman="home">

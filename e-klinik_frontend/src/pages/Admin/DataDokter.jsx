@@ -104,7 +104,7 @@ const DataDokter = (props) => {
     useEffect(() => {
         let unMounted = false;
         if (user?.role !== 'resepsionis' || !user) {
-            navigate('/');
+            navigate('/login');
             return () => {
                 unMounted = true
             }

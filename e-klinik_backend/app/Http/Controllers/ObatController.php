@@ -162,4 +162,10 @@ class ObatController extends Controller
         ];
         return $this->responseSuccess($response);
     }
+    public function deleteSelected(Request $request)
+    {
+        return response()->json([
+            'selected_data' => $request->all()
+        ]);
+    }
 }

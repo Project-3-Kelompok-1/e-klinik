@@ -100,7 +100,6 @@ const JadwalPraktek = () => {
             }
         }
     }, [user])
-
     useEffect(() => {
         setResources([
             {

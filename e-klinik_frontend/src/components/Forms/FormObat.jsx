@@ -1,7 +1,71 @@
 import { Close } from "@mui/icons-material"
-import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, TextField, Toolbar, Typography } from "@mui/material"
-const gridForm = { marginBottom: '2rem' }
-const FormObat = ({ fullScreen, showForm, handleHideForm }) => {
+import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Slide, TextField, Toolbar, Typography } from "@mui/material"
+import React, { useEffect, useState } from "react";
+import { DOMAIN_SERVER } from "../../config";
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="down" ref={ref} {...props} />
+})
+const url = {
+    create: DOMAIN_SERVER + '/api/data-obat/create'
+}
+const FormObat = ({ fullScreen, showForm, handleHideForm, fetchData, user, handleShowAlert }) => {
+    const [namaObat, setNamaObat] = useState('');
+    const [stokObat, setStokObat] = useState(0);
+    const [jenisObat, setJenisObat] = useState('');
+    const [tipeObat, setTipeObat] = useState('');
+    const [hargaPabrik, setHargaPabrik] = useState(0);
+    const [hargaJual, setHargaJual] = useState();
+    const [dosisObat, setDosisObat] = useState('');
+    useEffect(() => {
+        if (stokObat < 0) {
+            setStokObat(0);
+        }
+        if (hargaJual < 0) {
+            setHargaJual(0);
+        }
+        if (hargaPabrik < 0) {
+            setHargaPabrik(0);
+        }
+    }, [stokObat, hargaJual, hargaPabrik])
+    const createFormData = () => {
+        const formData = new FormData();
+        formData.append('nama_obat', namaObat);
+        formData.append('dosis_obat', dosisObat);
+        formData.append('stok_obat', stokObat);
+        formData.append('jenis_obat', jenisObat);
+        formData.append('tipe_obat', tipeObat);
+        formData.append('harga_jual', hargaJual);
+        formData.append('harga_pabrik', hargaPabrik);
+        return formData;
+    }
+    const submitForm = (e) => {
+        e.preventDefault();
+        const data = createFormData();
+        const postData = {
+            method: 'POST',
+            body: data,
+            headers: new Headers({
+                'Accept': 'application/json',
+                // 'Content-Type': 'multipart/form-data; application/json; charset=UTF-8',
+                'Authorization': `Bearer ${user.token}`
+            })
+        }
+        fetch(url.create, postData)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    handleShowAlert("success", data.message)
+                }
+                else {
+                    handleShowAlert("error", data.message)
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        fetchData();
+        handleHideForm();
+    }
     return (
         <Dialog
             fullScreen={fullScreen}
@@ -10,6 +74,7 @@ const FormObat = ({ fullScreen, showForm, handleHideForm }) => {
             aria-labelledby="responsive-dialog-title"
             fullWidth
             maxWidth="md"
+            TransitionComponent={Transition}
         >
             {fullScreen ? (
                 <AppBar
@@ -61,6 +126,10 @@ const FormObat = ({ fullScreen, showForm, handleHideForm }) => {
                             fullWidth
                             required
                             helperText="panjang karakter maksimal 255"
+                            value={namaObat}
+                            onChange={(e) => {
+                                setNamaObat(e.target.value)
+                            }}
                         />
                     </Grid>
                     <Grid
@@ -76,6 +145,13 @@ const FormObat = ({ fullScreen, showForm, handleHideForm }) => {
                             fullWidth
                             required
                             type="number"
+                            value={stokObat}
+                            onChange={(e) => {
+                                if (stokObat < 0) {
+                                    setStokObat(0);
+                                }
+                                setStokObat(e.target.value)
+                            }}
                         />
                     </Grid>
                 </Grid>
@@ -83,13 +159,11 @@ const FormObat = ({ fullScreen, showForm, handleHideForm }) => {
                     container
                     spacing={2}
                     sx={{ marginBottom: '1rem' }}
-
                 >
                     <Grid
                         item
                         md={6}
                         xs={12}
-
                     >
                         <TextField
                             id="jenis_obat"
@@ -98,13 +172,16 @@ const FormObat = ({ fullScreen, showForm, handleHideForm }) => {
                             fullWidth
                             required
                             helperText="panjang karakter maksimal 255"
+                            value={jenisObat}
+                            onChange={(e) => {
+                                setJenisObat(e.target.value);
+                            }}
                         />
                     </Grid>
                     <Grid
                         item
                         md={6}
                         xs={12}
-
                     >
                         <TextField
                             id="tipe_obat"
@@ -112,6 +189,10 @@ const FormObat = ({ fullScreen, showForm, handleHideForm }) => {
                             variant="standard"
                             fullWidth
                             helperText="panjang karakter maksimal 255"
+                            value={tipeObat}
+                            onChange={(e) => {
+                                setTipeObat(e.target.value);
+                            }}
                         />
                     </Grid>
                 </Grid>
@@ -119,13 +200,11 @@ const FormObat = ({ fullScreen, showForm, handleHideForm }) => {
                     container
                     spacing={2}
                     sx={{ marginBottom: '1rem' }}
-
                 >
                     <Grid
                         item
                         md={6}
                         xs={12}
-
                     >
                         <TextField
                             id="harga_pabrik"
@@ -134,13 +213,16 @@ const FormObat = ({ fullScreen, showForm, handleHideForm }) => {
                             fullWidth
                             required
                             type="number"
+                            value={hargaPabrik}
+                            onChange={(e) => {
+                                setHargaPabrik(e.target.value)
+                            }}
                         />
                     </Grid>
                     <Grid
                         item
                         md={6}
                         xs={12}
-
                     >
                         <TextField
                             id="harga_jual"
@@ -148,6 +230,10 @@ const FormObat = ({ fullScreen, showForm, handleHideForm }) => {
                             variant="standard"
                             fullWidth
                             type="number"
+                            value={hargaJual}
+                            onChange={(e) => {
+                                setHargaJual(e.target.value)
+                            }}
                         />
                     </Grid>
 
@@ -156,7 +242,6 @@ const FormObat = ({ fullScreen, showForm, handleHideForm }) => {
                     container
                     spacing={2}
                     sx={{ marginBottom: '1rem' }}
-
                 >
                     <Grid
                         item
@@ -169,6 +254,10 @@ const FormObat = ({ fullScreen, showForm, handleHideForm }) => {
                             fullWidth
                             multiline
                             rows={3}
+                            value={dosisObat}
+                            onChange={(e) => {
+                                setDosisObat(e.target.value);
+                            }}
                         />
                     </Grid>
                 </Grid>
@@ -186,6 +275,7 @@ const FormObat = ({ fullScreen, showForm, handleHideForm }) => {
                 <Button
                     component="span"
                     variant="contained"
+                    onClick={submitForm}
                 >
                     Simpan
                 </Button>

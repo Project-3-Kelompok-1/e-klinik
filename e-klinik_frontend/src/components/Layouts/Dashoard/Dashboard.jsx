@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { HealthAndSafety, EventAvailable } from '@mui/icons-material';
+import { HealthAndSafety, EventAvailable, MedicalServices } from '@mui/icons-material';
 import { UserContext } from '../../../Helpers/Context';
 import { useNavigate } from 'react-router-dom';
 import "./style.css";
@@ -91,7 +91,7 @@ const Dashboard = (props) => {
                         component="span"
                         sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
                         variant={`${props.halaman === 'Data Obat' ? 'contained' : 'text'}`}
-                        startIcon={<EventAvailable />}
+                        startIcon={<MedicalServices />}
                         onClick={() => {
                             if (user.role === 'resepsionis') {
                                 navigate('/resepsionis/data-obat')

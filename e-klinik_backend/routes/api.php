@@ -3,6 +3,7 @@
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\JadwalPraktekController;
+use App\Http\Controllers\ObatController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,13 +34,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/dokter/hapus/{id}', [DokterController::class, 'destroy']);
     Route::post('/dokter/update/{id}', [DokterController::class, 'update']);
 
+    Route::get('/data-obat', [ObatController::class, 'index'])->middleware('isAdmin');
     Route::middleware('resepsionis')->group(function () {
         // Kelola jadwal praktek 
         Route::post('/jadwal-praktek/create', [JadwalPraktekController::class, 'store']);
         Route::post('/jadwal-praktek/update', [JadwalPraktekController::class, 'update']);
         Route::post('/jadwal-praktek/delete', [JadwalPraktekController::class, 'destroy']);
+
+        // Kelola data obat
+        Route::post('/data-obat/create', [ObatController::class, 'store']);
+        Route::post('/data-obat/update/{id}', [ObatController::class, 'update']);
+        Route::delete('/data-obat/delete/{id}', [ObatController::class, 'destroy']);
+        Route::delete('/data-obat/delete', [ObatController::class, 'deleteSelected']);
     });
-    // Route::post('/test_upload', [DokterController::class, 'testUpload']);
 });
 // Get semua jadwal praktek
 Route::get('/jadwal-praktek', [JadwalPraktekController::class, 'index']);

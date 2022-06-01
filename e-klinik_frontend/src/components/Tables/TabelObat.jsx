@@ -4,7 +4,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { useEffect, useState } from "react";
 import { Toolbar as MuiToolbar } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-
+import NoRowsOverlay from "../Overlays/NoRowsOverlays"
 const Toolbar = ({ showDeleteIcon, selectedDelete, handleShowDelete }) => {
     return (
         <MuiToolbar
@@ -120,7 +120,8 @@ const TabelObat = ({ dataObat, loading, handleShowDelete }) => {
                 loading={loading}
                 components={{
                     LoadingOverlay: LinearProgress,
-                    Toolbar
+                    Toolbar,
+                    NoRowsOverlay: NoRowsOverlay
                 }}
                 componentsProps={{
                     toolbar: { showDeleteIcon: selectedData.length > 0, selectedDelete: selectedData, handleShowDelete: handleShowDelete }

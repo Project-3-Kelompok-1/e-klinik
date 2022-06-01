@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Toolbar as MuiToolbar } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 
-const Toolbar = ({ showDelete, deleteSelected }) => {
+const Toolbar = ({ showDeleteIcon, selectedDelete, handleShowDelete }) => {
     return (
         <MuiToolbar
             variant="dense"
@@ -18,9 +18,12 @@ const Toolbar = ({ showDelete, deleteSelected }) => {
             >
                 Master data obat
             </Typography>
-            {showDelete && (
+            {showDeleteIcon && (
                 <IconButton
                     component="span"
+                    onClick={(e) => {
+                        handleShowDelete(selectedDelete)
+                    }}
                 >
                     <Delete />
                 </IconButton>
@@ -73,7 +76,6 @@ const columns = (handleShowDelete) => {
     ]
 }
 const TabelObat = ({ dataObat, loading, handleShowDelete }) => {
-    const [selectedAll, setSelectedAll] = useState(false);
     const [selectedData, setSelectedData] = useState([]);
     const removeSelection = (target) => {
         // setSelectedData(selectedData => selectedData.filter(x => x.id !== item))
@@ -121,7 +123,7 @@ const TabelObat = ({ dataObat, loading, handleShowDelete }) => {
                     Toolbar
                 }}
                 componentsProps={{
-                    toolbar: { showDelete: selectedData.length > 0 }
+                    toolbar: { showDeleteIcon: selectedData.length > 0, selectedDelete: selectedData, handleShowDelete: handleShowDelete }
                 }}
                 onCellClick={(item, e, details) => {
                     // console.log(item)

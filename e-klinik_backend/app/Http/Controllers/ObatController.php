@@ -164,8 +164,31 @@ class ObatController extends Controller
     }
     public function deleteSelected(Request $request)
     {
-        return response()->json([
-            'selected_data' => $request->all()
+        // 1. Validasi form
+        $validate = Validator::make($request->all(), [
+            'id' => ['required', 'array', 'min:1'],
+            'id.*' => ['required', 'integer']
         ]);
+        // Validasi gagal
+        if ($validate->fails()) {
+            return $this->responseValidationFailed($validate->failed());
+        }
+        // 2. Cari semua data obat
+        $obat = Obat::find($request->id);
+        if (!$obat) {
+            $response = [
+                'status' => 'not found',
+                'message' => 'Data obat tidak ditemukan'
+            ];
+            return $this->responseFailed($response);
+        }
+        
+        // 3. Hapus data obat terpilih
+        Obat::destroy($request->id);
+        $response = [
+            'status' => 'success',
+            'message' => 'Data obat berhasil di hapus'
+        ];
+        return $this->responseSuccess($response);
     }
 }

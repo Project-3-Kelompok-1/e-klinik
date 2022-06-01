@@ -6,23 +6,54 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 })
 let url = DOMAIN_SERVER + '/api/data-obat/delete/';
 const HapusObat = ({ showDelete, handleHideDelete, obat, user, fetchData, handleShowAlert }) => {
+    // console.log(obat);
+    const createData = (data) => {
+        let formData = {id: []}
+        data.forEach(item => {
+            formData.id.push(item.id)
+        });
+        return formData
+    }
     const handleDelete = () => {
-        fetch(url + obat.id, {
-            method: 'DELETE',
-            headers: new Headers({
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${user.token}`
+        if (obat.id) {
+            fetch(url + obat.id, {
+                method: 'DELETE',
+                headers: new Headers({
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                })
             })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    handleShowAlert("success", data.message)
-                }
-                else {
-                    handleShowAlert("error", data.message)
-                }
-            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        handleShowAlert("success", data.message)
+                    }
+                    else {
+                        handleShowAlert("error", data.message)
+                    }
+                })
+        }
+        else {
+            const data = createData(obat)
+            fetch(url, {
+                method: 'DELETE',
+                body: JSON.stringify(data),
+                headers: new Headers({
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Authorization': `Bearer ${user.token}`
+                })
+            }).then(response => response.json())
+                .then(data => {
+                    // console.log(data);
+                    if (data.status === 'success') {
+                        handleShowAlert("success", data.message)
+                    }
+                    else {
+                        handleShowAlert("error", data.message)
+                    }
+                })
+        }
         handleHideDelete();
         fetchData();
     }

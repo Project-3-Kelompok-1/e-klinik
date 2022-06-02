@@ -20,6 +20,7 @@ import appStore from "../assets/img/app_store.svg"
 import Landing from "../../components/Layouts/Landing/Landing";
 import Calenders from "../Calenders/Calenders";
 import { DOMAIN_SERVER } from "../../config";
+import JamPraktek from "../../components/Tables/JamPraktek";
 
 const Home = () => {
     const { user } = useContext(UserContext);
@@ -79,11 +80,11 @@ const Home = () => {
 
                     <div className="page-section">
                         <div className="container">
-                            <h1 className="text-center mb-5 wow fadeInUp">Make Appointment</h1>
-
+                            <h1 className="text-center mb-5 wow fadeInUp">Booking Jam Praktek</h1>
                             <div className="row mt-5" style={{ display: 'flex', justifyContent: 'center' }}>
                                 <div className="col-lg-6">
-                                    <Calenders />
+                                    {/* <Calenders /> */}
+                                    <JamPraktek />
                                 </div>
                             </div>
                         </div>

@@ -1,18 +1,59 @@
 import { Alert, Chip, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { DOMAIN_SERVER } from "../../config";
 const createData = (hari, tanggal, mulai, selesai, status) => {
     return { hari, tanggal, mulai, selesai, status }
 }
-const rows = [
-    createData("Senin", "15-05-2022", "08:00", "16:00", "Jam Kerja"),
-    createData("Senin", "15-05-2022", "08:00", "16:00", "Jam Kerja"),
-    createData("Senin", "15-05-2022", "08:00", "16:00", "Libur"),
-    createData("Senin", "15-05-2022", "08:00", "16:00", "Jam Kerja"),
-    createData("Senin", "15-05-2022", "08:00", "16:00", "Istirahat"),
-
-]
+const url = {
+    jadwal_seminggu: DOMAIN_SERVER + '/api/jadwal-praktek/seminggu'
+}
+const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
 const JamPraktek = () => {
-    console.log(rows);
+    const [listJadwal, setListJadwal] = useState([])
+    const fetchJadwal = async () => {
+        setListJadwal([])
+        let response = await fetch(url.jadwal_seminggu)
+        let result = await response.json()
+        result = result?.jadwal_praktek
+        Object.keys(result).forEach(tgl_praktek => {
+            Object.keys(result[tgl_praktek]).forEach(jam_mulai => {
+                Object.keys(result[tgl_praktek][jam_mulai]).forEach(jam_selesai => {
+                    Object.keys(result[tgl_praktek][jam_mulai][jam_selesai]).forEach(status => {
+                        const hari = new Date(tgl_praktek).getDay()
+                        if (hari !== 0) {
+                            const jadwalCollection = result[tgl_praktek][jam_mulai][jam_selesai][status]
+                            let item = {}
+                            item.title = jadwalCollection[0].title
+                            item.tgl = tgl_praktek
+                            item.jam_mulai = jam_mulai
+                            item.jam_selesai = jam_selesai
+                            item.hari = days[hari]
+                            // item.startDate = new Date(`${tgl_praktek} ${jam_mulai}`)
+                            // item.endDate = new Date(`${tgl_praktek} ${jam_selesai}`)
+                            item.status = status.toLocaleLowerCase();
+                            item.memberDokter = []
+                            item.id_jadwal = []
+                            jadwalCollection.forEach(itemJadwal => {
+                                if (!item.id) {
+                                    item.id = itemJadwal.id
+                                }
+                                item.memberDokter.push(itemJadwal.dokter)
+                                item.id_jadwal.push(itemJadwal.id)
+                            })
+                            setListJadwal(oldArray => [...oldArray, item])
+                        }
+
+                    })
+                })
+            })
+        })
+    }
+    useEffect(() => {
+        fetchJadwal()
+    }, [])
+    useEffect(() => {
+        console.log(listJadwal);
+    }, [listJadwal])
     return (
         <TableContainer
             component={Paper}
@@ -31,7 +72,7 @@ const JamPraktek = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {listJadwal.map((row) => (
                         <TableRow
                             key={row.hari}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -45,24 +86,24 @@ const JamPraktek = () => {
                             <TableCell
                                 align="right"
                             >
-                                {row.tanggal}
+                                {row.tgl}
                             </TableCell>
                             <TableCell
                                 align="right"
                             >
-                                {row.mulai}
+                                {row.jam_mulai}
                             </TableCell>
                             <TableCell
                                 align="right"
                             >
-                                {row.selesai}
+                                {row.jam_selesai}
                             </TableCell>
                             <TableCell
                                 align="right"
                             >
                                 <Chip
                                     label={row.status}
-                                    color={row.status === 'Jam Kerja' ? "primary" : row.status === "Istirahat" ? "warning" : "error"}
+                                    color={row.status === 'kerja' ? "primary" : row.status === "istirahat" ? "warning" : "error"}
                                 />
                             </TableCell>
                         </TableRow>

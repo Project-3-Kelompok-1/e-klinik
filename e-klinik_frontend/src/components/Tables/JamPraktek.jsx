@@ -1,4 +1,4 @@
-import { Alert, Chip, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Alert, Button, Chip, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { DOMAIN_SERVER } from "../../config";
 const createData = (hari, tanggal, mulai, selesai, status) => {
@@ -28,8 +28,6 @@ const JamPraktek = () => {
                             item.jam_mulai = jam_mulai
                             item.jam_selesai = jam_selesai
                             item.hari = days[hari]
-                            // item.startDate = new Date(`${tgl_praktek} ${jam_mulai}`)
-                            // item.endDate = new Date(`${tgl_praktek} ${jam_selesai}`)
                             item.status = status.toLocaleLowerCase();
                             item.memberDokter = []
                             item.id_jadwal = []
@@ -59,7 +57,7 @@ const JamPraktek = () => {
             component={Paper}
         >
             <Table
-                sx={{ width: '100%' }}
+                sx={{ width: '100%', userSelect: 'none' }}
                 aria-label="simple table"
             >
                 <TableHead>
@@ -69,6 +67,7 @@ const JamPraktek = () => {
                         <TableCell align="right">Mulai</TableCell>
                         <TableCell align="right">Selesai</TableCell>
                         <TableCell align="right">Status</TableCell>
+                        <TableCell align="right">Book</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -105,6 +104,15 @@ const JamPraktek = () => {
                                     label={row.status}
                                     color={row.status === 'kerja' ? "primary" : row.status === "istirahat" ? "warning" : "error"}
                                 />
+                            </TableCell>
+                            <TableCell
+                                align="right"
+                            >
+                                <Button
+                                    // size="small"
+                                >
+                                    Booking sekarang
+                                </Button>
                             </TableCell>
                         </TableRow>
                     ))}

@@ -141,7 +141,7 @@ const DataDokter = (props) => {
             />
 
             {/* Component popover profil dokter */}
-            <Popover
+            <ProfileDokter
                 elevation={5}
                 id={idPopover}
                 open={open}
@@ -152,15 +152,13 @@ const DataDokter = (props) => {
                     horizontal: 'left',
                 }}
                 sx={{ display: openHapusDokter ? 'none' : 'initial' }}
-            >
-                <ProfileDokter
-                    selectDokter={selectDokter}
-                    setOpenHapusDokter={setOpenHapusDokter}
-                    setShowFormDokter={setShowTambahDokter}
-                />
-            </Popover>
+                selectDokter={selectDokter}
+                setOpenHapusDokter={setOpenHapusDokter}
+                setShowFormDokter={setShowTambahDokter}
+            />
 
             {/* Component modal form dokter */}
+
             <FormDokter
                 showFormDokter={showTambahDokter}
                 setShowFormDokter={setShowTambahDokter}

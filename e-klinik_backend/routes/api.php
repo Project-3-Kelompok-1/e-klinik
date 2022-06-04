@@ -55,7 +55,6 @@ Route::get('/jadwal-praktek', [JadwalPraktekController::class, 'index']);
 Route::get('/jadwal-praktek/seminggu', [JadwalPraktekController::class, 'seminggu']);
 // Get jadwal praktek yang dimiliki dokter
 Route::get('/jadwal-praktek/{id}', [JadwalPraktekController::class, 'detail']);
-
 // Route::middleware('auth:sanctum')->group(function(){
 //     Route::get("/user", function(){
 //         return response()->json([

@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
-import { Box, Avatar, Typography, Grid, Divider, CardActions, Button } from "@mui/material";
+import { Box, Avatar, Typography, Grid, Divider, CardActions, Button, Popover } from "@mui/material";
 import { DOMAIN_SERVER } from '../../config';
-const ProfileDokter = ({ selectDokter, setOpenHapusDokter, setShowFormDokter }) => {
+const ProfileDokter = ({ selectDokter, setOpenHapusDokter, setShowFormDokter, ...restProps }) => {
     return (
-        <>
+        <Popover
+            {...restProps}
+        >
             <Box sx={{ width: { xs: 375, md: 675 } }}>
                 <Grid container>
                     <Grid item xs={12} md={5} sx={{ backgroundColor: 'primary.main', display: 'flex', justifyContent: 'center' }}>
@@ -264,7 +266,7 @@ const ProfileDokter = ({ selectDokter, setOpenHapusDokter, setShowFormDokter }) 
                     </Grid>
                 </Grid>
             </Box>
-        </>
+        </Popover>
     )
 }
 export default ProfileDokter;

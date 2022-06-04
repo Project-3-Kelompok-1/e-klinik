@@ -9,55 +9,19 @@ import "../../../../pages/assets/vendor/animate/animate.css";
 const Footer = () => {
     return (
         <>
-            <footer className="page-footer">
+            <footer className="page-footer" id="kontak">
                 <div className="container">
                     <div className="row px-md-3">
-                        <div className="col sm-6 col-lg-3 py-3">
-                            <h5>Company</h5>
-                            <ul className="footer-menu">
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">Career</a></li>
-                                <li><a href="#">Editorial Team</a></li>
-                                <li><a href="#">Protection</a></li>
-                            </ul>
-                        </div>
-                        <div className="col-sm-6 col-lg-3 py-3">
-                            <h5>More</h5>
-                            <ul className="footer-menu">
-                                <li><a href="#">Terms & Condition</a></li>
-                                <li><a href="#">Privacy</a></li>
-                                <li><a href="#">Advertise</a></li>
-                                <li><a href="#">Join as Doctors</a></li>
-                            </ul>
-                        </div>
-                        <div className="col-sm-6 col-lg-3 py-3">
-                            <h5>Our partner</h5>
-                            <ul className="footer-menu">
-                                <li><a href="#">One-Fitness</a></li>
-                                <li><a href="#">One-Drugs</a></li>
-                                <li><a href="#">One-Live</a></li>
-                            </ul>
-                        </div>
-                        <div className="col-sm-6 col-lg-3 py-3">
-                            <h5>Contact</h5>
-                            <p className="footer-link mt-2">351 Willow Street Franklin, MA 02038</p>
-                            <a href="#" className="footer-link">701-573-7582</a>
-                            <a href="#" className="footer-link">healthcare@temporary.net</a>
-
-                            <h5 className="mt-3">Social Media</h5>
-                            <div className="footer-sosmed mt-3">
-                                <a href="#" target="_blank"><span className="mai-logo-facebook-f"></span></a>
-                                <a href="#" target="_blank"><span className="mai-logo-twitter"></span></a>
-                                <a href="#" target="_blank"><span className="mai-logo-google-plus-g"></span></a>
-                                <a href="#" target="_blank"><span className="mai-logo-instagram"></span></a>
-                                <a href="#" target="_blank"><span className="mai-logo-linkedin"></span></a>
+                        <div className="col-12 py-3">
+                            <h5>Kontak</h5>
+                            <div className="d-flex gap-3">
+                                <p className="footer-link mr-5">Jl. Mayor Dasuki, Jatibarang, Kabupaten Indramayu, Jawa Barat 45273, Indonesia</p>
+                                <a href="#" className="footer-link mr-5">+6287828677663</a>
+                                <a href="#" className="footer-link mr-5">healthcare@temporary.net</a>
                             </div>
                         </div>
                     </div>
-
                     <hr />
-
-                    <p id="copyright">Copyright &copy; 2020 <a href="https://macodeid.com/" target="_blank">MACode ID</a>. All right reserved</p>
                 </div>
             </footer>
             {/* <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

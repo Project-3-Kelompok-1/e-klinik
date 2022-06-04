@@ -25,11 +25,13 @@ class JadwalPraktekController extends Controller
     ];
     public function seminggu(Request $request)
     {
-        $jadwalPraktek = JadwalPraktek::whereBetween('tgl_praktek', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+        $jadwalPraktek = JadwalPraktek::with('dokter')->whereBetween('tgl_praktek', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+        $jadwalPraktek = $jadwalPraktek->groupBy(['tgl_praktek', "jam_mulai", "jam_selesai", "status"]);
         return response()->json([
             'jadwal_praktek' => $jadwalPraktek
         ]);
     }
+
     public function index()
     {
         $jadwalPraktek = JadwalPraktek::all()

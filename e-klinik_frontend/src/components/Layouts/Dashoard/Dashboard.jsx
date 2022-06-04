@@ -112,7 +112,7 @@ const Dashboard = (props) => {
     const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', userSelect: 'none' }}>
             <AppBar
                 position="fixed"
                 sx={{

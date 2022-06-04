@@ -34,23 +34,19 @@ const Header = ({ active }) => {
                         <div className={`collapse navbar-collapse ${show ? "show" : ""}`} id="navbarSupport" style={{transition: 'ease-in-out', transitionDelay: '0.5s'}}>
                             <ul className="navbar-nav ml-auto">
                                 <li className={`nav-item ${active === 'home' ? 'active' : ''}`}>
-                                    <NavLink className="nav-link" to="/">Home</NavLink>
+                                    <NavLink className="nav-link" to="/">Beranda</NavLink>
                                 </li>
                                 <li className={`nav-item ${active === 'about' ? 'active' : ''}`}>
-                                    <a className="nav-link" href="about.html">About Us</a>
+                                    <a className="nav-link" href="#tentang">Tentang</a>
                                 </li>
                                 <li className={`nav-item ${active === 'doctors' ? 'active' : ''}`}>
-                                    <NavLink className="nav-link" to="/doctors">Doctors</NavLink>
-                                </li>
-                                <li className={`nav-item ${active === 'blog' ? 'active' : ''}`}>
-                                    <a className="nav-link" href="blog.html">News</a>
+                                    <a href="#dokter_kami" className="nav-link">Dokter</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="contact.html">Contact</a>
+                                    <a className="nav-link" href="#kontak">Kontak</a>
                                 </li>
                                 <li className="nav-item">
-                                    {/* <a className="btn btn-primary ml-lg-3" href="#">Login / Register</a> */}
-                                    <NavLink className="btn btn-primary ml-lg-3" to="/login">Login / Register</NavLink>
+                                    <NavLink className="btn btn-primary ml-lg-3" to="/login">Masuk / Daftar</NavLink>
                                 </li>
                             </ul>
                         </div>

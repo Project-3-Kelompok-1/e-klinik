@@ -25,6 +25,7 @@ body {
   font-family: "Source Sans Pro", sans-serif;
   line-height: 1.5;
   color: #343531;
+  user-select: none;
 }
 
 a {
@@ -141,11 +142,11 @@ a.bg-dark:hover, a.bg-dark:focus {
 }
 
 .text-primary {
-  color: #00D9A5 !important;
+  color: #1976d2 !important;
 }
 
 a.text-primary:hover, a.text-primary:focus {
-  color: #07be94 !important;
+  color: #1976d2 !important;
 }
 
 .text-accent {
@@ -277,8 +278,8 @@ a.text-dark:hover, a.text-dark:focus {
 .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
   color: #fff;
-  background-color: #00D9A5;
-  border-color: #07be94;
+  background-color: #52a0ee;
+  border-color: #1976d2;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
@@ -935,7 +936,7 @@ a.text-dark:hover, a.text-dark:focus {
 .navbar-light .navbar-nav .nav-link.show,
 .navbar-light .navbar-nav .nav-link.active {
   font-weight: 500;
-  color: #00D9A5;
+  color: #1976d2;
 }
 
 

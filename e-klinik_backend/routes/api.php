@@ -4,6 +4,8 @@ use App\Http\Controllers\AkunController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\JadwalPraktekController;
 use App\Http\Controllers\ObatController;
+use App\Models\Appointment;
+use App\Models\Pasien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

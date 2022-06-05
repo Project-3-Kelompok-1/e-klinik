@@ -31,6 +31,7 @@ Route::controller(AkunController::class)->group(function () {
 Route::get('/dokter', [DokterController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/my-role', [AkunController::class, 'getRole']);
     // Kelola dokter
     Route::post("/tambah_dokter", [DokterController::class, 'add']);
     Route::delete('/dokter/hapus/{id}', [DokterController::class, 'destroy']);

@@ -12,9 +12,6 @@ class AkunController extends Controller
 {
     public function register(Request $request)
     {
-        // return response()->json([
-        //     'status' => 'success'
-        // ]);
         $validator = Validator::make($request->all(), [
             'username' => ['required', 'unique:users,username', 'max:255'],
             'password' => ['required']
@@ -29,8 +26,9 @@ class AkunController extends Controller
         $user = new User();
         $user->username = $validated['username'];
         $user->password = Hash::make($validated['password']);
-        $data['username'] = $validated['username'];
         $user->save();
+        $data['username'] = $validated['username'];
+        $data['role'] = User::find($user->id)->role;
         $data['token'] = $user->createToken('E-Klinik')->plainTextToken;
         return response()->json([
             'status' => 'success',
@@ -59,7 +57,7 @@ class AkunController extends Controller
             ]);
         }
 
-        
+
         $data['token'] = $user->createToken('E-Klinik')->plainTextToken;
         $data['username'] = $validated['username'];
         $data['role'] = $user->role;
@@ -68,10 +66,11 @@ class AkunController extends Controller
             'data' => $data
         ]);
     }
-    public function getUsers()
+    public function getRole(Request $request)
     {
+        
         return response()->json([
-            'message' => 'Hello World !!!'
+            'user' => $request->user()->role
         ]);
     }
 }

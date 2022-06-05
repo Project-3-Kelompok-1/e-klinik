@@ -14,7 +14,7 @@ import { DOMAIN_SERVER } from "../../config";
 
 const theme = createTheme();
 
-export default function Register() {
+export default function SignUp() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('');
     const [konfirmasiPassword, setKonfirmasiPassword] = useState('');

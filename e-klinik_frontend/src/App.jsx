@@ -13,6 +13,8 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import JadwalPraktek from "./pages/Admin/Resepsionis/JadwalPraktek";
 import CustomizeScheduleForm from "./pages/Tests/CustomizeScheduleForm";
+import SignUp from "./pages/Register/SignUp";
+import HomePage from "./pages/Pasien/HomePage";
 const App = () => {
   const [user, setUser] = useState(() => {
     return JSON.parse(localStorage.getItem('user'))
@@ -48,14 +50,16 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/resepsionis" element={<Resepsionis />} />
           <Route path="/dokter" element={<Dokter />} />
           <Route path="/doctors" element={<Doctors />} />
           <Route path="/calenders" element={<Calenders />} />
+          <Route path="/resepsionis" element={<Resepsionis />} />
           <Route path="/resepsionis/data-dokter" element={<DataDokter />} />
           <Route path="/resepsionis/jadwal-praktek" element={<JadwalPraktek />} />
           <Route path="/resepsionis/data-obat" element={<DataObat />} />
+          <Route path="/pasien" element={<HomePage />} />
           {/* <Route path="/test/customize-schedule-form" element={<CustomizeScheduleForm />} /> */}
         </Routes>
       </UserContext.Provider>

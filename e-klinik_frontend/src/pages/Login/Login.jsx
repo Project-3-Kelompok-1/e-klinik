@@ -33,6 +33,12 @@ export default function Login() {
                 isCancelled = true
             }
         }
+        else if (user?.role === 'pasien') {
+            navigate('/profile')
+            return () => {
+                isCancelled = true
+            }
+        }
     }, [user, navigate])
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -58,7 +64,8 @@ export default function Login() {
             localStorage.setItem('user', JSON.stringify(result.data))
             alert("Login berhasil");
             setUser(JSON.parse(localStorage.getItem('user')))
-            console.log(user);
+            console.log(result.data);
+            // console.log(user);
         }
         else if (result?.status === 'failed') {
             alert(result?.message);

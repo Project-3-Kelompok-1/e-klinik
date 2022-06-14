@@ -59,7 +59,7 @@ const App = () => {
           <Route path="/resepsionis/data-dokter" element={<DataDokter />} />
           <Route path="/resepsionis/jadwal-praktek" element={<JadwalPraktek />} />
           <Route path="/resepsionis/data-obat" element={<DataObat />} />
-          <Route path="/pasien" element={<HomePage />} />
+          <Route path="/profile" element={<HomePage />} />
           {/* <Route path="/test/customize-schedule-form" element={<CustomizeScheduleForm />} /> */}
         </Routes>
       </UserContext.Provider>

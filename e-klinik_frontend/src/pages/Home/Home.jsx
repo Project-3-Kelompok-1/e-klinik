@@ -28,7 +28,7 @@ const Home = () => {
         document.title = "Klinik Dokter Rezka"
     }, [])
     useEffect(() => {
-        console.log(user);
+        // console.log(user);
     }, [user])
 
     return (

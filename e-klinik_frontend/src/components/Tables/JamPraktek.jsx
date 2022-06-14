@@ -67,7 +67,7 @@ const JamPraktek = () => {
         fetchJadwal()
     }, [])
     useEffect(() => {
-        console.log(listJadwal);
+        // console.log(listJadwal);
     }, [listJadwal])
 
     return (

@@ -30,7 +30,7 @@ const HomePage = () => {
     return (
         <Layout>
             <CssBaseline />
-            <Container maxWidth="lg">
+            <Container maxWidth="lg" sx={{marginTop: '4rem'}}>
                 <Grid container spacing={3} sx={{ paddingTop: '1.7rem' }}>
                     <Grid item md={4} xs={12}>
                         <ProfileCard profile={profile} user={user} />

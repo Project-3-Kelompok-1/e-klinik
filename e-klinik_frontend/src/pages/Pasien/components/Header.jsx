@@ -25,7 +25,7 @@ const Header = ({ username }) => {
     return (
         <>
             <CssBaseline />
-            <AppBar position="static" >
+            <AppBar position="fixed">
                 <Container maxWidth="lg">
                     <Toolbar disableGutters sx={{ alignItems: 'center' }}>
                         <LocalHospital
@@ -132,15 +132,8 @@ const Header = ({ username }) => {
                             }}
                         >
                             {pages.map((page) => (
-                                // <Button
-                                //     component="span"
-                                //     key={page}
-                                //     onClick={handleCloseNavMenu}
-                                //     sx={{ my: 2, color: 'white', display: 'block' }}
-                                // >
-                                //     {page}
-                                // </Button>
                                 <Link
+                                    key={page}
                                     to={`/${page.toLowerCase().replace(" ", "-")}`}
                                     style={{
                                         fontFamily: 'monospace',

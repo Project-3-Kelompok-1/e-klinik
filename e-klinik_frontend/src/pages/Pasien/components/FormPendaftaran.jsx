@@ -1,6 +1,8 @@
 import { Close } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Grid, IconButton, Paper, TextField, Typography } from "@mui/material";
-import React from "react";
+import React, { useContext, useState } from "react";
+import { DOMAIN_SERVER } from "../../../config";
+import { UserContext } from "../../../Helpers/Context";
 import { hoursAndMinutes } from "../../../Helpers/DateConvert";
 const bulan = [
     "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"
@@ -12,7 +14,39 @@ const tanggalBooking = (time) => {
     const year = date.getFullYear()
     return `${day} ${month} ${year}`
 }
-const FormPendaftaran = ({ handleCancelBooking, profile, formulirPendaftaran }) => {
+const FormPendaftaran = ({ handleCancelBooking, profile, formulirPendaftaran, handleShowAlert }) => {
+    const { user } = useContext(UserContext)
+    const [konsultasi, setKonsultasi] = useState('')
+    const submitForm = (e) => {
+        e.preventDefault()
+        const formData = {
+            "nik_pasien": profile.nik,
+            "id_jadwal_praktek": formulirPendaftaran.id,
+            "konsultasi": konsultasi,
+        }
+        const params = {
+            method: 'POST',
+            body: JSON.stringify(formData),
+            headers: new Headers({
+                'Content-type': 'application/json; charset=UTF-8',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${user.token}`
+            })
+        }
+        fetch(DOMAIN_SERVER + '/api/appointment', params)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status !== 'success') {
+                    throw data.message
+                }
+                setKonsultasi('')
+                handleCancelBooking()
+                handleShowAlert('success', data.message)
+            })
+            .catch(error => {
+                handleShowAlert('error', error)
+            })
+    }
     return (
         <Card variant="outlined" sx={{ marginTop: '1.7rem' }}>
             <CardContent>
@@ -191,12 +225,15 @@ const FormPendaftaran = ({ handleCancelBooking, profile, formulirPendaftaran }) 
                     id="outlined-multiline-static"
                     label="Konsultasi Keluhan"
                     multiline
+                    value={konsultasi}
+                    onChange={(e) => setKonsultasi(e.target.value)}
                     rows={4}
                 />
                 <Button
                     component="span"
                     variant="contained"
                     sx={{ textTransform: 'none' }}
+                    onClick={submitForm}
                 >
                     Mendaftar
                 </Button>

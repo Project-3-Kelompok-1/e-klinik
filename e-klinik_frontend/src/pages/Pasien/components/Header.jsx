@@ -3,7 +3,7 @@ import MenuIcon from "@mui/icons-material/Menu"
 import { AppBar, Avatar, Box, Button, Container, CssBaseline, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-const pages = ['Profil', 'Pendaftaran', 'Pengobatan', 'Rawat Inap', 'Transaksi']
+const pages = ['Profile', 'Pendaftaran', 'Pengobatan', 'Rawat Inap', 'Transaksi']
 const settings = ['Akun', 'Keluar']
 const Header = ({ username }) => {
     const [anchorElNav, setAnchorElNav] = useState(null)
@@ -27,7 +27,7 @@ const Header = ({ username }) => {
             <CssBaseline />
             <AppBar position="static" >
                 <Container maxWidth="lg">
-                    <Toolbar disableGutters>
+                    <Toolbar disableGutters sx={{ alignItems: 'center' }}>
                         <LocalHospital
                             sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
                         />
@@ -40,13 +40,15 @@ const Header = ({ username }) => {
                                 to="/"
                                 style={{
                                     fontFamily: 'monospace',
-                                    fontWeight: 700,
                                     letterSpacing: '.3rem',
                                     color: 'inherit',
                                     textDecoration: 'none',
+                                    fontWeight: 'normal !important',
                                     ":hover": {
+                                        fontWeight: 'bold !important',
                                         color: 'inherit',
-                                        textDecoration: 'none'
+                                        textDecoration: 'none',
+
                                     }
                                 }}
                             >
@@ -130,14 +132,30 @@ const Header = ({ username }) => {
                             }}
                         >
                             {pages.map((page) => (
-                                <Button
-                                    component="span"
-                                    key={page}
-                                    onClick={handleCloseNavMenu}
-                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                // <Button
+                                //     component="span"
+                                //     key={page}
+                                //     onClick={handleCloseNavMenu}
+                                //     sx={{ my: 2, color: 'white', display: 'block' }}
+                                // >
+                                //     {page}
+                                // </Button>
+                                <Link
+                                    to={`/${page.toLowerCase().replace(" ", "-")}`}
+                                    style={{
+                                        fontFamily: 'monospace',
+                                        color: 'inherit',
+                                        textDecoration: 'none',
+                                        ":hover": {
+                                            color: 'inherit',
+                                            textDecoration: 'none',
+                                            fontWeight: 700
+                                        },
+                                        margin: '0 .5rem'
+                                    }}
                                 >
                                     {page}
-                                </Button>
+                                </Link>
                             ))}
                         </Box>
                         <Box

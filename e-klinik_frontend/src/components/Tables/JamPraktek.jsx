@@ -11,7 +11,7 @@ const url = {
 }
 
 const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
-const JamPraktek = () => {
+const JamPraktek = ({ handleClickBooking }) => {
     const [listJadwal, setListJadwal] = useState([])
     const [openBooking, setOpenBooking] = useState(false)
     const handleOpenBooking = () => {
@@ -66,10 +66,6 @@ const JamPraktek = () => {
     useEffect(() => {
         fetchJadwal()
     }, [])
-    useEffect(() => {
-        // console.log(listJadwal);
-    }, [listJadwal])
-
     return (
         <>
             <TableContainer
@@ -91,16 +87,12 @@ const JamPraktek = () => {
                             <JadwalFragment
                                 key={row.hari}
                                 row={row}
-                                handleOpenBooking={handleOpenBooking}
+                                handleOpenBooking={handleClickBooking}
                             />
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Booking
-                open={openBooking}
-                onClose={handleCloseBooking}
-            />
         </>
     )
 }

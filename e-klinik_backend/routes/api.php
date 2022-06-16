@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AkunController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\JadwalPraktekController;
 use App\Http\Controllers\ObatController;
@@ -54,6 +55,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/data-obat/delete', [ObatController::class, 'deleteSelected']);
         Route::post('/data-obat/update/{id}', [ObatController::class, 'update']);
     });
+    // Appointment
+    Route::post('/appointment', [AppointmentController::class, 'store'])->middleware('isPasien');
 });
 // Get semua jadwal praktek
 Route::get('/jadwal-praktek', [JadwalPraktekController::class, 'index']);

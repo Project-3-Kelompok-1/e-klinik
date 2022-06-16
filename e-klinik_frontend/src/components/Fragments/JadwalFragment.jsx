@@ -74,7 +74,7 @@ const JadwalFragment = (props) => {
                                                         component="span"
                                                         size="small"
                                                         sx={{ textTransform: 'capitalize' }}
-                                                        onClick={handleOpenBooking}
+                                                        onClick={(e) => handleOpenBooking(item)}
                                                     >
                                                         Booking
                                                     </Button>

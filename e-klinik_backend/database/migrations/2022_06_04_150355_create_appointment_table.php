@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nik_pasien');
             $table->foreignId('id_jadwal_praktek');
-            $table->string('konsultasi');
+            $table->string('konsultasi')->nullable();
             $table->dateTime('waktu_pesan');
             $table->string('status');
             $table->timestamps();

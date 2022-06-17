@@ -56,8 +56,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/data-obat/update/{id}', [ObatController::class, 'update']);
     });
     // Appointment
-    Route::post('/appointment', [AppointmentController::class, 'store'])->middleware('isPasien');
+    // Route::post('/appointment', [AppointmentController::class, 'store'])->middleware('isPasien');
+    Route::middleware('isPasien')->group(function () {
+        Route::get('/appointment', [AppointmentController::class, 'index']);
+        Route::post('/appointment', [AppointmentController::class, 'store']);
+    });
 });
+
 // Get semua jadwal praktek
 Route::get('/jadwal-praktek', [JadwalPraktekController::class, 'index']);
 // Get jadwal praktek selama 1 minggu

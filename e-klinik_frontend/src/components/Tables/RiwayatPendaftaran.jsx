@@ -1,13 +1,15 @@
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { Box, Button, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import RiwayatPendaftaranFragment from "../Fragments/RiwayatPendaftaranFragment";
-const createData = (waktu_pesan, jadwal_praktek, waktu_mulai, waktu_selesai, status, konsultasi) => {
+import { UserContext } from '../../Helpers/Context';
+import { DOMAIN_SERVER } from "../../config";
+const createData = (waktu_pesan, tgl_praktek, jam_mulai, jam_selesai, status, konsultasi) => {
     return {
         waktu_pesan,
-        jadwal_praktek,
-        waktu_mulai,
-        waktu_selesai,
+        tgl_praktek,
+        jam_mulai,
+        jam_selesai,
         status,
         konsultasi
     }
@@ -33,7 +35,8 @@ const rows = [
 const RiwayatPendaftaran = () => {
     const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(5)
-    const [collapse, setCollapse] = useState(false)
+    const [appoinments, setAppointments] = useState([])
+    const { user } = useContext(UserContext)
     const handleChangePage = (e, newPage) => {
         setPage(newPage)
     }
@@ -41,6 +44,33 @@ const RiwayatPendaftaran = () => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     }
+    const fetchAppointment = () => {
+        const params = {
+            method: 'GET',
+            headers: new Headers({
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${user.token}`
+            })
+        }
+        fetch(DOMAIN_SERVER + '/api/appointment', params)
+            .then(response => response.json())
+            .then(data => {
+                if (data?.status === 'success') {
+                    setAppointments(data.appointment)
+                }
+                else {
+                    throw data?.message
+                }
+            })
+            .catch(error => {
+                // alert(error.toString())
+                console.log(error);
+            })
+    }
+
+    useEffect(() => {
+        fetchAppointment()
+    }, [user])
     return (
         <React.Fragment>
             <TableContainer
@@ -71,9 +101,8 @@ const RiwayatPendaftaran = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                       
-                            <RiwayatPendaftaranFragment row={row} />
+                        {appoinments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                            <RiwayatPendaftaranFragment key={row.id} row={row} />
                         ))}
                     </TableBody>
                 </Table>
@@ -81,7 +110,9 @@ const RiwayatPendaftaran = () => {
             <TablePagination
                 rowsPerPageOptions={[5, 10, 15]}
                 component="div"
-                count={rows.length}
+                nextIconButtonProps={{ component: "span" }}
+                backIconButtonProps={{ component: "span" }}
+                count={appoinments.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

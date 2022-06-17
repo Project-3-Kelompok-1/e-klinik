@@ -21,4 +21,8 @@ class JadwalPraktek extends Model
     {
         return $this->belongsTo(Dokter::class, 'id_dokter', 'id');
     }
+    public function appointment()
+    {
+        return $this->hasMany(Appointment::class, 'id_jadwal_praktek', 'id');
+    }
 }

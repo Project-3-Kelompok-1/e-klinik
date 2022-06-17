@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\ResponseTrait;
 use App\Models\Appointment;
+use App\Models\JadwalPraktek;
 use App\Models\Pasien;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -50,6 +51,31 @@ class AppointmentController extends Controller
             return $this->responseFailed($response, 400);
         }
         return false;
+    }
+    public function index(Request $request)
+    {
+        // 1. Cari data pasien
+        $pasien = $request->user()->pasien;
+        // 2. Cari data appointment
+        if ($pasien) {
+            $appointment = JadwalPraktek::join('appointment', 'appointment.id_jadwal_praktek', '=', 'jadwal_praktek.id')
+                ->where('appointment.nik_pasien', $pasien->nik)
+                ->get(
+                    [
+                        'appointment.id',
+                        'appointment.waktu_pesan',
+                        'appointment.konsultasi',
+                        'appointment.status',
+                        'jadwal_praktek.tgl_praktek',
+                        'jadwal_praktek.jam_mulai',
+                        'jadwal_praktek.jam_selesai'
+                    ]
+                );
+            return response()->json([
+                'status' => 'success',
+                'appointment' => $appointment
+            ]);
+        }
     }
     public function store(Request $request)
     {

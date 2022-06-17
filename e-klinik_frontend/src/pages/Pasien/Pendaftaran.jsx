@@ -78,14 +78,6 @@ const Pendaftaran = () => {
                                     <Tab component="span" label="Jam Praktek" {...a11yProps(0)} />
                                     <Tab component="span" label="Riwayat Pendaftaran" {...a11yProps(1)} />
                                 </Tabs>
-                                {/* <Typography
-                                    variant="h6"
-                                    component="div"
-                                    color="text.primary"
-                                    sx={{ fontSize: '1.25rem', marginTop: '1rem' }}
-                                >
-                                    Jam praktek
-                                </Typography> */}
                                 <Box sx={{ marginTop: '1.7rem' }}>
                                     <TabPanel
                                         value={valueTab}

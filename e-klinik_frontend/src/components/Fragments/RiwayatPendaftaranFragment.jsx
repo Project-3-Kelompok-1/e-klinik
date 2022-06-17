@@ -20,13 +20,13 @@ const RiwayatPendaftaranFragment = ({ row }) => {
                     {row.waktu_pesan}
                 </TableCell>
                 <TableCell align="right">
-                    {row.jadwal_praktek}
+                    {row.tgl_praktek}
                 </TableCell>
                 <TableCell align="right">
-                    {row.waktu_mulai}
+                    {row.jam_mulai}
                 </TableCell>
                 <TableCell align="right">
-                    {row.waktu_selesai}
+                    {row.jam_selesai}
                 </TableCell>
                 <TableCell align="right">
                     {row.status}

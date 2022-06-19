@@ -1,13 +1,17 @@
 import { LocalHospital } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu"
 import { AppBar, Avatar, Box, Button, Container, CssBaseline, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { DOMAIN_SERVER } from "../../../config";
+import { UserContext } from "../../../Helpers/Context";
 const pages = ['Profile', 'Pendaftaran', 'Pengobatan', 'Rawat Inap', 'Transaksi']
 const settings = ['Akun', 'Keluar']
 const Header = ({ username }) => {
+    const { user } = useContext(UserContext)
     const [anchorElNav, setAnchorElNav] = useState(null)
     const [anchorElUser, setAnchorElUser] = useState(null)
+    const navigate = useNavigate()
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -18,9 +22,21 @@ const Header = ({ username }) => {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-
-    const handleCloseUserMenu = () => {
+    const logout = () => {
+        alert('Berhasil logout')
+        fetch(DOMAIN_SERVER + '/api/logout', {
+            headers: new Headers({
+                'Authorization': `Bearer ${user.token}`
+            })
+        })
+        localStorage.removeItem('user')
+        navigate('/')
+    }
+    const handleCloseUserMenu = (setting) => {
         setAnchorElUser(null);
+        if (setting === 'Keluar') {
+            logout()
+        }
     };
     return (
         <>
@@ -184,7 +200,7 @@ const Header = ({ username }) => {
                                 onClose={handleCloseUserMenu}
                             >
                                 {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                    <MenuItem key={setting} onClick={(e) => { handleCloseUserMenu(setting) }}>
                                         <Typography textAlign="center">{setting}</Typography>
                                     </MenuItem>
                                 ))}

@@ -29,10 +29,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::controller(AkunController::class)->group(function () {
     Route::post("/register", 'register');
     Route::post("/login", 'login');
+    // Route::get('/logout', 'logout');
 });
 Route::get('/dokter', [DokterController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/logout', [AkunController::class, 'logout']);
     Route::get('/pasien/profile', [PasienController::class, 'show']);
 
     Route::get('/my-role', [AkunController::class, 'getRole']);

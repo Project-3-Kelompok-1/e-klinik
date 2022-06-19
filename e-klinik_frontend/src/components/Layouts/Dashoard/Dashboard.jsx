@@ -15,16 +15,38 @@ import { HealthAndSafety, EventAvailable, MedicalServices } from '@mui/icons-mat
 import { UserContext } from '../../../Helpers/Context';
 import { useNavigate } from 'react-router-dom';
 import "./style.css";
-import { Button } from '@mui/material';
+import { Avatar, Button, Menu, MenuItem, Tooltip } from '@mui/material';
+import { DOMAIN_SERVER } from '../../../config';
 const drawerWidth = 240;
+const settings = ['Akun', 'Keluar']
 const Dashboard = (props) => {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = useState(false);
-    const navigate = useNavigate();
+    const [anchorEl, setAnchorEl] = useState(null)
+    const { user } = useContext(UserContext)
+    const navigate = useNavigate()
+    const logout = () => {
+        alert("Berhasil logout")
+        fetch(DOMAIN_SERVER + '/api/logout', {
+            headers: new Headers({
+                'Authorization': `Bearer ${user.token}`
+            })
+        })
+        localStorage.removeItem('user')
+        navigate('/')
+    }
+    const handleOpenUserMenu = (event) => {
+        setAnchorEl(event.currentTarget)
+    }
+    const handleCloseUserMenu = (setting) => {
+        setAnchorEl(null)
+        if (setting === 'Keluar') {
+            logout()
+        }
+    }
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
-    const { user } = useContext(UserContext);
     const drawer = (
         <div>
             <Toolbar />
@@ -122,19 +144,56 @@ const Dashboard = (props) => {
 
             >
                 <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2, display: { sm: 'none' } }}
-                        component="span"
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        {props?.halaman ? props.halaman : 'Dashboard'}
-                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            edge="start"
+                            onClick={handleDrawerToggle}
+                            sx={{ mr: 2, display: { sm: 'none' } }}
+                            component="span"
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" noWrap component="div">
+                            {props?.halaman ? props.halaman : 'Dashboard'}
+                        </Typography>
+                    </Box>
+                    <Box sx={{ flexGrow: 0 }}>
+                        <Tooltip
+                            title="Buka pengaturan"
+                        >
+                            <IconButton
+                                component="span"
+                                sx={{ p: 0 }}
+                                onClick={handleOpenUserMenu}
+                            >
+                                <Avatar src="/broken-image.jpg" />
+                            </IconButton>
+                        </Tooltip>
+                        <Menu
+                            sx={{ mt: '45px' }}
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorEl)}
+                            onClose={handleCloseUserMenu}
+                        >
+                            {settings.map((setting) => (
+                                <MenuItem key={setting} onClick={(e) => { handleCloseUserMenu(setting) }}>
+                                    <Typography textAlign="center">{setting}</Typography>
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                    </Box>
                 </Toolbar>
             </AppBar>
             <Box

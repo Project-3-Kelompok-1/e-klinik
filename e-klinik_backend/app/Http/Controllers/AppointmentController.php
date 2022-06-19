@@ -108,4 +108,28 @@ class AppointmentController extends Controller
         ];
         return $this->responseSuccess($response);
     }
+    public function destroy(Request $request, $id)
+    {
+        // 1. Cari data appointment
+        $appointment = Appointment::find($id);
+        // 2. Bandingkan nik_pasien dengan user pasien yang mengakses
+        if ($appointment && ($appointment->nik_pasien == $request->user()->pasien->nik)) {
+            // 3. Hapus appointment
+            $appointment->delete();
+            $response = [
+                'status' => 'success',
+                'message' => 'Berhasil menghapus pendaftaran'
+            ];
+            // 4. Response
+            return $this->responseSuccess($response);
+        }
+        else {
+            // Gagal menghapus
+            $response = [
+                'status' => 'failed',
+                'message' => 'Gagal menghapus pendaftaran'
+            ];
+            return $this->responseFailed($response);
+        }
+    }
 }

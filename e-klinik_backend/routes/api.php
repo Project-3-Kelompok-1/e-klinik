@@ -63,6 +63,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/pasien/profile', [PasienController::class, 'store']);
         Route::get('/appointment', [AppointmentController::class, 'index']);
         Route::post('/appointment', [AppointmentController::class, 'store']);
+        Route::delete('/appointment/{id}', [AppointmentController::class, 'destroy']);
     });
 });
 

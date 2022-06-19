@@ -19,4 +19,11 @@ trait ResponseTrait
     {
         return response()->json($response, $code);
     }
+    protected function responseErrorMessages($errors, $code = 400)
+    {
+        return response()->json([
+            'status' => 'error',
+            'errors' => $errors
+        ], $code);
+    }
 }

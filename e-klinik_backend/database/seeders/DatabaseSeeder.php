@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call([
             UserSeeder::class,
-            PasienSeeder::class,
+            // PasienSeeder::class,
             DokterSeeder::class,
             JadwalPraktekSeeder::class,
-            AppointmentSeeder::class
+            // AppointmentSeeder::class
         ]);
     }
 }

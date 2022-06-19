@@ -12,7 +12,7 @@ const ExpandMore = styled((props) => {
         duration: theme.transitions.duration.shortest,
     }),
 }));
-const ProfileCard = ({ profile, user, expandComponent, expandButton }) => {
+const ProfileCard = ({ profile, user, expandComponent, expandButton, handleClickEdit }) => {
     const [expanded, setExpanded] = useState(false)
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -37,11 +37,11 @@ const ProfileCard = ({ profile, user, expandComponent, expandButton }) => {
             </CardContent>
             <CardActions sx={{ paddingLeft: '1rem', paddingBottom: '1rem', display: 'flex', justifyContent: 'space-between' }}>
                 <Button
-                    // size="small" 
                     variant="contained"
                     component="span"
                     color="warning"
                     sx={{ textTransform: 'none' }}
+                    onClick={handleClickEdit}
                 >
                     Ubah Profile
                 </Button>

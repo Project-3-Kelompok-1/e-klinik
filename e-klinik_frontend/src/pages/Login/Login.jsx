@@ -103,6 +103,7 @@ export default function Login() {
                             onChange={(e) => {
                                 setUsername(e.target.value);
                             }}
+                            value={username}
                         />
                         <TextField
                             margin="normal"
@@ -116,6 +117,7 @@ export default function Login() {
                             onChange={(e) => {
                                 setPassword(e.target.value);
                             }}
+                            value={password}
                         />
                         <Button
                             type="submit"

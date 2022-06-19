@@ -23,12 +23,12 @@ import { DOMAIN_SERVER } from "../../config";
 import JamPraktek from "../../components/Tables/JamPraktek";
 
 const Home = () => {
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     useEffect(() => {
         document.title = "Klinik Dokter Rezka"
     }, [])
     useEffect(() => {
-        // console.log(user);
+        setUser(JSON.parse(localStorage.getItem('user')))
     }, [user])
 
     return (
@@ -134,7 +134,7 @@ const Home = () => {
                                 <div className="card-doctor">
                                     <div className="header">
                                         <img src={doctor3} alt="" />
-                                        
+
                                     </div>
                                     <div className="body">
                                         <p className="text-xl mb-0">Dr. Rebecca Steffany</p>

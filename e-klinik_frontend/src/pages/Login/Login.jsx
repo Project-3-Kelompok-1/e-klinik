@@ -64,8 +64,6 @@ export default function Login() {
             localStorage.setItem('user', JSON.stringify(result.data))
             alert("Login berhasil");
             setUser(JSON.parse(localStorage.getItem('user')))
-            console.log(result.data);
-            // console.log(user);
         }
         else if (result?.status === 'failed') {
             alert(result?.message);

@@ -73,4 +73,12 @@ class AkunController extends Controller
             'user' => $request->user()->role
         ]);
     }
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'berhasil logout'
+        ], 200);
+    }
 }

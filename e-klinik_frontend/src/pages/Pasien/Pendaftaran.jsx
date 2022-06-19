@@ -86,7 +86,7 @@ const Pendaftaran = () => {
                                         value={valueTab}
                                         index={1}
                                     >
-                                        <RiwayatPendaftaran />
+                                        <RiwayatPendaftaran handleShowAlert={handleShow}/>
                                     </TabPanel>
                                 </Box>
                             </CardContent>

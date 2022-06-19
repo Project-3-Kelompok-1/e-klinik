@@ -1,8 +1,33 @@
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { Box, Button, Collapse, IconButton, Paper, TableCell, TableRow, Typography } from "@mui/material";
-import React, { useState } from "react";
-const RiwayatPendaftaranFragment = ({ row }) => {
+import React, { useContext, useState } from "react";
+import { DOMAIN_SERVER } from "../../config";
+import { UserContext } from "../../Helpers/Context";
+const RiwayatPendaftaranFragment = ({ row, fetchAppointment, handleShowAlert }) => {
     const [collapse, setCollapse] = useState(false)
+    const { user } = useContext(UserContext)
+    const handleDelete = (id) => {
+        const params = {
+            method: 'DELETE',
+            headers: new Headers({
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${user.token}`
+            })
+        }
+        fetch(`${DOMAIN_SERVER}/api/appointment/${id}`, params)
+            .then(response => response.json())
+            .then(data => {
+                if (data?.status !== 'success') {
+                    throw data?.message
+                }
+                handleShowAlert('success', data?.message)
+                fetchAppointment()
+                console.log(data);
+            })
+            .catch(error => {
+                handleShowAlert('error', error)
+            })
+    }
     return (
         <React.Fragment>
             <TableRow>
@@ -35,6 +60,7 @@ const RiwayatPendaftaranFragment = ({ row }) => {
                     <Button
                         component="span"
                         color="error"
+                        onClick={() => { handleDelete(row.id) }}
                     >
                         Hapus
                     </Button>

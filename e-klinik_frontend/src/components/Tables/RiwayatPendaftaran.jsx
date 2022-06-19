@@ -4,7 +4,7 @@ import React, { useState, useContext, useEffect } from "react";
 import RiwayatPendaftaranFragment from "../Fragments/RiwayatPendaftaranFragment";
 import { UserContext } from '../../Helpers/Context';
 import { DOMAIN_SERVER } from "../../config";
-const RiwayatPendaftaran = () => {
+const RiwayatPendaftaran = ({ handleShowAlert }) => {
     const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [appoinments, setAppointments] = useState([])
@@ -74,7 +74,12 @@ const RiwayatPendaftaran = () => {
                     </TableHead>
                     <TableBody>
                         {appoinments.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                            <RiwayatPendaftaranFragment key={row.id} row={row} />
+                            <RiwayatPendaftaranFragment
+                                key={row.id}
+                                row={row}
+                                fetchAppointment={fetchAppointment}
+                                handleShowAlert={handleShowAlert}
+                            />
                         ))}
                     </TableBody>
                 </Table>

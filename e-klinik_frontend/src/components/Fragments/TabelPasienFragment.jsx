@@ -1,8 +1,9 @@
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { Box, Button, Collapse, IconButton, Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
 import React, { useState } from "react";
+import { tanggalLahir } from "../../Helpers/TimeSplits";
 
-const TabelPasienFragment = ({ row }) => {
+const TabelPasienFragment = ({ row, setSelectedPasien, handleClickOpen }) => {
     const [collapse, setCollapse] = useState(false)
     return (
         <React.Fragment>
@@ -21,7 +22,7 @@ const TabelPasienFragment = ({ row }) => {
                     {row.nik}
                 </TableCell>
                 <TableCell align="right">
-                    {row.nama_lengkap}
+                    {`${row.nama_depan} ${row?.nama_belakang}`}
                 </TableCell>
                 <TableCell align="right">
                     {row.usia}
@@ -30,26 +31,34 @@ const TabelPasienFragment = ({ row }) => {
                     {row.jenis_kelamin}
                 </TableCell>
                 <TableCell align="right">
-                    <Box
-                        sx={{ display: 'flex', gap: '0.1rem', justifyContent: 'flex-end' }}
-                    >
-                        <Button
-                            component="span"
-                            color="error"
-                            variant="contained"
-                            sx={{ textTransform: 'capitalize' }}
+                    {row.id_user == 0 && (
+                        <Box
+                            sx={{ display: 'flex', gap: '0.1rem', justifyContent: 'flex-end' }}
                         >
-                            Hapus
-                        </Button>
-                        <Button
-                            component="span"
-                            color="warning"
-                            variant="contained"
-                            sx={{ textTransform: 'capitalize' }}
-                        >
-                            Edit
-                        </Button>
-                    </Box>
+                            <Button
+                                component="span"
+                                color="error"
+                                variant="contained"
+                                sx={{ textTransform: 'capitalize' }}
+                            >
+                                Hapus
+                            </Button>
+                            <Button
+                                component="span"
+                                color="warning"
+                                variant="contained"
+                                sx={{ textTransform: 'capitalize' }}
+                                onClick={() => {
+                                    handleClickOpen(() => {
+                                        setSelectedPasien(row)
+                                    })
+                                }}
+                            >
+                                Edit
+                            </Button>
+                        </Box>
+                    )}
+
                 </TableCell>
             </TableRow>
             <TableRow>
@@ -63,11 +72,10 @@ const TabelPasienFragment = ({ row }) => {
                                 <TableBody>
                                     <TableRow>
                                         <TableCell>
-                                            Tampat lahir
+                                            Kota kelahiran
                                         </TableCell>
                                         <TableCell>
                                             {row.tempat_lahir}
-
                                         </TableCell>
                                     </TableRow>
                                     <TableRow>
@@ -75,7 +83,7 @@ const TabelPasienFragment = ({ row }) => {
                                             Tanggal lahir
                                         </TableCell>
                                         <TableCell>
-                                            {row.tgl_lahir}
+                                            {tanggalLahir(row.tgl_lahir)}
                                         </TableCell>
                                     </TableRow>
                                     <TableRow>

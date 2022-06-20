@@ -34,7 +34,11 @@ Route::controller(AkunController::class)->group(function () {
 Route::get('/dokter', [DokterController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    // Logout
     Route::get('/logout', [AkunController::class, 'logout']);
+
+    // Pasien endpoints
+    Route::get('/pasien', [PasienController::class, 'index']);
     Route::get('/pasien/profile', [PasienController::class, 'show']);
 
     Route::get('/my-role', [AkunController::class, 'getRole']);

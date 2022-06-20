@@ -23,6 +23,17 @@ class PasienController extends Controller
             'tgl_lahir' => ['required', 'date_format:Y-m-d', 'before_or_equal:today'],
         ]);
     }
+    public function index(Request $request)
+    {
+        // 1. Cari semua data pasien
+        $pasien = Pasien::all();
+        // 2. Lakukan response
+        $response = [
+            'status' => 'success',
+            'data_pasien' => $pasien
+        ];
+        return $this->responseSuccess($response);
+    }
     public function show(Request $request)
     {
         $user = $request->user();

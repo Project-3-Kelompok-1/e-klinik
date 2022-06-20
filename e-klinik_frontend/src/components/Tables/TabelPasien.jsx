@@ -1,5 +1,5 @@
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import useTablePagination from "../../Helpers/CustomHooks/useTablePagination";
 import TabelPasienFragment from "../Fragments/TabelPasienFragment";
 const createData = (nik, nama_lengkap, usia, jenis_kelamin, tempat_lahir, tgl_lahir, alamat_rumah) => {
@@ -36,7 +36,7 @@ const rows = [
     createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
 
 ]
-const TabelPasien = () => {
+const TabelPasien = ({ pasien, setSelectedPasien, handleClickOpen }) => {
     const [
         page,
         rowsPerPage,
@@ -68,8 +68,8 @@ const TabelPasien = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                            <TabelPasienFragment key={row} row={row} />
+                        {pasien?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, i) => (
+                            <TabelPasienFragment key={i} row={row} setSelectedPasien={setSelectedPasien} handleClickOpen={handleClickOpen} />
                         ))}
                     </TableBody>
                 </Table>
@@ -79,7 +79,7 @@ const TabelPasien = () => {
                 component="div"
                 nextIconButtonProps={{ component: "span" }}
                 backIconButtonProps={{ component: "span" }}
-                count={rows.length}
+                count={pasien?.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

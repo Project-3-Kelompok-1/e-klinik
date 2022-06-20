@@ -53,30 +53,65 @@ class PasienController extends Controller
         // 2. Validasi data pasien dan user
         $user = $request->user();
         $pasien = Pasien::find($request->nik);
-        if ($pasien && ($user->id !== $pasien->id_user)) {
-            $validation = Validator::make($request->all(), [
-                'nik' => ['unique:pasien,nik']
-            ]);
-            if ($validation->fails()) {
-                return $this->responseErrorMessages($validation->messages());
+        // 3. Validasi role
+        if ($user->role === 'pasien') {
+            if ($pasien && ($user->id !== $pasien->id_user)) {
+                $validation = Validator::make($request->all(), [
+                    'nik' => ['unique:pasien,nik']
+                ]);
+                if ($validation->fails()) {
+                    return $this->responseErrorMessages($validation->messages());
+                }
             }
+            // 4. Create or Update profile pasien
+            $request->request->add([
+                'id_user' => $request->user()->id
+            ]);
+            Pasien::updateOrCreate(
+                ['id_user' => $user->id],
+                $request->all()
+            );
+            $response = [
+                'status' => 'success',
+                'message' => 'Profile berhasil disimpan',
+            ];
+        } else if ($user->role === 'resepsionis') {
+            // Check id user => jika id bukan 0 tidak bisa melakukan update
+            $pasien = Pasien::where('nik', $request->nik)->where('id_user', 0)->firstOrFail();
+            if ($pasien) {
+                // 4. Create or Update pasien
+                $request->request->add([
+                    'id_user' => 0
+                ]);
+                Pasien::updateOrCreate(
+                    ['nik' => $request->nik],
+                    $request->all()
+                );
+                $response = [
+                    'status' => 'success',
+                    'message' => 'Data pasien berhasil disimpan',
+                ];
+            } else {
+                $validation = Validator::make($request->all(), [
+                    'nik' => ['unique:pasien,nik']
+                ]);
+                if ($validation->fails()) {
+                    return $this->responseErrorMessages($validation->messages());
+                }
+                $response = [
+                    'status' => 'failed',
+                    'message' => 'Permission denied'
+                ];
+                return $this->responseFailed($response, 403);
+            }
+        } else {
+            $response = [
+                'status' => 'failed',
+                'message' => 'Permission denied'
+            ];
+            return $this->responseFailed($response, 403);
         }
-        // 3. Create or Update profile pasien
-        $request->request->add([
-            'id_user' => $request->user()->id
-        ]);
-        Pasien::updateOrCreate(
-            [
-                'id_user' => $user->id
-            ],
-            $request->all()
-        );
         // 4. Response berhasil
-        $response = [
-            'status' => 'success',
-            'message' => 'Profile berhasil di update',
-            'request' => $request->all()
-        ];
         return $this->responseSuccess($response);
     }
 }

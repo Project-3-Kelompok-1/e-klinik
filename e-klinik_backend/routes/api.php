@@ -40,7 +40,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Pasien endpoints
     Route::get('/pasien', [PasienController::class, 'index']);
     Route::get('/pasien/profile', [PasienController::class, 'show']);
-
+    Route::post('/pasien/profile', [PasienController::class, 'store']);
+    
     Route::get('/my-role', [AkunController::class, 'getRole']);
     // Kelola dokter
     Route::post("/tambah_dokter", [DokterController::class, 'add']);
@@ -64,7 +65,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Appointment
     // Route::post('/appointment', [AppointmentController::class, 'store'])->middleware('isPasien');
     Route::middleware('isPasien')->group(function () {
-        Route::post('/pasien/profile', [PasienController::class, 'store']);
         Route::get('/appointment', [AppointmentController::class, 'index']);
         Route::post('/appointment', [AppointmentController::class, 'store']);
         Route::delete('/appointment/{id}', [AppointmentController::class, 'destroy']);

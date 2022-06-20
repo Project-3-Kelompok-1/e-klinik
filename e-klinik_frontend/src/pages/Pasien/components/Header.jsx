@@ -5,7 +5,7 @@ import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { DOMAIN_SERVER } from "../../../config";
 import { UserContext } from "../../../Helpers/Context";
-const pages = ['Profile', 'Pendaftaran', 'Pengobatan', 'Rawat Inap', 'Transaksi']
+const pages = ['Profile', 'Pendaftaran', 'Pengobatan']
 const settings = ['Akun', 'Keluar']
 const Header = ({ username }) => {
     const { user } = useContext(UserContext)

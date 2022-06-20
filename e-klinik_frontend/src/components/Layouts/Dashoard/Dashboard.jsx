@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { HealthAndSafety, EventAvailable, MedicalServices } from '@mui/icons-material';
+import { HealthAndSafety, EventAvailable, MedicalServices, Group } from '@mui/icons-material';
 import { UserContext } from '../../../Helpers/Context';
 import { useNavigate } from 'react-router-dom';
 import "./style.css";
@@ -89,6 +89,24 @@ const Dashboard = (props) => {
                     </Button>
                 </ListItem>
                 <ListItem>
+                    <Button color="primary"
+                        component="span"
+                        sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                        variant={`${props.halaman === 'Data Pasien' ? 'contained' : 'text'}`}
+                        startIcon={<Group />}
+                        onClick={() => {
+                            if (user.role === 'resepsionis') {
+                                navigate('/resepsionis/data-pasien')
+                            }
+                            else if (user.role === 'dokter') {
+                                navigate('/dokter/pasien')
+                            }
+                        }}
+                    >
+                        <ListItemText primary="Data Pasien" />
+                    </Button>
+                </ListItem>
+                <ListItem>
                     <Button
                         color='primary'
                         component="span"
@@ -141,7 +159,6 @@ const Dashboard = (props) => {
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` }
                 }}
-
             >
                 <Toolbar>
                     <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>

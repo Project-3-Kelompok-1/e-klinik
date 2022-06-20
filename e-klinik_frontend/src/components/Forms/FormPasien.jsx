@@ -1,7 +1,10 @@
 import { Close } from "@mui/icons-material";
 import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormHelperText, Grid, IconButton, InputLabel, MenuItem, Select, TextField, Toolbar, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { DOMAIN_SERVER } from "../../config";
+import { UserContext } from "../../Helpers/Context";
+import createFormPasien from "../../Helpers/CreateFormData/CreateFormPasien";
 import { helperTextPasien } from "../../Helpers/HelperText";
 import DatePicker from "./DatePicker";
 // const scroll = 'paper'
@@ -15,7 +18,8 @@ const initialState = {
     tempat_lahir: '',
     tgl_lahir: new Date()
 }
-const FormPasien = ({ selectedPasien, fetchPasien, ...restProps }) => {
+const FormPasien = ({ selectedPasien, fetchPasien, handleShowAlert, ...restProps }) => {
+    const { user } = useContext(UserContext)
     const theme = useTheme()
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
     const [pasien, setPasien] = useState(initialState)
@@ -24,9 +28,32 @@ const FormPasien = ({ selectedPasien, fetchPasien, ...restProps }) => {
         setPasien(initialState)
         restProps.onClose()
     }
-    const handleSubmit = () => {
-        handleClose()
-        fetchPasien()
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const formData = createFormPasien(pasien)
+        const params = {
+            method: 'POST',
+            body: JSON.stringify(formData),
+            headers: new Headers({
+                'Content-type': 'application/json; charset=UTF-8',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${user.token}`
+            })
+        }
+        fetch(DOMAIN_SERVER + '/api/pasien/profile', params)
+            .then(response => response.json())
+            .then(data => {
+                if (data?.errors) {
+                    throw data.errors
+                }
+                setErrorMessages()
+                handleClose()
+                handleShowAlert(data?.status, data?.message)
+                fetchPasien()
+            })
+            .catch(errors => {
+                setErrorMessages(errors)
+            })
     }
     useEffect(() => {
         if (selectedPasien) {

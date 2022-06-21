@@ -23,7 +23,9 @@ return new class extends Migration
             $table->timestamps();
 
             // add foreign key
-            $table->foreign('nik_pasien')->references('nik')->on('pasien');
+            $table->foreign('nik_pasien')
+                ->references('nik')->on('pasien')
+                ->onDelete('cascade');
         });
     }
 

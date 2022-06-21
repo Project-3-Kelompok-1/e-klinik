@@ -9,6 +9,7 @@ import { helperTextPasien } from "../../Helpers/HelperText";
 import DatePicker from "./DatePicker";
 // const scroll = 'paper'
 const initialState = {
+    old_nik: '',
     nik: '',
     nama_depan: '',
     nama_belakang: '',
@@ -43,6 +44,7 @@ const FormPasien = ({ selectedPasien, fetchPasien, handleShowAlert, ...restProps
         fetch(DOMAIN_SERVER + '/api/pasien/profile', params)
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 if (data?.errors) {
                     throw data.errors
                 }
@@ -60,6 +62,7 @@ const FormPasien = ({ selectedPasien, fetchPasien, handleShowAlert, ...restProps
             setPasien((prevState) => {
                 return {
                     ...prevState,
+                    old_nik: selectedPasien.nik,
                     nik: selectedPasien.nik,
                     nama_depan: selectedPasien.nama_depan,
                     nama_belakang: selectedPasien.nama_belakang,

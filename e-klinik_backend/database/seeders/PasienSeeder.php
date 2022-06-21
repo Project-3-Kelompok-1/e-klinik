@@ -17,7 +17,7 @@ class PasienSeeder extends Seeder
     public function run()
     {
         Pasien::create([
-            'nik' => '123456789',
+            'nik' => '1234567890123456',
             'id_user' => 4,
             'nama_depan' => "Mar'i",
             'nama_belakang' => 'Adhari',

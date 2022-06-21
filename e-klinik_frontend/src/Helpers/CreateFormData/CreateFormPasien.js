@@ -1,5 +1,6 @@
 const createFormPasien = (form) => {
     const formData = {
+        old_nik: form.old_nik,
         nik: form.nik,
         nama_depan: form.nama_depan,
         nama_belakang: form.nama_belakang,

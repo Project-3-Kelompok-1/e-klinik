@@ -38,5 +38,11 @@ class Pasien extends Model
                 $appointment->delete(); // <-- menghapus data relasi appointment
             });
         });
+        self::updating(function($pasien){
+            $pasien->appointment()->each(function($appointment, $pasien){
+                $appointment->nik_pasien = $pasien->nik;
+                $appointment->save();
+            });
+        });
     }
 }

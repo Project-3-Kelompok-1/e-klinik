@@ -37,8 +37,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Pasien endpoints
     Route::get('/pasien', [PasienController::class, 'index'])->middleware('isAdmin');
-    Route::get('/pasien/profile', [PasienController::class, 'show']);
     Route::post('/pasien/profile', [PasienController::class, 'store']);
+    Route::get('/pasien/profile', [PasienController::class, 'show']);
     Route::delete('/pasien', [PasienController::class, 'destroy'])->middleware('isAdmin');
     
     Route::get('/my-role', [AkunController::class, 'getRole']);

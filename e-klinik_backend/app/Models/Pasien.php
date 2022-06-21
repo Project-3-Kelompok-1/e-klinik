@@ -30,4 +30,13 @@ class Pasien extends Model
     {
         return $this->hasMany(Appointment::class, 'nik_pasien', 'nik');
     }
+    public static function boot() // event handlers
+    {
+        parent::boot();
+        self::deleting(function ($pasien) {
+            $pasien->appointment()->each(function ($appointment) {
+                $appointment->delete(); // <-- menghapus data relasi appointment
+            });
+        });
+    }
 }

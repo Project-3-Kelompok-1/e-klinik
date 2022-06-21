@@ -121,4 +121,30 @@ class PasienController extends Controller
         // 4. Response berhasil
         return $this->responseSuccess($response);
     }
+    public function destroy(Request $request)
+    {
+        // 1. Validasi request
+        $validation = Validator::make($request->all(), [
+            'nik' => 'required'
+        ]);
+        // Jika validasi gagal
+        if ($validation->fails()) {
+            return $this->responseErrorMessages($validation->messages());
+        }
+        // 2. Hapus
+        $pasien = Pasien::where('nik', $request->nik)->where('id_user', 0)->delete();
+        if (!$pasien) {
+            $response = [
+                'status' => 'failed',
+                'message' => 'Permission denied'
+            ];
+            return $this->responseFailed($response, 403);
+        }
+        // 3. Response
+        $response = [
+            'status' => 'success',
+            'message' => 'Berhasil menghapus pasien'
+        ];
+        return $this->responseSuccess($response);
+    }
 }

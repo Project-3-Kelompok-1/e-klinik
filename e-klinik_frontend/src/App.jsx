@@ -17,6 +17,7 @@ import SignUp from "./pages/Register/SignUp";
 import HomePage from "./pages/Pasien/HomePage";
 import Pendaftaran from "./pages/Pasien/Pendaftaran";
 import DataPasien from "./pages/Admin/Resepsionis/DataPasien";
+import DataPendaftaran from "./pages/Admin/DataPendaftaran";
 const App = () => {
   const [user, setUser] = useState(() => {
     return JSON.parse(localStorage.getItem('user'))
@@ -62,6 +63,8 @@ const App = () => {
           <Route path="/resepsionis/jadwal-praktek" element={<JadwalPraktek />} />
           <Route path="/resepsionis/data-obat" element={<DataObat />} />
           <Route path="/resepsionis/data-pasien" element={<DataPasien />} />
+          <Route path="/resepsionis/data-pendaftaran" element={<DataPendaftaran />} />
+          <Route path="/dokter/data-pendaftaran" element={<DataPendaftaran />} />
           <Route path="/profile" element={<HomePage />} />
           <Route path="/pendaftaran" element={<Pendaftaran />} />
           {/* <Route path="/test/customize-schedule-form" element={<CustomizeScheduleForm />} /> */}

@@ -6,8 +6,6 @@ use App\Http\Controllers\DokterController;
 use App\Http\Controllers\JadwalPraktekController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\PasienController;
-use App\Models\Appointment;
-use App\Models\Pasien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/pasien', [PasienController::class, 'index'])->middleware('isAdmin');
     Route::get('/pasien/profile', [PasienController::class, 'show']);
     Route::post('/pasien/profile', [PasienController::class, 'store']);
+    Route::delete('/pasien', [PasienController::class, 'destroy'])->middleware('isAdmin');
     
     Route::get('/my-role', [AkunController::class, 'getRole']);
     // Kelola dokter

@@ -1,48 +1,16 @@
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
+import { Box, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
 import React, { useEffect } from "react";
 import useTablePagination from "../../Helpers/CustomHooks/useTablePagination";
 import TabelPasienFragment from "../Fragments/TabelPasienFragment";
-const createData = (nik, nama_lengkap, usia, jenis_kelamin, tempat_lahir, tgl_lahir, alamat_rumah) => {
-    return {
-        nik,
-        nama_lengkap,
-        usia,
-        jenis_kelamin,
-        tempat_lahir,
-        tgl_lahir,
-        alamat_rumah
-    }
-}
-const rows = [
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
-    createData("1234567890123456", "Mar'i Adhari", 21, "Laki-laki", "Cirebon", "14-03-2001", "Kutagara Utara"),
 
-]
-const TabelPasien = ({ pasien, setSelectedPasien, handleClickOpen }) => {
+const TabelPasien = ({ pasien, setSelectedPasien, handleClickOpen, loading }) => {
     const [
         page,
         rowsPerPage,
         handleChangePage,
         handleChangeRowsPerPage
     ] = useTablePagination()
+
     return (
         <Box sx={{ margin: '1rem 2rem' }}>
             <TableContainer component={Paper}>
@@ -67,11 +35,21 @@ const TabelPasien = ({ pasien, setSelectedPasien, handleClickOpen }) => {
                             </TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>
-                        {pasien?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, i) => (
-                            <TabelPasienFragment key={i} row={row} setSelectedPasien={setSelectedPasien} handleClickOpen={handleClickOpen} />
-                        ))}
-                    </TableBody>
+                    {loading ? (
+                        <TableBody>
+                            <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer' }}>
+                                <TableCell rowSpan={4} colSpan={6} align="center">
+                                    <CircularProgress />
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    ) : (
+                        <TableBody>
+                            {pasien?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, i) => (
+                                <TabelPasienFragment key={i} row={row} setSelectedPasien={setSelectedPasien} handleClickOpen={handleClickOpen} />
+                            ))}
+                        </TableBody>
+                    )}
                 </Table>
             </TableContainer>
             <TablePagination

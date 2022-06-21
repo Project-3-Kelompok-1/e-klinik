@@ -14,6 +14,8 @@ const DataPasien = () => {
     const [pasien, setPasien] = useState([])
     const [selectedPasien, setSelectedPasien] = useState(null)
     const [open, handleClickOpen, handleClose] = useDialog()
+    const [loading, setLoading] = useState(false)
+    const [search, setSearch] = useState('')
     const [
         openAlert,
         severity,
@@ -21,27 +23,33 @@ const DataPasien = () => {
         handleShowAlert,
         handleHideAlert
     ] = useAlert()
+    const handleChangeSearch = (e) => {
+        setSearch(e.target.value)
+    }
     const fetchPasien = () => {
+        setLoading(true)
         const params = {
             headers: new Headers({
                 'Authorization': `Bearer ${user.token}`
             })
         }
-        fetch(DOMAIN_SERVER + '/api/pasien', params)
+        fetch(DOMAIN_SERVER + '/api/pasien?search=' + search, params)
             .then(response => response.json())
             .then(data => {
                 if (data?.status !== 'success') {
                     throw data
                 }
                 setPasien(data?.data_pasien)
+                setLoading(false)
             })
             .catch(error => {
                 console.log(error);
+                setLoading(true)
             })
     }
     useEffect(() => {
         fetchPasien()
-    }, [])
+    }, [search])
     return (
         <>
             <Dashboard
@@ -57,11 +65,15 @@ const DataPasien = () => {
                             console.log("Hello world");
                         })
                     }}
+                    value={search}
+                    onChange={handleChangeSearch}
+                    search
                 />
                 <TabelPasien
                     pasien={pasien}
                     setSelectedPasien={setSelectedPasien}
                     handleClickOpen={handleClickOpen}
+                    loading={loading}
                 />
             </Dashboard>
             <FormPasien

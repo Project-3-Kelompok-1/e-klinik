@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Traits\ResponseTrait;
 use App\Models\Pasien;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PasienController extends Controller
@@ -26,7 +27,13 @@ class PasienController extends Controller
     public function index(Request $request)
     {
         // 1. Cari semua data pasien
-        $pasien = Pasien::all();
+        if ($request->search) {
+            $pasien = Pasien::where('nik', 'LIKE', '%' . $request->search . '%')
+                ->orWhere(DB::raw("CONCAT(`nama_depan`, ' ', `nama_belakang`)"), 'LIKE', '%' . $request->search . '%')
+                ->get();
+        } else {
+            $pasien = Pasien::all();
+        }
         // 2. Lakukan response
         $response = [
             'status' => 'success',

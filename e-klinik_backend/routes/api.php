@@ -38,7 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AkunController::class, 'logout']);
 
     // Pasien endpoints
-    Route::get('/pasien', [PasienController::class, 'index']);
+    Route::get('/pasien', [PasienController::class, 'index'])->middleware('isAdmin');
     Route::get('/pasien/profile', [PasienController::class, 'show']);
     Route::post('/pasien/profile', [PasienController::class, 'store']);
     

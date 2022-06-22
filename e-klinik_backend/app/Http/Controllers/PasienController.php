@@ -16,7 +16,7 @@ class PasienController extends Controller
         return Validator::make($request->all(), [
             'nik' => ['required', 'size:16'],
             'nama_depan' => ['required', 'string', 'max:32'],
-            'nama_belakang' => ['string', 'max:255'],
+            'nama_belakang' => ['max:255'],
             'alamat_rumah' => ['required', 'string', 'min:32'],
             'usia' => ['required', 'integer', 'min:0'],
             'jenis_kelamin' => ['required', 'string', 'max:255'],

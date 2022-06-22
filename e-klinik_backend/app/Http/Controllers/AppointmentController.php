@@ -8,6 +8,7 @@ use App\Models\JadwalPraktek;
 use App\Models\Pasien;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -56,15 +57,19 @@ class AppointmentController extends Controller
     {
         // 1. Cari data appointment yang memiliki status mendaftar dan jadwal hari ini
         $appointment = Appointment::join('jadwal_praktek', 'appointment.id_jadwal_praktek', '=', 'jadwal_praktek.id')
-        ->join('pasien', 'appointment.nik_pasien', '=', 'pasien.nik')
-        ->where('appointment.status', 'mendaftar')
-        ->whereDate('jadwal_praktek.tgl_praktek', Carbon::today())
-        ->select('appointment.id', 'appointment.waktu_pesan', 'pasien.nik', 'pasien.nama_depan', 'pasien.nama_belakang')
-        ->get();
+            ->join('pasien', 'appointment.nik_pasien', '=', 'pasien.nik')
+            ->where('appointment.status', 'mendaftar')
+            ->where('pasien.nik', 'LIKE', '%' . $request->search . '%')
+            ->orWhere(DB::raw("CONCAT(`nama_depan`, ' ', `nama_belakang`)"), 'LIKE', '%' . $request->search . '%')
+            ->whereDate('jadwal_praktek.tgl_praktek', Carbon::today())
+            ->select('appointment.id', 'appointment.waktu_pesan', 'pasien.nik', 'pasien.nama_depan', 'pasien.nama_belakang', 'pasien.usia', 'pasien.jenis_kelamin')
+            ->get();
         // 2. Response 
-        return response()->json([
-            'appointment' => $appointment
-        ]);
+        $response = [
+            'status' => 'success',
+            'todays_appointment' => $appointment
+        ];
+        return $this->responseSuccess($response);
     }
     public function index(Request $request)
     {

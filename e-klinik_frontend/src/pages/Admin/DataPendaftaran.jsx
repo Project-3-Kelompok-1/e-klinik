@@ -7,6 +7,7 @@ const DataPendaftaran = () => {
             halaman="Data Pendaftaran"
         >
             <Toolbar />
+            
         </Dashboard>
     )
 }

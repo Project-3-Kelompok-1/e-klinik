@@ -30,10 +30,10 @@ Route::controller(AkunController::class)->group(function () {
     // Route::get('/logout', 'logout');
 });
 Route::get('/dokter', [DokterController::class, 'index']);
-
 Route::middleware('auth:sanctum')->group(function () {
-    // Logout
+    // Sanctum auth
     Route::get('/logout', [AkunController::class, 'logout']);
+    Route::get('/my-role', [AkunController::class, 'getRole']);
 
     // Pasien endpoints
     Route::get('/pasien', [PasienController::class, 'index'])->middleware('isAdmin');
@@ -41,7 +41,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/pasien/profile', [PasienController::class, 'show']);
     Route::delete('/pasien', [PasienController::class, 'destroy'])->middleware('isAdmin');
     
-    Route::get('/my-role', [AkunController::class, 'getRole']);
     // Kelola dokter
     Route::post("/tambah_dokter", [DokterController::class, 'add']);
     Route::delete('/dokter/hapus/{id}', [DokterController::class, 'destroy']);
@@ -61,7 +60,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/data-obat/delete', [ObatController::class, 'deleteSelected']);
         Route::post('/data-obat/update/{id}', [ObatController::class, 'update']);
     });
+    
     // Appointment
+    Route::get('/appointment/todays_registration', [AppointmentController::class, 'todays_registration'])->middleware('isAdmin');
     // Route::post('/appointment', [AppointmentController::class, 'store'])->middleware('isPasien');
     Route::middleware('isPasien')->group(function () {
         Route::get('/appointment', [AppointmentController::class, 'index']);

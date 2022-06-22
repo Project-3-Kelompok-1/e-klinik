@@ -52,6 +52,20 @@ class AppointmentController extends Controller
         }
         return false;
     }
+    public function todays_registration(Request $request)
+    {
+        // 1. Cari data appointment yang memiliki status mendaftar dan jadwal hari ini
+        $appointment = Appointment::join('jadwal_praktek', 'appointment.id_jadwal_praktek', '=', 'jadwal_praktek.id')
+        ->join('pasien', 'appointment.nik_pasien', '=', 'pasien.nik')
+        ->where('appointment.status', 'mendaftar')
+        ->whereDate('jadwal_praktek.tgl_praktek', Carbon::today())
+        ->select('appointment.id', 'appointment.waktu_pesan', 'pasien.nik', 'pasien.nama_depan', 'pasien.nama_belakang')
+        ->get();
+        // 2. Response 
+        return response()->json([
+            'appointment' => $appointment
+        ]);
+    }
     public function index(Request $request)
     {
         // 1. Cari data pasien
@@ -122,8 +136,7 @@ class AppointmentController extends Controller
             ];
             // 4. Response
             return $this->responseSuccess($response);
-        }
-        else {
+        } else {
             // Gagal menghapus
             $response = [
                 'status' => 'failed',

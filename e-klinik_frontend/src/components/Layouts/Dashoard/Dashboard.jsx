@@ -11,13 +11,14 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { HealthAndSafety, EventAvailable, MedicalServices, Group } from '@mui/icons-material';
+import { HealthAndSafety, EventAvailable, MedicalServices, Group, ExpandLess, ExpandMore, AppRegistration, PendingActions, Medication, Favorite } from '@mui/icons-material';
 import { UserContext } from '../../../Helpers/Context';
 import { useNavigate } from 'react-router-dom';
 import "./style.css";
-import { Avatar, Button, Menu, MenuItem, Tooltip } from '@mui/material';
+import { Avatar, Button, Collapse, Menu, MenuItem, Tooltip } from '@mui/material';
 import { DOMAIN_SERVER } from '../../../config';
-const drawerWidth = 240;
+import useCollapse from '../../../Helpers/CustomHooks/useCollapse';
+const drawerWidth = 260;
 const settings = ['Akun', 'Keluar']
 const Dashboard = (props) => {
     const { window } = props;
@@ -25,6 +26,7 @@ const Dashboard = (props) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const { user } = useContext(UserContext)
     const navigate = useNavigate()
+    const [collapsePendaftaran, handleCollapsePendaftaran] = useCollapse()
     const logout = () => {
         alert("Berhasil logout")
         fetch(DOMAIN_SERVER + '/api/logout', {
@@ -113,7 +115,7 @@ const Dashboard = (props) => {
                         component="span"
                         sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
                         variant={`${props.halaman === 'Data Obat' ? 'contained' : 'text'}`}
-                        startIcon={<MedicalServices />}
+                        startIcon={<Medication />}
                         onClick={() => {
                             if (user.role === 'resepsionis') {
                                 navigate('/resepsionis/data-obat')
@@ -144,24 +146,75 @@ const Dashboard = (props) => {
                         <ListItemText primary="Data Pasien" />
                     </Button>
                 </ListItem>
-                <ListItem>
-                    <Button color="primary"
-                        component="span"
-                        sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
-                        variant={`${props.halaman === 'Data Pendaftaran' ? 'contained' : 'text'}`}
-                        startIcon={<Group />}
-                        onClick={() => {
-                            if (user.role === 'resepsionis') {
-                                navigate('/resepsionis/data-pendaftaran')
-                            }
-                            else if (user.role === 'dokter') {
-                                navigate('/dokter/data-pendaftaran')
-                            }
-                        }}
-                    >
-                        <ListItemText primary="Pendaftaran" />
-                    </Button>
-                </ListItem>
+                {(user?.role === 'resepsionis' || user?.role === 'dokter') && (
+                    <React.Fragment>
+                        <ListItem>
+                            <Button color="primary"
+                                component="span"
+                                sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                                startIcon={<Group />}
+                                onClick={handleCollapsePendaftaran}
+                                variant={`${props.halaman === 'Pasien Mendaftar' || props.halaman === 'Pasien Menunggu' || props.halaman === 'Pasien Diperiksa' || props.halaman === 'Pemeriksaan Selesai' ? 'contained' : 'text'}`}
+
+                            >
+                                <ListItemText primary="Pendaftaran" />
+                                {collapsePendaftaran ? <ExpandLess /> : <ExpandMore />}
+                            </Button>
+                        </ListItem>
+                        <Collapse in={collapsePendaftaran} timeout="auto" unmountOnExit>
+                            <List component="div" disablePadding>
+                                {user?.role === 'resepsionis' && (
+                                    <React.Fragment>
+                                        <ListItem sx={{ pl: 4 }}>
+                                            <Button color="primary"
+                                                component="span"
+                                                sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                                                startIcon={<AppRegistration />}
+                                                onClick={() => { navigate('/resepsionis/pendaftaran/mendaftar') }}
+                                                variant={`${props.halaman === 'Pasien Mendaftar' ? 'contained' : 'text'}`}
+
+                                            >
+                                                <ListItemText primary="Mendaftar" />
+                                            </Button>
+                                        </ListItem>
+                                        <ListItem sx={{ pl: 4 }}>
+                                            <Button color="primary"
+                                                component="span"
+                                                sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                                                startIcon={<PendingActions />}
+                                            >
+                                                <ListItemText primary="Menunggu" />
+                                            </Button>
+                                        </ListItem>
+                                    </React.Fragment>
+                                )}
+                                {user?.role === 'dokter' && (
+                                    <ListItem sx={{ pl: 4 }}>
+                                        <Button color="primary"
+                                            component="span"
+                                            sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                                            startIcon={<MedicalServices />}
+                                        >
+                                            <ListItemText primary="Diperiksa" />
+                                        </Button>
+                                    </ListItem>
+                                )}
+                                {user?.role === 'resepsionis' && (
+                                    <ListItem sx={{ pl: 4 }}>
+                                        <Button color="primary"
+                                            component="span"
+                                            sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                                            startIcon={<Favorite />}
+                                        >
+                                            <ListItemText primary="Selesai" />
+                                        </Button>
+                                    </ListItem>
+                                )}
+                            </List>
+                        </Collapse>
+                    </React.Fragment>
+                )}
+
             </List>
             <Divider />
         </div>

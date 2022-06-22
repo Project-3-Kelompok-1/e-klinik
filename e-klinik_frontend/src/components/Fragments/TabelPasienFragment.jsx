@@ -3,7 +3,7 @@ import { Box, Button, Collapse, IconButton, Table, TableBody, TableCell, TableRo
 import React, { useState } from "react";
 import { tanggalLahir } from "../../Helpers/TimeSplits";
 
-const TabelPasienFragment = ({ row, setSelectedPasien, handleClickOpen }) => {
+const TabelPasienFragment = ({ row, setSelectedPasien, handleClickOpen, handleClickDelete }) => {
     const [collapse, setCollapse] = useState(false)
     return (
         <React.Fragment>
@@ -40,6 +40,11 @@ const TabelPasienFragment = ({ row, setSelectedPasien, handleClickOpen }) => {
                                 color="error"
                                 variant="contained"
                                 sx={{ textTransform: 'capitalize' }}
+                                onClick={() => {
+                                    handleClickDelete(() => {
+                                        setSelectedPasien(row)
+                                    })
+                                }}
                             >
                                 Hapus
                             </Button>

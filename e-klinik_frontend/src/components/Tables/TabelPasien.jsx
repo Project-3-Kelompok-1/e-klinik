@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import useTablePagination from "../../Helpers/CustomHooks/useTablePagination";
 import TabelPasienFragment from "../Fragments/TabelPasienFragment";
 
-const TabelPasien = ({ pasien, setSelectedPasien, handleClickOpen, loading }) => {
+const TabelPasien = ({ pasien, setSelectedPasien, handleClickOpen, handleClickDelete, loading }) => {
     const [
         page,
         rowsPerPage,
@@ -46,7 +46,13 @@ const TabelPasien = ({ pasien, setSelectedPasien, handleClickOpen, loading }) =>
                     ) : (
                         <TableBody>
                             {pasien?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, i) => (
-                                <TabelPasienFragment key={i} row={row} setSelectedPasien={setSelectedPasien} handleClickOpen={handleClickOpen} />
+                                <TabelPasienFragment
+                                    key={i}
+                                    row={row}
+                                    setSelectedPasien={setSelectedPasien}
+                                    handleClickOpen={handleClickOpen}
+                                    handleClickDelete={handleClickDelete}
+                                />
                             ))}
                         </TableBody>
                     )}

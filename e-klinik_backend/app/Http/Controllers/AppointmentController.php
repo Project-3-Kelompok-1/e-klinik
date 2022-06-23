@@ -53,7 +53,7 @@ class AppointmentController extends Controller
         if ($appointment) {
             $response = [
                 'status' => 'failed',
-                'message' => 'Anda sudah melakukan pendaftaran'
+                'message' => 'Sudah dilakukan pendaftaran'
             ];
             return $this->responseFailed($response, 400);
         }
@@ -62,11 +62,19 @@ class AppointmentController extends Controller
     public function todays_registration(Request $request)
     {
         // 1. Cari data appointment yang memiliki status mendaftar dan jadwal hari ini
-        $appointment = Appointment::join('jadwal_praktek', 'appointment.id_jadwal_praktek', '=', 'jadwal_praktek.id')
-            ->join('pasien', 'appointment.nik_pasien', '=', 'pasien.nik')
+        // $appointment = Appointment::join('jadwal_praktek', 'appointment.id_jadwal_praktek', '=', 'jadwal_praktek.id')
+        //     ->join('pasien', 'appointment.nik_pasien', '=', 'pasien.nik')
+        //     ->where('appointment.status', 'mendaftar')
+        //     ->whereDate('jadwal_praktek.tgl_praktek', Carbon::today())
+        //     ->where('pasien.nama_depan', 'LIKE', '%' . $request->search . '%')
+        //     // ->where(DB::raw('concat("pasien.nama_depan", "pasien.nama_belakang")'), 'like', '%' . $request->search . '%')
+        //     ->select('appointment.id', 'appointment.waktu_pesan', 'pasien.nik', 'pasien.nama_depan', 'pasien.nama_belakang', 'pasien.usia', 'pasien.jenis_kelamin')
+        //     ->get();
+
+        $appointment = Pasien::where('nik', 'LIKE', '%' . $request->search . '%')
+            ->join('appointment', 'pasien.nik', '=', 'appointment.nik_pasien')
             ->where('appointment.status', 'mendaftar')
-            ->where('pasien.nik', 'LIKE', '%' . $request->search . '%')
-            ->orWhere(DB::raw("CONCAT(`nama_depan`, ' ', `nama_belakang`)"), 'LIKE', '%' . $request->search . '%')
+            ->join('jadwal_praktek', 'appointment.id_jadwal_praktek', '=', 'jadwal_praktek.id')
             ->whereDate('jadwal_praktek.tgl_praktek', Carbon::today())
             ->select('appointment.id', 'appointment.waktu_pesan', 'pasien.nik', 'pasien.nama_depan', 'pasien.nama_belakang', 'pasien.usia', 'pasien.jenis_kelamin')
             ->get();
@@ -234,7 +242,7 @@ class AppointmentController extends Controller
         // 2. Cari jadwal hari ini dan jam selesai setalah jam sekarang <= ambil yang pertama ditemukan
         $jadwal = JadwalPraktek::where('status', 'kerja')
             ->whereDate('tgl_praktek', Carbon::today())
-            ->whereDate('jam_selesai', '>=', Carbon::now()->format('H:i:s'))
+            // ->whereTime('jam_selesai', '>', Carbon::now()->format('H:i:s'))
             ->first();
         // Jadwal praktek tidak ditemukan
         if (!$jadwal) {

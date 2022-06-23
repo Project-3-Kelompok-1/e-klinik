@@ -66,6 +66,7 @@ const Mendaftar = () => {
             <AdminPageNavigation
                 halaman="Pasien Mendaftar"
                 link="/resepsionis/pendaftaran/mendaftar"
+                // pageData="Appointment"
                 search
                 value={search}
                 onChange={handleChangeSearch}

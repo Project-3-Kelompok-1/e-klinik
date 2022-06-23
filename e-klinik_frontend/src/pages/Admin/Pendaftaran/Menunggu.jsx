@@ -5,17 +5,19 @@ import Alert from "../../../components/Feedback/Alert";
 import ChangeAppointmentStatus from "../../../components/Forms/ChangeAppointmentStatus";
 import Dashboard from "../../../components/Layouts/Dashoard/Dashboard";
 import AdminPageNavigation from "../../../components/Navigations/AdminPageNavigation";
-import PasienMendaftar from "../../../components/Tables/PasienMendaftar";
+import PasienMenunggu from "../../../components/Tables/PasienMenunggu";
 import { DOMAIN_SERVER } from "../../../config";
 import { isResepsionis } from "../../../Helpers/checkUser";
 import { UserContext } from "../../../Helpers/Context";
 import useAlert from "../../../Helpers/CustomHooks/useAlert";
 import useDialog from "../../../Helpers/CustomHooks/useDialog";
-const Mendaftar = () => {
+const Menunggu = () => {
+    const { user } = useContext(UserContext)
+    const navigate = useNavigate()
+    const [search, setSearch] = useState('')
     const [appointment, setAppointment] = useState([])
     const [selectedAppoitment, setSelectedAppointment] = useState(null)
     const [loading, setLoading] = useState(false)
-    const [search, setSearch] = useState('')
     const [open, handleClickStatus, handleClose] = useDialog()
     const [
         openAlert,
@@ -24,16 +26,16 @@ const Mendaftar = () => {
         handleShowAlert,
         handleHideAlert
     ] = useAlert()
-    const { user } = useContext(UserContext)
-    const navigate = useNavigate()
+
+    const handleChangeSearch = (e) => {
+        setSearch(e.target.value)
+    }
+
     useEffect(() => {
         if (!isResepsionis()) {
             navigate('/')
         }
     }, [user])
-    const handleChangeSearch = (e) => {
-        setSearch(e.target.value)
-    }
     const fetchAppointment = () => {
         setLoading(true)
         const params = {
@@ -41,7 +43,7 @@ const Mendaftar = () => {
                 'Authorization': `Bearer ${user.token}`
             })
         }
-        fetch(DOMAIN_SERVER + '/api/appointment/todays_registration?search=' + search, params)
+        fetch(DOMAIN_SERVER + '/api/appointment/todays_waiting?search=' + search, params)
             .then(response => response.json())
             .then(data => {
                 if (data?.status !== 'success') {
@@ -52,7 +54,7 @@ const Mendaftar = () => {
             })
             .catch(error => {
                 setLoading(true)
-                handleShowAlert("error", 'Server Error')
+                handleShowAlert("error", "Server Error")
             })
     }
     useEffect(() => {
@@ -60,17 +62,17 @@ const Mendaftar = () => {
     }, [search])
     return (
         <Dashboard
-            halaman="Pasien Mendaftar"
+            halaman="Pasien Menunggu"
         >
             <Toolbar />
             <AdminPageNavigation
-                halaman="Pasien Mendaftar"
-                link="/resepsionis/pendaftaran/mendaftar"
+                halaman="Pasien Menunggu"
+                link="/resepsionis/pendaftaran/menunggu"
                 search
                 value={search}
                 onChange={handleChangeSearch}
             />
-            <PasienMendaftar
+            <PasienMenunggu
                 appointment={appointment}
                 loading={loading}
                 handleClickStatus={handleClickStatus}
@@ -80,7 +82,7 @@ const Mendaftar = () => {
                 TransitionComponent={Slide}
                 fullWidth
                 selectedAppoitment={selectedAppoitment}
-                status="menunggu"
+                status="diperiksa"
                 open={open}
                 fetchAppoitment={fetchAppointment}
                 onClose={() => {
@@ -106,4 +108,4 @@ const Mendaftar = () => {
         </Dashboard>
     )
 }
-export default Mendaftar
+export default Menunggu

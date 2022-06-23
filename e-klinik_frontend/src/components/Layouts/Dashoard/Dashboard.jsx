@@ -146,7 +146,7 @@ const Dashboard = (props) => {
                         <ListItemText primary="Data Pasien" />
                     </Button>
                 </ListItem>
-                {(user?.role === 'resepsionis' || user?.role === 'dokter') && (
+                {user?.role === 'resepsionis' && (
                     <React.Fragment>
                         <ListItem>
                             <Button color="primary"
@@ -163,53 +163,49 @@ const Dashboard = (props) => {
                         </ListItem>
                         <Collapse in={collapsePendaftaran} timeout="auto" unmountOnExit>
                             <List component="div" disablePadding>
-                                {user?.role === 'resepsionis' && (
-                                    <React.Fragment>
-                                        <ListItem sx={{ pl: 4 }}>
-                                            <Button color="primary"
-                                                component="span"
-                                                sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
-                                                startIcon={<AppRegistration />}
-                                                onClick={() => { navigate('/resepsionis/pendaftaran/mendaftar') }}
-                                                variant={`${props.halaman === 'Pasien Mendaftar' ? 'contained' : 'text'}`}
+                                <ListItem sx={{ pl: 4 }}>
+                                    <Button color="primary"
+                                        component="span"
+                                        sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                                        startIcon={<AppRegistration />}
+                                        onClick={() => { navigate('/resepsionis/pendaftaran/mendaftar') }}
+                                        variant={`${props.halaman === 'Pasien Mendaftar' ? 'contained' : 'text'}`}
 
-                                            >
-                                                <ListItemText primary="Mendaftar" />
-                                            </Button>
-                                        </ListItem>
-                                        <ListItem sx={{ pl: 4 }}>
-                                            <Button color="primary"
-                                                component="span"
-                                                sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
-                                                startIcon={<PendingActions />}
-                                            >
-                                                <ListItemText primary="Menunggu" />
-                                            </Button>
-                                        </ListItem>
-                                    </React.Fragment>
-                                )}
-                                {user?.role === 'dokter' && (
-                                    <ListItem sx={{ pl: 4 }}>
-                                        <Button color="primary"
-                                            component="span"
-                                            sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
-                                            startIcon={<MedicalServices />}
-                                        >
-                                            <ListItemText primary="Diperiksa" />
-                                        </Button>
-                                    </ListItem>
-                                )}
-                                {user?.role === 'resepsionis' && (
-                                    <ListItem sx={{ pl: 4 }}>
-                                        <Button color="primary"
-                                            component="span"
-                                            sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
-                                            startIcon={<Favorite />}
-                                        >
-                                            <ListItemText primary="Selesai" />
-                                        </Button>
-                                    </ListItem>
-                                )}
+                                    >
+                                        <ListItemText primary="Mendaftar" />
+                                    </Button>
+                                </ListItem>
+                                <ListItem sx={{ pl: 4 }}>
+                                    <Button color="primary"
+                                        component="span"
+                                        sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                                        startIcon={<PendingActions />}
+                                        onClick={() => { navigate('/resepsionis/pendaftaran/menunggu') }}
+                                        variant={`${props.halaman === 'Pasien Menunggu' ? 'contained' : 'text'}`}
+                                    >
+                                        <ListItemText primary="Menunggu" />
+                                    </Button>
+                                </ListItem>
+                                <ListItem sx={{ pl: 4 }}>
+                                    <Button color="primary"
+                                        component="span"
+                                        sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                                        startIcon={<MedicalServices />}
+                                        onClick={() => { navigate('/resepsionis/pendaftaran/diperiksa') }}
+                                        variant={`${props.halaman === 'Pasien Diperiksa' ? 'contained' : 'text'}`}
+                                    >
+                                        <ListItemText primary="Diperiksa" />
+                                    </Button>
+                                </ListItem>
+                                <ListItem sx={{ pl: 4 }}>
+                                    <Button color="primary"
+                                        component="span"
+                                        sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                                        startIcon={<Favorite />}
+                                    >
+                                        <ListItemText primary="Selesai" />
+                                    </Button>
+                                </ListItem>
                             </List>
                         </Collapse>
                     </React.Fragment>

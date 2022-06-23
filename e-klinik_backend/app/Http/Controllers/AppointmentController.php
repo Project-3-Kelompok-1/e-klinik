@@ -71,9 +71,43 @@ class AppointmentController extends Controller
         //     ->select('appointment.id', 'appointment.waktu_pesan', 'pasien.nik', 'pasien.nama_depan', 'pasien.nama_belakang', 'pasien.usia', 'pasien.jenis_kelamin')
         //     ->get();
 
-        $appointment = Pasien::where('nik', 'LIKE', '%' . $request->search . '%')
+        $appointment = Pasien::where('nama_depan', 'LIKE', '%' . $request->search . '%')
             ->join('appointment', 'pasien.nik', '=', 'appointment.nik_pasien')
             ->where('appointment.status', 'mendaftar')
+            ->join('jadwal_praktek', 'appointment.id_jadwal_praktek', '=', 'jadwal_praktek.id')
+            ->whereDate('jadwal_praktek.tgl_praktek', Carbon::today())
+            ->select('appointment.id', 'appointment.waktu_pesan', 'pasien.nik', 'pasien.nama_depan', 'pasien.nama_belakang', 'pasien.usia', 'pasien.jenis_kelamin')
+            ->get();
+        // 2. Response 
+        $response = [
+            'status' => 'success',
+            'todays_appointment' => $appointment
+        ];
+        return $this->responseSuccess($response);
+    }
+    public function todays_waiting(Request $request)
+    {
+        // 1. Cari data appointment yang memiliki status menunggu dan jadwal hari ini
+        $appointment = Pasien::where('nama_depan', 'LIKE', '%' . $request->search . '%')
+            ->join('appointment', 'pasien.nik', '=', 'appointment.nik_pasien')
+            ->where('appointment.status', 'menunggu')
+            ->join('jadwal_praktek', 'appointment.id_jadwal_praktek', '=', 'jadwal_praktek.id')
+            ->whereDate('jadwal_praktek.tgl_praktek', Carbon::today())
+            ->select('appointment.id', 'appointment.waktu_pesan', 'pasien.nik', 'pasien.nama_depan', 'pasien.nama_belakang', 'pasien.usia', 'pasien.jenis_kelamin')
+            ->get();
+        // 2. Response 
+        $response = [
+            'status' => 'success',
+            'todays_appointment' => $appointment
+        ];
+        return $this->responseSuccess($response);
+    }
+    public function todays_checking(Request $request)
+    {
+        // 1. Cari data appointment yang memiliki status diperiksa dan jadwal hari ini
+        $appointment = Pasien::where('nama_depan', 'LIKE', '%' . $request->search . '%')
+            ->join('appointment', 'pasien.nik', '=', 'appointment.nik_pasien')
+            ->where('appointment.status', 'diperiksa')
             ->join('jadwal_praktek', 'appointment.id_jadwal_praktek', '=', 'jadwal_praktek.id')
             ->whereDate('jadwal_praktek.tgl_praktek', Carbon::today())
             ->select('appointment.id', 'appointment.waktu_pesan', 'pasien.nik', 'pasien.nama_depan', 'pasien.nama_belakang', 'pasien.usia', 'pasien.jenis_kelamin')

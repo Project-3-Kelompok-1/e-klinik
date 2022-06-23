@@ -33,9 +33,10 @@ const TabelPasienFragment = ({ row, setSelectedPasien, handleClickOpen, handleCl
                 <TableCell align="right">
                     {row.id_user == 0 && (
                         <Box
-                            sx={{ display: 'flex', gap: '0.1rem', justifyContent: 'flex-end' }}
+                            sx={{ display: 'flex', gap: '0.2rem', justifyContent: 'flex-end' }}
                         >
                             <Button
+                                size="small"
                                 component="span"
                                 color="error"
                                 variant="contained"
@@ -49,6 +50,7 @@ const TabelPasienFragment = ({ row, setSelectedPasien, handleClickOpen, handleCl
                                 Hapus
                             </Button>
                             <Button
+                                size="small"
                                 component="span"
                                 color="warning"
                                 variant="contained"
@@ -60,6 +62,15 @@ const TabelPasienFragment = ({ row, setSelectedPasien, handleClickOpen, handleCl
                                 }}
                             >
                                 Edit
+                            </Button>
+                            <Button
+                                size="small"
+                                component="span"
+                                color="info"
+                                variant="contained"
+                                sx={{ textTransform: 'capitalize' }}
+                            >
+                                Daftarkan
                             </Button>
                         </Box>
                     )}

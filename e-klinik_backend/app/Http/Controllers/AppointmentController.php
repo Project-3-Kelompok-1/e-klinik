@@ -22,6 +22,12 @@ class AppointmentController extends Controller
      * 3. menunggu transaksi
      * 4. selesai
      */
+    private $status = [
+        'mendaftar',
+        'menunggu',
+        'diperiksa',
+        'selesai'
+    ];
     private function validation($request)
     {
         return Validator::make($request->all(), [
@@ -149,5 +155,65 @@ class AppointmentController extends Controller
             ];
             return $this->responseFailed($response);
         }
+    }
+    public function change_status($id)
+    {
+
+        // 1. Cari data appointment berdasarkan id
+        $appointment = Appointment::where('id', $id)->where('status', '<>', 'selesai')->first();
+        // Jika appointment tidak ditemukan
+        if (!$appointment) {
+            $response = [
+                'status' => 'fialed',
+                'message' => 'Appointment tidak ditemukan'
+            ];
+            return $this->responseFailed($response);
+        }
+        // 2. Ubah status menjadi menunggu
+        foreach ($this->status as $key => $value) {
+            if ($value === $appointment->status) {
+                $appointment->update([
+                    'status' => $this->status[$key + 1]
+                ]);
+                break;
+            }
+        }
+        // 3. Response
+        $response = [
+            'status' => 'success',
+            'message' => 'Appointment berhasil di update'
+        ];
+        return $this->responseSuccess($response);
+    }
+    public function update_status(Request $request, $id)
+    {
+        // 1. Validasi request
+        $validation = Validator::make($request->all(), [
+            'status' => ['required', 'string', Rule::in(['menunggu', 'diperiksa', 'selesai'])]
+        ]);
+        // Jika validasi gagal
+        if ($validation->fails()) {
+            return $this->responseErrorMessages($validation->messages());
+        }
+        // 2. Cari appointment berdasarkan id
+        $appointment = Appointment::find($id);
+        // Jika appointment tidak ditemukan
+        if (!$appointment) {
+            $response = [
+                'status' => 'failed',
+                'message' => 'Appointmetn tidak ditemukan'
+            ];
+            return $this->responseFailed($response);
+        }
+        // 3. Update appointment
+        $appointment->update([
+            'status' => $request->status
+        ]);
+        // 4. Response
+        $response = [
+            'status' => 'success',
+            'message' => 'Status berhasil di update'
+        ];
+        return $this->responseSuccess($response);
     }
 }

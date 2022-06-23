@@ -28,11 +28,21 @@ class PasienController extends Controller
     {
         // 1. Cari semua data pasien
         if ($request->search) {
-            $pasien = Pasien::where('nik', 'LIKE', '%' . $request->search . '%')
+            $pasien = Pasien::with('appointment')
+                ->where('nik', 'LIKE', '%' . $request->search . '%')
                 ->orWhere(DB::raw("CONCAT(`nama_depan`, ' ', `nama_belakang`)"), 'LIKE', '%' . $request->search . '%')
                 ->get();
         } else {
-            $pasien = Pasien::all();
+            // $pasien = Pasien::with('appointment')->get();
+            $pasien = Pasien::with('appointment')->get();
+        }
+        foreach ($pasien as $key => $value) {
+            $value->total_mendaftar = 0;
+            foreach ($value->appointment as $appointment) {
+                if ($appointment->status !== 'selesai') {
+                    $value->total_mendaftar++;
+                }
+            }
         }
         // 2. Lakukan response
         $response = [

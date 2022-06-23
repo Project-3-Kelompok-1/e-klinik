@@ -57,9 +57,6 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dokter" element={<Dokter />} />
-          <Route path="/doctors" element={<Doctors />} />
-          <Route path="/calenders" element={<Calenders />} />
           {/* Resepsionis */}
           <Route path="/resepsionis" element={<Resepsionis />} />
           <Route path="/resepsionis/data-dokter" element={<DataDokter />} />
@@ -72,6 +69,12 @@ const App = () => {
           {/* Pasien */}
           <Route path="/profile" element={<HomePage />} />
           <Route path="/pendaftaran" element={<Pendaftaran />} />
+          {/* Dokter */}
+          <Route path="/dokter" element={<Dokter />} />
+          <Route path="/dokter/data-dokter" element={<DataDokter />} />
+          <Route path="/dokter/jadwal-praktek" element={<JadwalPraktek />} />
+          <Route path="/dokter/pemeriksaan" element={<Diperiksa />} />
+
           {/* <Route path="/test/customize-schedule-form" element={<CustomizeScheduleForm />} /> */}
         </Routes>
       </UserContext.Provider>

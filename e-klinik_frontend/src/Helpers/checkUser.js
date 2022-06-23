@@ -38,3 +38,11 @@ export const isResepsionis = () => {
         return false
     }
 }
+export const isDokter = () => {
+    if (user && user.role === 'dokter') {
+        return getRole(user?.token)
+    }
+    else {
+        return false
+    }
+}

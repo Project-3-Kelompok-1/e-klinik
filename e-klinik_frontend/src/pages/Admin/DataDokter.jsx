@@ -24,6 +24,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import ProfileDokter from "../../components/Popover/ProfileDokter";
 import HapusDokter from "../../components/Forms/HapusDokter";
 import FormDokter from "../../components/Forms/FormDokter";
+import { isDokter, isResepsionis } from "../../Helpers/checkUser";
 const useStyles = makeStyles({
     paper: {
         backgroundColor: blue['700']
@@ -102,17 +103,10 @@ const DataDokter = (props) => {
         fetchData();
     }, [fetchUrl])
     useEffect(() => {
-        let unMounted = false;
-        if (user?.role !== 'resepsionis' || !user) {
-            navigate('/login');
-            return () => {
-                unMounted = true
-            }
+        if (!isResepsionis() && !isDokter()) {
+            navigate('/');
         }
     }, [user])
-    const createData = (nama_lengkap, alamat, jenis_kelamin, no_hp) => {
-        return { nama_lengkap, alamat, jenis_kelamin, no_hp };
-    }
     return (
         <>
             {/* Component Snackbar alert */}

@@ -1,5 +1,6 @@
 import { Dialog, Slide, Snackbar, Toolbar } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Alert from "../../../components/Feedback/Alert";
 import DaftarkanPasien from "../../../components/Forms/DaftarkanPasien";
 import FormPasien from "../../../components/Forms/FormPasien";
@@ -8,11 +9,13 @@ import Dashboard from "../../../components/Layouts/Dashoard/Dashboard";
 import AdminPageNavigation from "../../../components/Navigations/AdminPageNavigation";
 import TabelPasien from "../../../components/Tables/TabelPasien";
 import { DOMAIN_SERVER } from "../../../config";
+import { isResepsionis } from "../../../Helpers/checkUser";
 import { UserContext } from "../../../Helpers/Context";
 import useAlert from "../../../Helpers/CustomHooks/useAlert";
 import useDialog from "../../../Helpers/CustomHooks/useDialog";
 const DataPasien = () => {
     const { user } = useContext(UserContext)
+    const navigate = useNavigate()
     const [pasien, setPasien] = useState([])
     const [selectedPasien, setSelectedPasien] = useState(null)
     const [open, handleClickOpen, handleClose] = useDialog()
@@ -58,6 +61,11 @@ const DataPasien = () => {
     useEffect(() => {
         fetchPasien()
     }, [search])
+    useEffect(() => {
+        if (!isResepsionis()) {
+            navigate('/')
+        }
+    }, [user])
     return (
         <>
             <Dashboard

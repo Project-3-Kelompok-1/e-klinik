@@ -72,82 +72,89 @@ const Dashboard = (props) => {
                         <ListItemText primary="Dashboard" />
                     </Button>
                 </ListItem>
-                <ListItem>
-                    <Button color="primary"
-                        component="span"
-                        sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
-                        variant={`${props.halaman === 'Data Dokter' ? 'contained' : 'text'}`}
-                        startIcon={<HealthAndSafety />}
-                        onClick={() => {
-                            if (user.role === 'resepsionis') {
-                                navigate('/resepsionis/data-dokter')
-                            }
-                            else if (user.role === 'dokter') {
-                                navigate('/dokter/data-dokter')
-                            }
-                        }}
-                    >
-                        <ListItemText primary="Data Dokter" />
-                    </Button>
-                </ListItem>
-                <ListItem>
-                    <Button
-                        color='primary'
-                        component="span"
-                        sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
-                        variant={`${props.halaman === 'Jadwal Praktek' ? 'contained' : 'text'}`}
-                        startIcon={<EventAvailable />}
-                        onClick={() => {
-                            if (user.role === 'resepsionis') {
-                                navigate('/resepsionis/jadwal-praktek')
-                            }
-                            else if (user.role === 'dokter') {
-                                navigate('/dokter/jadwal-praktek')
-                            }
-                        }}
-                    >
-                        <ListItemText primary="Jadwal Praktek" />
-                    </Button>
-                </ListItem>
-                <ListItem>
-                    <Button
-                        color='primary'
-                        component="span"
-                        sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
-                        variant={`${props.halaman === 'Data Obat' ? 'contained' : 'text'}`}
-                        startIcon={<Medication />}
-                        onClick={() => {
-                            if (user.role === 'resepsionis') {
-                                navigate('/resepsionis/data-obat')
-                            }
-                            else if (user.role === 'dokter') {
-                                navigate('/dokter/data-obat')
-                            }
-                        }}
-                    >
-                        <ListItemText primary="Data Obat" />
-                    </Button>
-                </ListItem>
-                <ListItem>
-                    <Button color="primary"
-                        component="span"
-                        sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
-                        variant={`${props.halaman === 'Data Pasien' ? 'contained' : 'text'}`}
-                        startIcon={<Group />}
-                        onClick={() => {
-                            if (user.role === 'resepsionis') {
-                                navigate('/resepsionis/data-pasien')
-                            }
-                            else if (user.role === 'dokter') {
-                                navigate('/dokter/data-pasien')
-                            }
-                        }}
-                    >
-                        <ListItemText primary="Data Pasien" />
-                    </Button>
-                </ListItem>
+
+                {(user?.role === 'dokter' || user?.role === 'resepsionis') && (
+                    <React.Fragment>
+                        <ListItem>
+                            <Button color="primary"
+                                component="span"
+                                sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                                variant={`${props.halaman === 'Data Dokter' ? 'contained' : 'text'}`}
+                                startIcon={<HealthAndSafety />}
+                                onClick={() => {
+                                    if (user.role === 'resepsionis') {
+                                        navigate('/resepsionis/data-dokter')
+                                    }
+                                    else if (user.role === 'dokter') {
+                                        navigate('/dokter/data-dokter')
+                                    }
+                                }}
+                            >
+                                <ListItemText primary="Data Dokter" />
+                            </Button>
+                        </ListItem>
+                        <ListItem>
+                            <Button
+                                color='primary'
+                                component="span"
+                                sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                                variant={`${props.halaman === 'Jadwal Praktek' ? 'contained' : 'text'}`}
+                                startIcon={<EventAvailable />}
+                                onClick={() => {
+                                    if (user.role === 'resepsionis') {
+                                        navigate('/resepsionis/jadwal-praktek')
+                                    }
+                                    else if (user.role === 'dokter') {
+                                        navigate('/dokter/jadwal-praktek')
+                                    }
+                                }}
+                            >
+                                <ListItemText primary="Jadwal Praktek" />
+                            </Button>
+                        </ListItem>
+                    </React.Fragment>
+                )}
+                {(user?.role === 'apoteker' || user?.role === 'resepsionis') && (
+                    <ListItem>
+                        <Button
+                            color='primary'
+                            component="span"
+                            sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                            variant={`${props.halaman === 'Data Obat' ? 'contained' : 'text'}`}
+                            startIcon={<Medication />}
+                            onClick={() => {
+                                if (user.role === 'resepsionis') {
+                                    navigate('/resepsionis/data-obat')
+                                }
+                                else if (user.role === 'apoteker') {
+                                    navigate('/apoteker/data-obat')
+                                }
+                            }}
+                        >
+                            <ListItemText primary="Data Obat" />
+                        </Button>
+                    </ListItem>
+                )}
                 {user?.role === 'resepsionis' && (
                     <React.Fragment>
+                        <ListItem>
+                            <Button color="primary"
+                                component="span"
+                                sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                                variant={`${props.halaman === 'Data Pasien' ? 'contained' : 'text'}`}
+                                startIcon={<Group />}
+                                onClick={() => {
+                                    if (user.role === 'resepsionis') {
+                                        navigate('/resepsionis/data-pasien')
+                                    }
+                                    else if (user.role === 'dokter') {
+                                        navigate('/dokter/data-pasien')
+                                    }
+                                }}
+                            >
+                                <ListItemText primary="Data Pasien" />
+                            </Button>
+                        </ListItem>
                         <ListItem>
                             <Button color="primary"
                                 component="span"
@@ -210,7 +217,19 @@ const Dashboard = (props) => {
                         </Collapse>
                     </React.Fragment>
                 )}
-
+                {user?.role === 'dokter' && (
+                    <ListItem>
+                        <Button color="primary"
+                            component="span"
+                            sx={{ textTransform: 'none', gap: '1.5rem', width: '100%', paddingX: '1rem' }}
+                            variant={`${props.halaman === 'Pasien Diperiksa' ? 'contained' : 'text'}`}
+                            startIcon={<HealthAndSafety />}
+                            onClick={() => navigate('/dokter/pemeriksaan')}
+                        >
+                            <ListItemText primary="Pemeriksaan" />
+                        </Button>
+                    </ListItem>
+                )}
             </List>
             <Divider />
         </div>

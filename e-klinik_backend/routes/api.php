@@ -40,11 +40,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/pasien/profile', [PasienController::class, 'store']);
     Route::get('/pasien/profile', [PasienController::class, 'show']);
     Route::delete('/pasien', [PasienController::class, 'destroy'])->middleware('isAdmin');
-    
+
     // Kelola dokter
-    Route::post("/tambah_dokter", [DokterController::class, 'add']);
-    Route::delete('/dokter/hapus/{id}', [DokterController::class, 'destroy']);
-    Route::post('/dokter/update/{id}', [DokterController::class, 'update']);
+
+    Route::middleware('isAdmin')->group(function () {
+        Route::post("/tambah_dokter", [DokterController::class, 'add']);
+        Route::delete('/dokter/hapus/{id}', [DokterController::class, 'destroy']);
+        Route::post('/dokter/update/{id}', [DokterController::class, 'update']);
+    });
 
     Route::get('/data-obat', [ObatController::class, 'index'])->middleware('isAdmin');
     Route::middleware('resepsionis')->group(function () {
@@ -59,7 +62,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/data-obat/delete/{id}', [ObatController::class, 'destroy']);
         Route::delete('/data-obat/delete', [ObatController::class, 'deleteSelected']);
         Route::post('/data-obat/update/{id}', [ObatController::class, 'update']);
-
     });
     // Appointment
     Route::get('/appointment/todays_registration', [AppointmentController::class, 'todays_registration'])->middleware('isAdmin');
@@ -67,12 +69,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/appointment/todays_checking', [AppointmentController::class, 'todays_checking'])->middleware('isAdmin');
     Route::patch('/appointment/update_status/{id}', [AppointmentController::class, 'update_status'])->middleware('isAdmin');
     Route::post('/appointment/offline_registration', [AppointmentController::class, 'offline_registration'])->middleware('resepsionis');
-    
+    Route::delete('/appointment/{id}', [AppointmentController::class, 'destroy']);
+
     // Route::post('/appointment', [AppointmentController::class, 'store'])->middleware('isPasien');
     Route::middleware('isPasien')->group(function () {
         Route::get('/appointment', [AppointmentController::class, 'index']);
         Route::post('/appointment', [AppointmentController::class, 'store']);
-        Route::delete('/appointment/{id}', [AppointmentController::class, 'destroy']);
     });
 });
 

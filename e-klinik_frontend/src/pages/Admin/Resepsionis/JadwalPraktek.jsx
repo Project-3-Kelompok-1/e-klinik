@@ -28,6 +28,7 @@ import BooleanEditorForm from "../../../components/Calender/BooleanEditorForm";
 import useTheme from "@mui/material/styles/useTheme";
 import { CircularProgress } from "@mui/material";
 import RecurrenceLayoutForm from "../../../components/Calender/RecurrenceLayout";
+import { isDokter, isResepsionis } from "../../../Helpers/checkUser";
 
 const url = {
     index: DOMAIN_SERVER + '/api/jadwal-praktek',
@@ -92,12 +93,8 @@ const JadwalPraktek = () => {
         }
     }, [dokter])
     useEffect(() => {
-        let unMounted = false;
-        if (user?.role !== 'resepsionis' || !user) {
+        if (!isResepsionis() && !isDokter()) {
             navigate('/');
-            return () => {
-                unMounted = true
-            }
         }
     }, [user])
     useEffect(() => {

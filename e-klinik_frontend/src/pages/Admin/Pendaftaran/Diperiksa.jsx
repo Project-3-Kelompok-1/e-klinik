@@ -1,14 +1,16 @@
-import { Snackbar, Toolbar } from "@mui/material";
+import { Slide, Snackbar, Toolbar } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Alert from "../../../components/Feedback/Alert";
+import HapusAppointment from "../../../components/Forms/HapusAppointment";
 import Dashboard from "../../../components/Layouts/Dashoard/Dashboard";
 import AdminPageNavigation from "../../../components/Navigations/AdminPageNavigation";
 import PasienDiperiksa from "../../../components/Tables/PasienDiperiksa";
 import { DOMAIN_SERVER } from "../../../config";
-import { isResepsionis } from "../../../Helpers/checkUser";
+import { isDokter, isResepsionis } from "../../../Helpers/checkUser";
 import { UserContext } from "../../../Helpers/Context";
 import useAlert from "../../../Helpers/CustomHooks/useAlert";
+import useDialog from "../../../Helpers/CustomHooks/useDialog";
 const Diperiksa = () => {
     // State Managements
     const { user } = useContext(UserContext)
@@ -17,6 +19,7 @@ const Diperiksa = () => {
     const [appointment, setAppointment] = useState([])
     const [selectedAppoitment, setSelectedAppointment] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [openDelete, handleClickDelete, handleCancelDelete] = useDialog()
     const [
         openAlert,
         severity,
@@ -53,7 +56,7 @@ const Diperiksa = () => {
 
     // Lifecycles
     useEffect(() => {
-        if (!isResepsionis()) {
+        if (!isResepsionis() && !isDokter()) {
             navigate('/')
         }
     }, [user])
@@ -76,6 +79,20 @@ const Diperiksa = () => {
                 appointment={appointment}
                 loading={loading}
                 setSelectedAppointment={setSelectedAppointment}
+                handleClickDelete={handleClickDelete}
+            />
+            <HapusAppointment
+                TransitionComponent={Slide}
+                fullWidth
+                selectedAppointment={selectedAppoitment}
+                open={openDelete}
+                fetchAppointment={fetchAppointment}
+                onClose={() => {
+                    handleCancelDelete(() => {
+                        setSelectedAppointment(null)
+                    })
+                }}
+                handleShowAlert={handleShowAlert}
             />
             <Snackbar
                 open={openAlert}

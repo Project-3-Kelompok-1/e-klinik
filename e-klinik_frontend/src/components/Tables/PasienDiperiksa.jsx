@@ -2,7 +2,7 @@ import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, Tabl
 import React, { useContext } from "react";
 import { UserContext } from "../../Helpers/Context";
 import useTablePagination from "../../Helpers/CustomHooks/useTablePagination";
-const PasienDiperiksa = ({ appointment, loading, handleClickDiagnostic, handleClickDelete, handleClickStatus }) => {
+const PasienDiperiksa = ({ appointment, setSelectedAppointment, loading, handleClickDiagnostic, handleClickDelete, handleClickStatus }) => {
     const { user } = useContext(UserContext)
     const [
         page,
@@ -64,14 +64,40 @@ const PasienDiperiksa = ({ appointment, loading, handleClickDiagnostic, handleCl
                                     </TableCell>
                                     {user?.role === 'dokter' && (
                                         <TableCell align="right">
-                                            <Button
-                                                size="small"
-                                                component="span"
-                                                variant="contained"
-                                                sx={{ textTransform: 'capitalize' }}
-                                            >
-                                                Diperiksa
-                                            </Button>
+                                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '0.2rem', justifyContent: 'flex-end' }}>
+                                                <Button
+                                                    size="small"
+                                                    component="span"
+                                                    variant="contained"
+                                                    sx={{ textTransform: 'capitalize' }}
+                                                    color="error"
+                                                    onClick={() => {
+                                                        handleClickDelete(() => {
+                                                            setSelectedAppointment(row)
+                                                        })
+                                                    }}
+                                                >
+                                                    Hapus
+                                                </Button>
+                                                <Button
+                                                    size="small"
+                                                    component="span"
+                                                    variant="contained"
+                                                    sx={{ textTransform: 'capitalize' }}
+                                                    color="warning"
+                                                >
+                                                    Diagnosis
+                                                </Button>
+                                                <Button
+                                                    size="small"
+                                                    component="span"
+                                                    variant="contained"
+                                                    sx={{ textTransform: 'capitalize' }}
+                                                    color="info"
+                                                >
+                                                    Selesai
+                                                </Button>
+                                            </Box>
                                         </TableCell>
                                     )}
                                 </TableRow>

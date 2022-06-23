@@ -28,13 +28,18 @@ export default function Login() {
         let isCancelled = false;
         if (user?.role === 'resepsionis') {
             navigate('/resepsionis');
-
             return () => {
                 isCancelled = true
             }
         }
         else if (user?.role === 'pasien') {
             navigate('/profile')
+            return () => {
+                isCancelled = true
+            }
+        }
+        else if (user?.role === 'dokter') {
+            navigate('/dokter')
             return () => {
                 isCancelled = true
             }

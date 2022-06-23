@@ -1,7 +1,8 @@
-import { Snackbar, Toolbar } from "@mui/material";
+import { Slide, Snackbar, Toolbar } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Alert from "../../../components/Feedback/Alert";
+import ChangeAppointmentStatus from "../../../components/Forms/ChangeAppointmentStatus";
 import Dashboard from "../../../components/Layouts/Dashoard/Dashboard";
 import AdminPageNavigation from "../../../components/Navigations/AdminPageNavigation";
 import PasienMendaftar from "../../../components/Tables/PasienMendaftar";
@@ -9,10 +10,13 @@ import { DOMAIN_SERVER } from "../../../config";
 import { isResepsionis } from "../../../Helpers/checkUser";
 import { UserContext } from "../../../Helpers/Context";
 import useAlert from "../../../Helpers/CustomHooks/useAlert";
+import useDialog from "../../../Helpers/CustomHooks/useDialog";
 const Mendaftar = () => {
     const [appointment, setAppointment] = useState([])
+    const [selectedAppoitment, setSelectedAppointment] = useState(null)
     const [loading, setLoading] = useState(false)
     const [search, setSearch] = useState('')
+    const [open, handleClickStatus, handleClose] = useDialog()
     const [
         openAlert,
         severity,
@@ -62,7 +66,6 @@ const Mendaftar = () => {
             <AdminPageNavigation
                 halaman="Pasien Mendaftar"
                 link="/resepsionis/pendaftaran/mendaftar"
-                // pageData="Appointment"
                 search
                 value={search}
                 onChange={handleChangeSearch}
@@ -70,6 +73,22 @@ const Mendaftar = () => {
             <PasienMendaftar
                 appointment={appointment}
                 loading={loading}
+                handleClickStatus={handleClickStatus}
+                setSelectedAppointment={setSelectedAppointment}
+            />
+            <ChangeAppointmentStatus
+                TransitionComponent={Slide}
+                fullWidth
+                selectedAppoitment={selectedAppoitment}
+                status="menunggu"
+                open={open}
+                fetchAppoitment={fetchAppointment}
+                onClose={() => {
+                    handleClose(() => {
+                        setSelectedAppointment(null)
+                    })
+                }}
+                handleShowAlert={handleShowAlert}
             />
             <Snackbar
                 open={openAlert}

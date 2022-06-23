@@ -1,39 +1,7 @@
 import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
 import React from "react";
 import useTablePagination from "../../Helpers/CustomHooks/useTablePagination";
-const createData = (nik, nama_depan, nama_belakang, usia, jenis_kelamin) => {
-    return {
-        nik,
-        nama_lengkap: `${nama_depan} ${nama_belakang}`,
-        usia,
-        jenis_kelamin
-    }
-}
-const rows = [
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-    createData("1234567890", "Mar'i", "Adhari", 21, "Laki-laki"),
-
-]
-const PasienMendaftar = ({ appointment, loading }) => {
+const PasienMendaftar = ({ appointment, loading, handleClickStatus, setSelectedAppointment }) => {
     const [
         page,
         rowsPerPage,
@@ -75,7 +43,7 @@ const PasienMendaftar = ({ appointment, loading }) => {
                     ) : (
                         <TableBody>
                             {appointment?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, i) => (
-                                <TableRow>
+                                <TableRow key={row.id}>
                                     <TableCell />
                                     <TableCell>
                                         {row.nik}
@@ -94,6 +62,11 @@ const PasienMendaftar = ({ appointment, loading }) => {
                                             component="span"
                                             variant="contained"
                                             sx={{ textTransform: 'capitalize' }}
+                                            onClick={() => {
+                                                handleClickStatus(() => {
+                                                    setSelectedAppointment(row)
+                                                })
+                                            }}
                                         >
                                             Menunggu
                                         </Button>

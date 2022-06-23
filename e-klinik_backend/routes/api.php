@@ -59,10 +59,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/data-obat/delete/{id}', [ObatController::class, 'destroy']);
         Route::delete('/data-obat/delete', [ObatController::class, 'deleteSelected']);
         Route::post('/data-obat/update/{id}', [ObatController::class, 'update']);
+
     });
-    
     // Appointment
     Route::get('/appointment/todays_registration', [AppointmentController::class, 'todays_registration'])->middleware('isAdmin');
+    Route::patch('/appointment/update_status/{id}', [AppointmentController::class, 'update_status'])->middleware('isAdmin');
     // Route::post('/appointment', [AppointmentController::class, 'store'])->middleware('isPasien');
     Route::middleware('isPasien')->group(function () {
         Route::get('/appointment', [AppointmentController::class, 'index']);

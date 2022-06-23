@@ -44,18 +44,20 @@ const AdminPageNavigation = ({ handleShowForm, halaman, link, pageData, search, 
                         </OutlinedInput>
                     </FormControl>
                 )}
-                <Button
-                    variant="contained"
-                    component="span"
-                    endIcon={<AddCircleOutline />}
-                    sx={{
-                        textTransform: 'capitalize',
-                        gap: '0.5rem'
-                    }}
-                    onClick={handleShowForm}
-                >
-                    Tambah {pageData}
-                </Button>
+                {pageData && (
+                    <Button
+                        variant="contained"
+                        component="span"
+                        endIcon={<AddCircleOutline />}
+                        sx={{
+                            textTransform: 'capitalize',
+                            gap: '0.5rem'
+                        }}
+                        onClick={handleShowForm}
+                    >
+                        Tambah {pageData}
+                    </Button>
+                )}
             </Box>
 
         </Box>

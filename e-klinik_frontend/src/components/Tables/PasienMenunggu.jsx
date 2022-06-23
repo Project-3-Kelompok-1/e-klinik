@@ -1,7 +1,7 @@
 import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
 import React from "react";
 import useTablePagination from "../../Helpers/CustomHooks/useTablePagination";
-const PasienMendaftar = ({ appointment, loading, handleClickStatus, setSelectedAppointment }) => {
+const PasienMenunggu = ({ appointment, loading, handleClickStatus, setSelectedAppointment }) => {
     const [
         page,
         rowsPerPage,
@@ -69,7 +69,7 @@ const PasienMendaftar = ({ appointment, loading, handleClickStatus, setSelectedA
                                                 })
                                             }}
                                         >
-                                            Menunggu
+                                            Diperiksa
                                         </Button>
                                     </TableCell>
                                 </TableRow>
@@ -92,4 +92,4 @@ const PasienMendaftar = ({ appointment, loading, handleClickStatus, setSelectedA
         </Box>
     )
 }
-export default PasienMendaftar
+export default PasienMenunggu

@@ -1,7 +1,9 @@
 import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../../Helpers/Context";
 import useTablePagination from "../../Helpers/CustomHooks/useTablePagination";
-const PasienMendaftar = ({ appointment, loading, handleClickStatus, setSelectedAppointment }) => {
+const PasienDiperiksa = ({ appointment, loading, handleClickDiagnostic, handleClickDelete, handleClickStatus }) => {
+    const { user } = useContext(UserContext)
     const [
         page,
         rowsPerPage,
@@ -27,9 +29,12 @@ const PasienMendaftar = ({ appointment, loading, handleClickStatus, setSelectedA
                             <TableCell align="right">
                                 Usia
                             </TableCell>
-                            <TableCell align="right">
-                                Aksi
-                            </TableCell>
+                            {user?.role === 'dokter' && (
+                                <TableCell align="right">
+                                    Aksi
+                                </TableCell>
+                            )}
+
                         </TableRow>
                     </TableHead>
                     {loading ? (
@@ -57,21 +62,18 @@ const PasienMendaftar = ({ appointment, loading, handleClickStatus, setSelectedA
                                     <TableCell align="right">
                                         {row.usia}
                                     </TableCell>
-                                    <TableCell align="right">
-                                        <Button
-                                            size="small"
-                                            component="span"
-                                            variant="contained"
-                                            sx={{ textTransform: 'capitalize' }}
-                                            onClick={() => {
-                                                handleClickStatus(() => {
-                                                    setSelectedAppointment(row)
-                                                })
-                                            }}
-                                        >
-                                            Menunggu
-                                        </Button>
-                                    </TableCell>
+                                    {user?.role === 'dokter' && (
+                                        <TableCell align="right">
+                                            <Button
+                                                size="small"
+                                                component="span"
+                                                variant="contained"
+                                                sx={{ textTransform: 'capitalize' }}
+                                            >
+                                                Diperiksa
+                                            </Button>
+                                        </TableCell>
+                                    )}
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -92,4 +94,4 @@ const PasienMendaftar = ({ appointment, loading, handleClickStatus, setSelectedA
         </Box>
     )
 }
-export default PasienMendaftar
+export default PasienDiperiksa

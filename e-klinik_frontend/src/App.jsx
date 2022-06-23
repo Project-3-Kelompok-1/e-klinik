@@ -18,6 +18,8 @@ import HomePage from "./pages/Pasien/HomePage";
 import Pendaftaran from "./pages/Pasien/Pendaftaran";
 import DataPasien from "./pages/Admin/Resepsionis/DataPasien";
 import Mendaftar from "./pages/Admin/Pendaftaran/Mendaftar";
+import Menunggu from "./pages/Admin/Pendaftaran/Menunggu";
+import Diperiksa from "./pages/Admin/Pendaftaran/Diperiksa";
 const App = () => {
   const [user, setUser] = useState(() => {
     return JSON.parse(localStorage.getItem('user'))
@@ -65,11 +67,12 @@ const App = () => {
           <Route path="/resepsionis/data-obat" element={<DataObat />} />
           <Route path="/resepsionis/data-pasien" element={<DataPasien />} />
           <Route path="/resepsionis/pendaftaran/mendaftar" element={<Mendaftar />} />
+          <Route path="/resepsionis/pendaftaran/menunggu" element={<Menunggu />} />
+          <Route path="/resepsionis/pendaftaran/diperiksa" element={<Diperiksa />} />
           {/* Pasien */}
           <Route path="/profile" element={<HomePage />} />
           <Route path="/pendaftaran" element={<Pendaftaran />} />
           {/* <Route path="/test/customize-schedule-form" element={<CustomizeScheduleForm />} /> */}
-
         </Routes>
       </UserContext.Provider>
     </BrowserRouter>

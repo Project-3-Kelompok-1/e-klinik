@@ -216,4 +216,46 @@ class AppointmentController extends Controller
         ];
         return $this->responseSuccess($response);
     }
+    public function offline_registration(Request $request)
+    {
+        // Algoritma mendaftarkan pasien oleh resepsionis
+        // 1. Validasi request
+        $validation = Validator::make($request->all(), [
+            'nik_pasien' => ['required', Rule::exists('pasien', 'nik')]
+        ]);
+        // Jika validasi gagal
+        if ($validation->fails()) {
+            $response = [
+                'status' => 'failed',
+                'message' => 'Pasien tidak ditemukan'
+            ];
+            return $this->responseFailed($response);
+        }
+        // 2. Cari jadwal hari ini dan jam selesai setalah jam sekarang <= ambil yang pertama ditemukan
+        $jadwal = JadwalPraktek::where('status', 'kerja')
+            ->whereDate('tgl_praktek', Carbon::today())
+            ->whereDate('jam_selesai', '>=', Carbon::now()->format('H:i:s'))
+            ->first();
+        // Jadwal praktek tidak ditemukan
+        if (!$jadwal) {
+            $response = [
+                'status' => 'failed',
+                'message' => 'Jadwal tidak tersedia'
+            ];
+            return $this->responseFailed($response);
+        }
+        // 3. Buat appointment berdasarkan jadwal hari ini
+        $request->request->add([
+            'id_jadwal_praktek' => $jadwal->id,
+            'waktu_pesan' => Carbon::today(),
+            'status' => 'menunggu'
+        ]);
+        Appointment::create($request->all());
+        // 4. Response
+        $response = [
+            'status' => 'success',
+            'message' => 'Berhasil mendaftarkan pasien'
+        ];
+        return $this->responseSuccess($response);
+    }
 }

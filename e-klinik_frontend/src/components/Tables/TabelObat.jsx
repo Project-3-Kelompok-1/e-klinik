@@ -81,7 +81,6 @@ const columns = (handleShowDelete, handleShowForm) => {
 const TabelObat = ({ dataObat, loading, handleShowDelete, handleShowForm }) => {
     const [selectedData, setSelectedData] = useState([]);
     const removeSelection = (target) => {
-        // setSelectedData(selectedData => selectedData.filter(x => x.id !== item))
         setSelectedData(selectedData.filter(item => item.id !== target))
     }
     const pushSelection = (item) => {

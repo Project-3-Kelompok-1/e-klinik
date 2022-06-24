@@ -29,7 +29,6 @@ const Diperiksa = () => {
         handleShowAlert,
         handleHideAlert
     ] = useAlert()
-
     // Handle functions
     const handleChangeSearch = (e) => {
         setSearch(e.target.value)

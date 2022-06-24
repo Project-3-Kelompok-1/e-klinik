@@ -93,9 +93,12 @@ const JadwalPraktek = () => {
         }
     }, [dokter])
     useEffect(() => {
-        if (!isResepsionis() && !isDokter()) {
-            navigate('/');
-        }
+        (async () => {
+            const result = await isResepsionis() || await isDokter()
+            if (!result || !user) {
+                navigate('/')
+            }
+        })()
     }, [user])
     useEffect(() => {
         setResources([

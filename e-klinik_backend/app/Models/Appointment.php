@@ -20,4 +20,8 @@ class Appointment extends Model
     {
         return $this->belongsTo(JadwalPraktek::class, 'id_jadwal_praktek', 'id');
     }
+    public function pemeriksaan()
+    {
+        return $this->hasOne(Pemeriksaan::class, 'id_appointment', 'id');
+    }
 }

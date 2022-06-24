@@ -199,14 +199,16 @@ const Penanganan = ({ ...restProps }) => {
 const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert, ...restProps }) => {
     const [activeStep, setActiveStep] = useState(0)
     const handleNext = () => {
-        setActiveStep((prevActiveState) => prevActiveState + 1);
+        if (activeStep < steps.length -1) {
+            setActiveStep((prevActiveState) => prevActiveState + 1);
+        }
     }
     const handleBack = () => {
         setActiveStep((prevActiveState) => prevActiveState - 1);
     }
     const handleReset = () => {
         setActiveStep(0);
-        // restProps.onClose()
+        restProps.onClose()
     }
     useEffect(() => {
         console.log(activeStep);
@@ -250,7 +252,7 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
                 >
                     Kembali
                 </Button>
-                {activeStep === steps.length - 1 ? (
+                {activeStep === steps.length -1 ? (
                     <Button
                         component="span"
                         color="info"
@@ -266,7 +268,7 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
                         variant="contained"
                         onClick={handleNext}
                     >
-                        Selnutnya
+                        Selnjutnya
                     </Button>
                 )}
             </DialogActions>

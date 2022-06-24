@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\DiagnosisController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\JadwalPraktekController;
 use App\Http\Controllers\ObatController;
@@ -55,6 +56,9 @@ Route::middleware('auth:sanctum')->group(function () {
         // Kelola pemeriksaan
         Route::get('/pemeriksaan', [PemeriksaanController::class, 'index']);
         Route::get('/pemeriksaan/{id_appointment}', [PemeriksaanController::class, 'show']);
+        Route::post('/pemeriksaan/validation', [PemeriksaanController::class, 'validation']);
+        Route::post('/pemeriksaan', [PemeriksaanController::class, 'store']);
+        Route::post('/pemeriksaan/diagnosis/validation', [DiagnosisController::class, 'validation']);
     });
 
     Route::get('/data-obat', [ObatController::class, 'index'])->middleware('isAdmin');

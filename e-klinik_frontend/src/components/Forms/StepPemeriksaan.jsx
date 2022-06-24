@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
-import { FormControl, Grid, InputLabel, MenuItem, Select, TextField, useMediaQuery } from "@mui/material";
+import { FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField, useMediaQuery } from "@mui/material";
 import DatePicker from "./DatePicker";
 import TimePicker from "./TimePicker";
+import { helperTextPemeriksaan } from "../../Helpers/HelperText";
 
-const StepPemeriksaan = ({ pemeriksaan, setPemeriksaan, ...restProps }) => {
+const StepPemeriksaan = ({ pemeriksaan, setPemeriksaan, onSubmit, errorPemerikasaan, ...restProps }) => {
     const theme = useTheme()
-    const fullScreen = useMediaQuery(theme.breakpoints.down('mdu'))
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
+    useEffect(() => {
+        console.log(pemeriksaan);
+    }, [pemeriksaan])
     return (
         <React.Fragment>
             <Grid container spacing={2} sx={{ marginBottom: '1rem' }}>
@@ -15,6 +19,7 @@ const StepPemeriksaan = ({ pemeriksaan, setPemeriksaan, ...restProps }) => {
                         fullScreen={fullScreen}
                         label="Tanggal periksa"
                         readOnly
+                        onChange={(e) => { }}
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -22,6 +27,7 @@ const StepPemeriksaan = ({ pemeriksaan, setPemeriksaan, ...restProps }) => {
                         fullScreen={fullScreen}
                         label="Jam periksa"
                         readOnly
+                        onChange={(e) => { }}
                     />
                 </Grid>
             </Grid>
@@ -41,12 +47,18 @@ const StepPemeriksaan = ({ pemeriksaan, setPemeriksaan, ...restProps }) => {
                                 }
                             })
                         }}
+                        error={errorPemerikasaan?.planning}
                     />
+                    {!errorPemerikasaan?.planning && <FormHelperText>{helperTextPemeriksaan.planning}</FormHelperText>}
+                    {errorPemerikasaan?.planning.map((error) => (
+                        <FormHelperText error>{error}</FormHelperText>
+                    ))}
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <FormControl
                         required
                         fullWidth
+                        error={errorPemerikasaan?.keputusan}
                     >
                         <InputLabel id="keputusan">Keputusan</InputLabel>
                         <Select
@@ -65,6 +77,10 @@ const StepPemeriksaan = ({ pemeriksaan, setPemeriksaan, ...restProps }) => {
                         >
                             <MenuItem value={"Berobat jalan"}>Berobat jalan</MenuItem>
                         </Select>
+                        {!errorPemerikasaan?.keputusan && <FormHelperText>{helperTextPemeriksaan.keputusan}</FormHelperText>}
+                        {errorPemerikasaan?.keputusan.map((error) => (
+                            <FormHelperText error>{error}</FormHelperText>
+                        ))}
                     </FormControl>
                 </Grid>
             </Grid>
@@ -86,7 +102,12 @@ const StepPemeriksaan = ({ pemeriksaan, setPemeriksaan, ...restProps }) => {
                                 }
                             })
                         }}
+                        error={errorPemerikasaan?.amnanesta}
                     />
+                    {!errorPemerikasaan?.amnanesta && <FormHelperText>{helperTextPemeriksaan.amnanesta}</FormHelperText>}
+                    {errorPemerikasaan?.amnanesta.map((error) => (
+                        <FormHelperText error>{error}</FormHelperText>
+                    ))}
                 </Grid>
             </Grid>
         </React.Fragment>

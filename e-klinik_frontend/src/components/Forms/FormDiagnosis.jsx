@@ -29,9 +29,37 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
     const [penanganan, setPenanganan] = useState({ tindakan_penanganan: '' })
     const [obat, setObat] = useState(initialObat)
 
-    const handleNext = () => {
+    // Error messages
+    const [errorPemerikasaan, setErrorPemeriksaan] = useState()
+
+    // Handle Validations
+    const handleValidationPemeriksaan = async () => {
+        const params = {
+            method: 'POST',
+            body: JSON.stringify(pemeriksaan),
+            headers: new Headers({
+                'Content-type': 'application/json; charset=UTF-8',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${user.token}`
+            })
+        }
+        let response = await fetch(DOMAIN_SERVER + '/api/pemeriksaan/validation', params)
+        response = await response.json()
+        if (response.errors) {
+            setErrorPemeriksaan(response.errors)
+            return false
+        }
+        return true
+    }
+
+    const handleNext = async () => {
         if (activeStep < steps.length - 1) {
-            setActiveStep((prevActiveState) => prevActiveState + 1);
+            if (activeStep === 0) {
+                const result = await handleValidationPemeriksaan()
+                if (result) {
+                    setActiveStep((prevActiveState) => prevActiveState + 1);
+                }
+            }
         }
     }
     const handleBack = () => {
@@ -91,11 +119,15 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
             fetchPemeriksaan(selectedAppointment.id)
         }
     }, [selectedAppointment])
+    useEffect(() => {
+        console.log(errorPemerikasaan);
+    }, [errorPemerikasaan])
     return (
         <Dialog
             {...restProps}
             onClose={() => {
                 setActiveStep(0)
+                setErrorPemeriksaan()
                 setPemeriksaan(initialPemeriksaan)
                 setDiagnosis(initialDiagnosis)
                 setPenanganan({ tindakan_penanganan: '' })
@@ -120,6 +152,7 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
                     <StepPemeriksaan
                         pemeriksaan={pemeriksaan}
                         setPemeriksaan={setPemeriksaan}
+                        errorPemerikasaan={errorPemerikasaan}
                     />
                 )}
                 {activeStep === 1 && (

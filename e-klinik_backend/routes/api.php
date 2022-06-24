@@ -59,6 +59,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/pemeriksaan/validation', [PemeriksaanController::class, 'validation']);
         Route::post('/pemeriksaan', [PemeriksaanController::class, 'store']);
         Route::post('/pemeriksaan/diagnosis/validation', [DiagnosisController::class, 'validation']);
+        Route::post('/pemeriksaan/diagnosis', [DiagnosisController::class, 'store']);
     });
 
     Route::get('/data-obat', [ObatController::class, 'index'])->middleware('isAdmin');

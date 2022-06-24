@@ -31,7 +31,7 @@ class PemeriksaanController extends Controller
         if ($validation->fails()) {
             return $this->responseErrorMessages($validation->messages());
         }
-        return false;
+        return true;
     }
     public function show($id_appoinment)
     {
@@ -49,7 +49,7 @@ class PemeriksaanController extends Controller
         // 1. Validasi request
         $validation = $this->validation($request);
         // Jika validasi gagal
-        if ($validation) {
+        if ($validation !== true) {
             return $validation;
         }
         // 2. Create or Update data pemeriksaan
@@ -57,14 +57,15 @@ class PemeriksaanController extends Controller
             'tgl_periksa' => Carbon::now()->format('Y-m-d'),
             'jam_periksa' => Carbon::now()->format('H:i:s'),
         ]);
-        Pemeriksaan::updateOrCreate(
+        $pemeriksaan = Pemeriksaan::updateOrCreate(
             ['id_appointment' => $request->id_appointment],
             $request->all()
         );
         // 3. Response 
         $response = [
             'status' => 'success',
-            'message' => 'Berhasil menyimpan data pemeriksaan'
+            'message' => 'Berhasil menyimpan data pemeriksaan',
+            'id' => $pemeriksaan->id
         ];
         return $this->responseSuccess($response);
     }

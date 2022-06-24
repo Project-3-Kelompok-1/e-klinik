@@ -8,9 +8,6 @@ import { helperTextPemeriksaan } from "../../Helpers/HelperText";
 const StepPemeriksaan = ({ pemeriksaan, setPemeriksaan, onSubmit, errorPemerikasaan, ...restProps }) => {
     const theme = useTheme()
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'))
-    useEffect(() => {
-        console.log(pemeriksaan);
-    }, [pemeriksaan])
     return (
         <React.Fragment>
             <Grid container spacing={2} sx={{ marginBottom: '1rem' }}>
@@ -50,7 +47,7 @@ const StepPemeriksaan = ({ pemeriksaan, setPemeriksaan, onSubmit, errorPemerikas
                         error={errorPemerikasaan?.planning}
                     />
                     {!errorPemerikasaan?.planning && <FormHelperText>{helperTextPemeriksaan.planning}</FormHelperText>}
-                    {errorPemerikasaan?.planning.map((error) => (
+                    {errorPemerikasaan?.planning?.map((error) => (
                         <FormHelperText error>{error}</FormHelperText>
                     ))}
                 </Grid>
@@ -78,7 +75,7 @@ const StepPemeriksaan = ({ pemeriksaan, setPemeriksaan, onSubmit, errorPemerikas
                             <MenuItem value={"Berobat jalan"}>Berobat jalan</MenuItem>
                         </Select>
                         {!errorPemerikasaan?.keputusan && <FormHelperText>{helperTextPemeriksaan.keputusan}</FormHelperText>}
-                        {errorPemerikasaan?.keputusan.map((error) => (
+                        {errorPemerikasaan?.keputusan?.map((error) => (
                             <FormHelperText error>{error}</FormHelperText>
                         ))}
                     </FormControl>
@@ -105,7 +102,7 @@ const StepPemeriksaan = ({ pemeriksaan, setPemeriksaan, onSubmit, errorPemerikas
                         error={errorPemerikasaan?.amnanesta}
                     />
                     {!errorPemerikasaan?.amnanesta && <FormHelperText>{helperTextPemeriksaan.amnanesta}</FormHelperText>}
-                    {errorPemerikasaan?.amnanesta.map((error) => (
+                    {errorPemerikasaan?.amnanesta?.map((error) => (
                         <FormHelperText error>{error}</FormHelperText>
                     ))}
                 </Grid>

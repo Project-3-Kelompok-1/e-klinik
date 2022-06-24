@@ -1,7 +1,7 @@
-import { Box, Button, Grid, TextField } from "@mui/material";
+import { Box, Button, FormHelperText, Grid, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-const StepDiagnosis = ({ diagnosis, setDiagnosis, ...restProps }) => {
+const StepDiagnosis = ({ diagnosis, setDiagnosis, errorDiagnosis, ...restProps }) => {
     const handlePush = () => {
         const newElement = { id: uuidv4(), diagnosa_pasien: '' }
         setDiagnosis(oldArray => [...oldArray, newElement])
@@ -28,10 +28,15 @@ const StepDiagnosis = ({ diagnosis, setDiagnosis, ...restProps }) => {
                             fullWidth
                             value={item.diagnosa_pasien}
                             onChange={handleChangeDiagnosis(index)}
+                            error={errorDiagnosis && errorDiagnosis[`diagnosa_pasien.${index}`]}
                         />
+                        {!errorDiagnosis[`diagnosa_pasien.${index}`] && <FormHelperText>Wajib diisi</FormHelperText>}
+                        {errorDiagnosis[`diagnosa_pasien.${index}`] && errorDiagnosis[`diagnosa_pasien.${index}`].map((error)=>(
+                            <FormHelperText error>{error}</FormHelperText>
+                        ))}
                         <Box sx={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
                             <Button
-                                component="span"
+                                compsonent="span"
                                 variant="contained"
                                 onClick={handlePush}
                             >

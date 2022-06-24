@@ -31,9 +31,10 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
 
     // Error messages
     const [errorPemerikasaan, setErrorPemeriksaan] = useState()
+    const [errorDiagnosis, setErrorDiagnosis] = useState([])
 
     // Handle Validations
-    const handleValidationPemeriksaan = async () => {
+    const handleSubmitPemeriksaan = async () => {
         const params = {
             method: 'POST',
             body: JSON.stringify(pemeriksaan),
@@ -43,22 +44,63 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
                 'Authorization': `Bearer ${user.token}`
             })
         }
-        let response = await fetch(DOMAIN_SERVER + '/api/pemeriksaan/validation', params)
+        let response = await fetch(DOMAIN_SERVER + '/api/pemeriksaan', params)
         response = await response.json()
-        if (response.errors) {
+        if (response?.errors) {
             setErrorPemeriksaan(response.errors)
+            return false
+        }
+        if (response?.id) {
+            setPemeriksaan((prevState) => {
+                return {
+                    ...prevState,
+                    id: response.id
+                }
+            })
+        }
+        
+        return true
+    }
+    const handleSubmitDiagnosis = async () => {
+        let diagnosa_pasien = []
+        diagnosis.forEach(element => {
+            diagnosa_pasien.push(element.diagnosa_pasien)
+        });
+        const params = {
+            method: 'POST',
+            body: JSON.stringify({ diagnosa_pasien, id_pemeriksaan: pemeriksaan?.id }),
+            headers: new Headers({
+                'Content-type': 'application/json; charset=UTF-8',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${user.token}`
+            })
+        }
+        let response = await fetch(DOMAIN_SERVER + "/api/pemeriksaan/diagnosis", params)
+        response = await response.json()
+        if (response?.errors) {
+            setErrorDiagnosis(response.errors)
             return false
         }
         return true
     }
 
+    const resetErrorMessages = () => {
+        setErrorPemeriksaan()
+        setErrorDiagnosis([])
+    }
     const handleNext = async () => {
         if (activeStep < steps.length - 1) {
+            let result = false
             if (activeStep === 0) {
-                const result = await handleValidationPemeriksaan()
-                if (result) {
-                    setActiveStep((prevActiveState) => prevActiveState + 1);
-                }
+                result = await handleSubmitPemeriksaan()
+
+            }
+            else if (activeStep == 1) {
+                result = await handleSubmitDiagnosis()
+            }
+            if (result) {
+                setActiveStep((prevActiveState) => prevActiveState + 1);
+                resetErrorMessages()
             }
         }
     }
@@ -119,19 +161,16 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
             fetchPemeriksaan(selectedAppointment.id)
         }
     }, [selectedAppointment])
-    useEffect(() => {
-        console.log(errorPemerikasaan);
-    }, [errorPemerikasaan])
     return (
         <Dialog
             {...restProps}
             onClose={() => {
                 setActiveStep(0)
-                setErrorPemeriksaan()
                 setPemeriksaan(initialPemeriksaan)
                 setDiagnosis(initialDiagnosis)
                 setPenanganan({ tindakan_penanganan: '' })
                 setObat(initialObat)
+                resetErrorMessages()
                 restProps.onClose()
             }}
             scroll="paper"
@@ -159,6 +198,7 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
                     <StepDiagnosis
                         diagnosis={diagnosis}
                         setDiagnosis={setDiagnosis}
+                        errorDiagnosis={errorDiagnosis}
                     />
                 )}
                 {activeStep === 2 && (

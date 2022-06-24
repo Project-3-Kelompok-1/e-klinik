@@ -20,7 +20,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/pemeriksaan', [PemeriksaanController::class, 'index']);
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -46,9 +47,14 @@ Route::middleware('auth:sanctum')->group(function () {
     // Kelola dokter
 
     Route::middleware('isAdmin')->group(function () {
+        // Kelola data dokter
         Route::post("/tambah_dokter", [DokterController::class, 'add']);
         Route::delete('/dokter/hapus/{id}', [DokterController::class, 'destroy']);
         Route::post('/dokter/update/{id}', [DokterController::class, 'update']);
+
+        // Kelola pemeriksaan
+        Route::get('/pemeriksaan', [PemeriksaanController::class, 'index']);
+        Route::get('/pemeriksaan/{id_appointment}', [PemeriksaanController::class, 'show']);
     });
 
     Route::get('/data-obat', [ObatController::class, 'index'])->middleware('isAdmin');

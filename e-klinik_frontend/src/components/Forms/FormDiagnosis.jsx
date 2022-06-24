@@ -1,224 +1,106 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, Grid, InputLabel, MenuItem, Select, Step, StepLabel, Stepper, TextField, Typography, useMediaQuery } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import DatePicker from "./DatePicker";
-import { useTheme } from "@mui/material/styles";
-import TimePicker from "./TimePicker";
+import React, { useContext, useEffect, useState } from "react";
+import StepDiagnosis from "./StepDiagnosis";
+import StepPemeriksaan from "./StepPemeriksaan";
+import StepPenanganan from "./StepPenanganan";
 import { v4 as uuidv4 } from "uuid";
+import { UserContext } from "../../Helpers/Context";
+import { DOMAIN_SERVER } from "../../config";
 const steps = ["Pemeriksaan", "Diagnosis", "Tindakan Penanganan"]
-const StepPemeriksaan = ({ pemeriksaan, setPemeriksaan, ...restProps }) => {
-    const theme = useTheme()
-    const fullScreen = useMediaQuery(theme.breakpoints.down('mdu'))
-    return (
-        <React.Fragment>
-            <Grid container spacing={2} sx={{ marginBottom: '1rem' }}>
-                <Grid item xs={12} md={6}>
-                    <DatePicker
-                        fullScreen={fullScreen}
-                        label="Tanggal periksa"
-                        readOnly
-                    />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <TimePicker
-                        fullScreen={fullScreen}
-                        label="Jam periksa"
-                        readOnly
-                    />
-                </Grid>
-            </Grid>
-            <Grid container spacing={2} sx={{ marginBottom: '1rem' }}>
-                <Grid item xs={12} md={6}>
-                    <TextField
-                        label="Planning"
-                        variant="outlined"
-                        required
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <FormControl
-                        required
-                        fullWidth
-                    >
-                        <InputLabel id="keputusan">Keputusan</InputLabel>
-                        <Select
-                            labelId="keputusan"
-                            label="Keputusan"
-                            required
-                        >
-                            <MenuItem value={"Berobat jalan"}>Berobat jalan</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-            </Grid>
-            <Grid container spacing={2} sx={{ marginBottom: '1rem' }}>
-                <Grid item xs={12}>
-                    <TextField
-                        label="Amnanesta"
-                        variant="outlined"
-                        required
-                        fullWidth
-                        multiline
-                        rows={4}
-                    />
-                </Grid>
-            </Grid>
-        </React.Fragment>
-    )
-}
-const StepDiagnosis = ({ ...restProps }) => {
-    const [diagnosis, setDiagnosis] = useState([
-        { id: uuidv4(), diagnosa_pasien: '' },
-    ])
-    const handlePush = () => {
-        const newElement = { id: uuidv4(), diagnosa_pasien: '' }
-        setDiagnosis(oldArray => [...oldArray, newElement])
-    }
-    const handleRemove = (id) => {
-        if (diagnosis.length > 1) {
-            setDiagnosis(diagnosis.filter(item => item.id != id))
-        }
-    }
-    return (
-        <React.Fragment>
-            {diagnosis?.map((item, index) => (
-                <Grid container spacing={2} sx={{ marginBottom: '1rem' }} key={index}>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Diagnosis"
-                            variant="outlined"
-                            required
-                            fullWidth
-                        />
-                        <Box sx={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-                            <Button
-                                component="span"
-                                variant="contained"
-                                onClick={handlePush}
-                            >
-                                Tambah
-                            </Button>
-                            <Button
-                                component="span"
-                                variant="contained"
-                                color="error"
-                                onClick={() => handleRemove(item.id)}
-                            >
-                                Hapus
-                            </Button>
-                        </Box>
-                    </Grid>
-                </Grid>
-            ))}
-        </React.Fragment>
-    )
-}
-const Penanganan = ({ ...restProps }) => {
-    const [obat, setObat] = useState([{ id: uuidv4(), nama_obat: '', jumlah_obat: 0, dosis_konsumsi: '' }])
-    const handlePush = () => {
-        const newElement = { id: uuidv4(), nama_obat: '', jumlah_obat: 0, dosis_konsumsi: '' }
-        setObat(oldArray => [...oldArray, newElement])
-    }
-    const handleRemove = (id) => {
-        if (obat.length > 1) {
-            setObat(obat.filter(item => item.id != id))
-        }
-    }
-    return (
-        <React.Fragment>
-            <Grid container spacing={2} sx={{ marginBottom: '1rem' }}>
-                <Grid item xs={12}>
-                    <TextField
-                        label="Tindakan penanganan"
-                        variant="outlined"
-                        required
-                        fullWidth
-                        multiline
-                        rows={4}
-                    />
-                </Grid>
-            </Grid>
-            <Grid container>
-                <Grid item>
-                    <Typography variant="h6" sx={{ fontSize: '1.125rem' }}>
-                        Obat
-                    </Typography>
-                </Grid>
-            </Grid>
-            {obat?.map((item, index) => (
-                <Grid container spacing={2} sx={{ marginBottom: '1rem' }} key={index}>
-                    <Grid item xs={12} md={6}>
-                        <TextField
-                            label="Nama obat"
-                            variant="outlined"
-                            required
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <TextField
-                            label="Jumlah obat"
-                            variant="outlined"
-                            required
-                            fullWidth
-                            type="number"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Dosis konsumsi"
-                            variant="outlined"
-                            required
-                            fullWidth
-                            multiline
-                            rows={3}
-                        />
-                        <Box sx={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-                            <Button
-                                component="span"
-                                variant="contained"
-                                onClick={handlePush}
-                            >
-                                Tambah
-                            </Button>
-                            <Button
-                                component="span"
-                                variant="contained"
-                                color="error"
-                                onClick={() => handleRemove(item.id)}
-                            >
-                                Hapus
-                            </Button>
-                        </Box>
-                    </Grid>
-                </Grid>
-            ))}
-        </React.Fragment>
-    )
-}
 const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert, ...restProps }) => {
+    // initial state management
+    const initialPemeriksaan = {
+        id: null,
+        id_appointment: selectedAppointment?.id,
+        tgl_periksa: new Date(),
+        jam_periksa: new Date(),
+        planning: '',
+        keputusan: '',
+        amnanesta: ''
+    }
+    const initialDiagnosis = [{ id: uuidv4(), diagnosa_pasien: '' }]
+    const initialObat = [{ id: uuidv4(), nama_obat: '', jumlah_obat: 0, dosis_konsumsi: '' }]
+
+    // declaration state
+    const { user } = useContext(UserContext)
     const [activeStep, setActiveStep] = useState(0)
+    const [pemeriksaan, setPemeriksaan] = useState(initialPemeriksaan)
+    const [diagnosis, setDiagnosis] = useState(initialDiagnosis)
+    const [penanganan, setPenanganan] = useState({ tindakan_penanganan: '' })
+    const [obat, setObat] = useState(initialObat)
+
     const handleNext = () => {
-        if (activeStep < steps.length -1) {
+        if (activeStep < steps.length - 1) {
             setActiveStep((prevActiveState) => prevActiveState + 1);
         }
     }
     const handleBack = () => {
-        setActiveStep((prevActiveState) => prevActiveState - 1);
+        if (activeStep > 0) {
+            setActiveStep((prevActiveState) => prevActiveState - 1);
+        }
     }
     const handleReset = () => {
         setActiveStep(0);
         restProps.onClose()
     }
+    const fetchPemeriksaan = (id) => {
+        const params = {
+            headers: new Headers({
+                'Authorization': `Bearer ${user.token}`
+            })
+        }
+        fetch(DOMAIN_SERVER + '/api/pemeriksaan/' + id, params)
+            .then(response => response.json())
+            .then(data => {
+                if (data.pemeriksaan) {
+                    setPemeriksaan((prevState) => {
+                        return {
+                            ...prevState,
+                            id: data.pemeriksaan.id,
+                            id_appointment: data.pemeriksaan.id_appointment,
+                            tgl_periksa: data.pemeriksaan.tgl_periksa,
+                            jam_periksa: data.pemeriksaan.jam_periksa,
+                            planning: data.pemeriksaan.planning,
+                            keputusan: data.pemeriksaan.keputusan,
+                            amnanesta: data.pemeriksaan.amnanesta
+                        }
+                    })
+                    if (data.pemeriksaan.diagnosis.length > 0) {
+                        setDiagnosis(data.pemeriksaan.diagnosis)
+                    }
+                    if (data.pemeriksaan.resep.length > 0) {
+                        setObat(data.pemeriksaan.resep)
+                    }
+                    if (data.pemeriksaan.penanganan_pasien) {
+                        setPenanganan(data.pemeriksaan.penanganan_pasien)
+                    }
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
     useEffect(() => {
-        console.log(activeStep);
-    }, [activeStep])
+        if (selectedAppointment?.id) {
+            setPemeriksaan((prevState) => {
+                return {
+                    ...prevState,
+                    id_appointment: selectedAppointment?.id
+                }
+            })
+            fetchPemeriksaan(selectedAppointment.id)
+        }
+    }, [selectedAppointment])
     return (
         <Dialog
             {...restProps}
             onClose={() => {
-                restProps.onClose()
                 setActiveStep(0)
+                setPemeriksaan(initialPemeriksaan)
+                setDiagnosis(initialDiagnosis)
+                setPenanganan({ tindakan_penanganan: '' })
+                setObat(initialObat)
+                restProps.onClose()
             }}
             scroll="paper"
         >
@@ -235,13 +117,24 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
             </DialogTitle>
             <DialogContent dividers>
                 {activeStep === 0 && (
-                    <StepPemeriksaan />
+                    <StepPemeriksaan
+                        pemeriksaan={pemeriksaan}
+                        setPemeriksaan={setPemeriksaan}
+                    />
                 )}
                 {activeStep === 1 && (
-                    <StepDiagnosis />
+                    <StepDiagnosis
+                        diagnosis={diagnosis}
+                        setDiagnosis={setDiagnosis}
+                    />
                 )}
                 {activeStep === 2 && (
-                    <Penanganan />
+                    <StepPenanganan
+                        penanganan={penanganan}
+                        setPenanganan={setPenanganan}
+                        obat={obat}
+                        setObat={setObat}
+                    />
                 )}
             </DialogContent>
             <DialogActions>
@@ -252,7 +145,7 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
                 >
                     Kembali
                 </Button>
-                {activeStep === steps.length -1 ? (
+                {activeStep === steps.length - 1 ? (
                     <Button
                         component="span"
                         color="info"

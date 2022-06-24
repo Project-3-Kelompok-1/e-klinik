@@ -62,9 +62,12 @@ const DataPasien = () => {
         fetchPasien()
     }, [search])
     useEffect(() => {
-        if (!isResepsionis()) {
-            navigate('/')
-        }
+        (async () => {
+            const result = isResepsionis()
+            if (!result) {
+                navigate('/')
+            }
+        })()
     }, [user])
     return (
         <>

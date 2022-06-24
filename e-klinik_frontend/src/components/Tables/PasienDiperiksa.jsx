@@ -2,7 +2,7 @@ import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, Tabl
 import React, { useContext } from "react";
 import { UserContext } from "../../Helpers/Context";
 import useTablePagination from "../../Helpers/CustomHooks/useTablePagination";
-const PasienDiperiksa = ({ appointment, setSelectedAppointment, loading, handleClickDiagnostic, handleClickDelete, handleClickStatus }) => {
+const PasienDiperiksa = ({ appointment, setSelectedAppointment, loading, handleClickDiagnosis, handleClickDelete, handleClickStatus }) => {
     const { user } = useContext(UserContext)
     const [
         page,
@@ -85,6 +85,11 @@ const PasienDiperiksa = ({ appointment, setSelectedAppointment, loading, handleC
                                                     variant="contained"
                                                     sx={{ textTransform: 'capitalize' }}
                                                     color="warning"
+                                                    onClick={() => {
+                                                        handleClickDiagnosis(() => {
+                                                            setSelectedAppointment(row)
+                                                        })
+                                                    }}
                                                 >
                                                     Diagnosis
                                                 </Button>

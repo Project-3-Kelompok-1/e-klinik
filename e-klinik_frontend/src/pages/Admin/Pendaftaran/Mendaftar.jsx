@@ -27,9 +27,12 @@ const Mendaftar = () => {
     const { user } = useContext(UserContext)
     const navigate = useNavigate()
     useEffect(() => {
-        if (!isResepsionis()) {
-            navigate('/')
-        }
+        (async () => {
+            const result = await isResepsionis()
+            if (!result) {
+                navigate('/')
+            }
+        })()
     }, [user])
     const handleChangeSearch = (e) => {
         setSearch(e.target.value)

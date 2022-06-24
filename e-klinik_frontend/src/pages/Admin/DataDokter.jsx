@@ -103,9 +103,12 @@ const DataDokter = (props) => {
         fetchData();
     }, [fetchUrl])
     useEffect(() => {
-        if (!isResepsionis() && !isDokter()) {
-            navigate('/');
-        }
+        (async () => {
+            const result = await isResepsionis() || await isDokter()
+            if (!result) {
+                navigate('/')
+            }
+        })()
     }, [user])
     return (
         <>

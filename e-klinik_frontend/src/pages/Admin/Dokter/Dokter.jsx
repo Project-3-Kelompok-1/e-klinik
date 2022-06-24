@@ -6,17 +6,20 @@ import { isDokter } from "../../../Helpers/checkUser";
 import { UserContext } from "../../../Helpers/Context";
 
 const Dokter = () => {
-    const navigate = useNavigate();
-    const { user } = useContext(UserContext);
-    useEffect(() => {
-      if(!isDokter()){
+  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
+  useEffect(() => {
+    (async () => {
+      const result = await isDokter()
+        if (!result) {
         navigate('/')
       }
-    }, [user])
-    return (
-        <Dashboard halaman="Dashboard Dokter">
-            <Toolbar />
-        </Dashboard>
-    )
+    })()
+  }, [user])
+  return (
+    <Dashboard halaman="Dashboard Dokter">
+      <Toolbar />
+    </Dashboard>
+  )
 }
 export default Dokter;

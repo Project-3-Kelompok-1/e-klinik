@@ -32,9 +32,12 @@ const Menunggu = () => {
     }
 
     useEffect(() => {
-        if (!isResepsionis()) {
-            navigate('/')
-        }
+        (async () => {
+            const result = isResepsionis()
+            if (!result) {
+                navigate('/')
+            }
+        })()
     }, [user])
     const fetchAppointment = () => {
         setLoading(true)

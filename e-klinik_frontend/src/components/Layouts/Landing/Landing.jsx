@@ -1,5 +1,4 @@
-import React, { useContext, useEffect } from "react";
-import { UserContext } from "../../../Helpers/Context";
+import React from "react";
 
 
 // Import CSS Landing Page

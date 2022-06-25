@@ -3,7 +3,6 @@ import React from "react";
 import SelectRepeat from "./SelectRepeat";
 import RadioGroupForm from "./RadioGroupForm";
 const RecurrenceLayoutForm = (props) => {
-    // console.log("Recurrence ", props)
     return <AppointmentForm.RecurrenceLayout {...props} selectComponent={SelectRepeat} radioGroupComponent={RadioGroupForm} />
 }
 export default RecurrenceLayoutForm

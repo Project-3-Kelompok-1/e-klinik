@@ -111,6 +111,7 @@ const Diperiksa = () => {
                         setSelectedAppointment(null)
                     })
                 }}
+                handleShowAlert={handleShowAlert}
             />
             <Snackbar
                 open={openAlert}

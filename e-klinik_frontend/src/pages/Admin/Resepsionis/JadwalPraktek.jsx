@@ -25,7 +25,6 @@ import { useNavigate } from "react-router-dom";
 import BasicLayoutForm from "../../../components/Calender/BasicLayoutForm";
 import TextEditorForm from "../../../components/Calender/TextEditorForm";
 import BooleanEditorForm from "../../../components/Calender/BooleanEditorForm";
-import useTheme from "@mui/material/styles/useTheme";
 import { CircularProgress } from "@mui/material";
 import RecurrenceLayoutForm from "../../../components/Calender/RecurrenceLayout";
 import { isDokter, isResepsionis } from "../../../Helpers/checkUser";
@@ -39,14 +38,13 @@ const url = {
     delete_jadwal: DOMAIN_SERVER + '/api/jadwal-praktek/delete'
 }
 let memberDokter = []
-let severityAlert = "success";
 let alertMessage = "Success";
+const mainResourcesName = 'status'
 const JadwalPraktek = () => {
     const { user } = useContext(UserContext)
     const navigate = useNavigate()
     const [currentDate, setCurrentDate] = useState(new Date())
     const [listJadwal, setListJadwal] = useState()
-    const [mainResourcesName, setMainResourceName] = useState('status')
     const [dokter, setDokter] = useState();
     const [membersDokter, setMembersDokter] = useState([])
     const [appointmentsData, setAppointmentsData] = useState([])
@@ -55,6 +53,7 @@ const JadwalPraktek = () => {
     const [visibleForm, setVisibleForm] = useState(false)
     const [selectedAppointment, setSelectedAppointment] = useState()
     const [openAlert, setOpenAlert] = useState(false)
+    const [severityAlert, setSeverityAlert] = useState('success')
     const showAlert = () => {
         setOpenAlert(true)
     }
@@ -99,7 +98,7 @@ const JadwalPraktek = () => {
                 navigate('/')
             }
         })()
-    }, [user])
+    }, [user, navigate])
     useEffect(() => {
         setResources([
             {
@@ -182,7 +181,7 @@ const JadwalPraktek = () => {
         fetchJadwal()
         if (response.message) {
             if (response?.status === 'success') {
-                severityAlert = "success";
+                setSeverityAlert("success")
                 alertMessage = response.message;
             }
             showAlert();
@@ -245,9 +244,6 @@ const JadwalPraktek = () => {
 
         return formData
     }
-    const deleteJadwal = async (jadwal) => {
-        console.log(jadwal)
-    }
     const commitChanges = ({ added, changed, deleted }) => {
         if (added) {
             postJadwal(createFormData(added), url.create_jadwal)
@@ -276,7 +272,6 @@ const JadwalPraktek = () => {
         // Memliih appointment yang akan di update
         setSelectedAppointment(appointment)
     }
-    const theme = useTheme()
     return (
         <>
             <Snackbar
@@ -286,7 +281,7 @@ const JadwalPraktek = () => {
             >
                 <Alert
                     onClose={hideAlert}
-                    severity="success"
+                    severity={severityAlert}
                     sx={{ width: '100%' }}
                 >
                     {alertMessage}

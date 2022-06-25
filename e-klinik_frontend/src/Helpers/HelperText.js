@@ -2,7 +2,7 @@ const helperTextPasien = {
     nama_depan: 'maksimal 32 karakter',
     nama_belakang: 'maksimal 255 karakter',
     jenis_kelamin: 'jenis kelamin wajib diisi',
-    usia: 'tidak boleh bilangan negatif',
+    usia: 'minimal 1',
     nik: 'masukkan 16 karakter nik anda',
     tempat_lahir: 'maksimal 32 karakter',
     tgl_lahir: 'tanggal lahir harus valid',
@@ -13,4 +13,10 @@ const helperTextPemeriksaan = {
     keputusan: 'tidak boleh kosong',
     amnanesta: 'tidak boleh kosong'
 }
-export { helperTextPasien, helperTextPemeriksaan }
+const helperTextPenanganan = {
+    tindakan_penanganan: 'tidak boleh kosong',
+    nama_obat: 'maksimal 255 karakter',
+    jumlah_obat: 'minimal 1',
+    dosis_konsumsi: 'tidak boleh kosong'
+}
+export { helperTextPasien, helperTextPemeriksaan, helperTextPenanganan }

@@ -32,7 +32,7 @@ const HapusAppointment = ({ selectedAppointment, fetchAppointment, handleShowAle
             {...restProps}
         >
             <DialogTitle>
-                {"Apakah anda yakin>"}
+                {"Apakah anda yakin?"}
             </DialogTitle>
             <DialogContent>
                 <DialogContentText>

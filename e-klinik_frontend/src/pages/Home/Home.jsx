@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../Helpers/Context";
 
 // Import Image Assets
@@ -7,29 +7,19 @@ import bgDoctor from "../assets/img/bg-doctor.png";
 import doctor1 from "../assets/img/doctors/doctor_1.jpg";
 import doctor2 from "../assets/img/doctors/doctor_2.jpg";
 import doctor3 from "../assets/img/doctors/doctor_3.jpg";
-import person1 from "../assets/img/person/person_1.jpg";
-import person2 from "../assets/img/person/person_2.jpg";
-import blog1 from "../assets/img/blog/blog_1.jpg";
-import blog2 from "../assets/img/blog/blog_2.jpg";
-import blog3 from "../assets/img/blog/blog_3.jpg";
-import mobilaApp from "../assets/img/mobile_app.png";
-import googlePlay from "../assets/img/google_play.svg";
-import appStore from "../assets/img/app_store.svg"
 // End Import Image Assets
 
 import Landing from "../../components/Layouts/Landing/Landing";
-import Calenders from "../Calenders/Calenders";
-import { DOMAIN_SERVER } from "../../config";
 import JamPraktek from "../../components/Tables/JamPraktek";
 
 const Home = () => {
-    const { user, setUser } = useContext(UserContext);
+    const { setUser } = useContext(UserContext);
     useEffect(() => {
         document.title = "Klinik Dokter Rezka"
     }, [])
     useEffect(() => {
         setUser(JSON.parse(localStorage.getItem('user')))
-    }, [user])
+    }, [setUser])
 
     return (
         <>

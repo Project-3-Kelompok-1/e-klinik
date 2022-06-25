@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 
 // Import CSS Landing Page
 import "../../../../pages/assets/css/maicons.css";
@@ -15,7 +15,6 @@ const Header = ({ active }) => {
                 <nav className="navbar navbar-expand-lg navbar-light shadow-sm">
                     <div className="container">
                         <a className="navbar-brand" href="#"><span className="text-primary">Dr</span>-Rezka</a>
-
                         <button
                             className="navbar-toggler"
                             type="button"

@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, Grid, InputLabel, MenuItem, Select, Step, StepLabel, Stepper, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Step, StepLabel, Stepper } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import StepDiagnosis from "./StepDiagnosis";
 import StepPemeriksaan from "./StepPemeriksaan";
@@ -32,7 +32,7 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
     // Error messages
     const [errorPemerikasaan, setErrorPemeriksaan] = useState()
     const [errorDiagnosis, setErrorDiagnosis] = useState([])
-
+    const [errorPenanganan, setErrorPenanganan] = useState()
     // Handle Validations
     const handleSubmitPemeriksaan = async () => {
         const params = {
@@ -58,7 +58,7 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
                 }
             })
         }
-        
+
         return true
     }
     const handleSubmitDiagnosis = async () => {
@@ -83,12 +83,53 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
         }
         return true
     }
+    const handleSubmitPenanganan = async () => {
+        let nama_obat = []
+        let jumlah_obat = []
+        let dosis_konsumsi = []
+        obat.forEach(element => {
+            nama_obat.push(element.nama_obat)
+            jumlah_obat.push(element.jumlah_obat)
+            dosis_konsumsi.push(element.dosis_konsumsi)
+        });
+        const formData = {
+            id_pemeriksaan: pemeriksaan?.id,
+            tindakan_penanganan: penanganan.tindakan_penanganan,
+            nama_obat,
+            jumlah_obat,
+            dosis_konsumsi
+        }
+        const params = {
+            method: 'POST',
+            body: JSON.stringify(formData),
+            headers: new Headers({
+                'Content-type': 'application/json; charset=UTF-8',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${user.token}`
+            })
+        }
+        let response = await fetch(DOMAIN_SERVER + '/api/pemeriksaan/penanganan', params)
+        response = await response.json()
+        if (response?.errors) {
+            setErrorPenanganan(response.errors)
+            return false
+        }
+        if (response?.status !== 'success') {
+            handleShowAlert("error", response?.message)
+        }
+        else {
+            handleShowAlert("success", response?.message)
+        }
+        return true
+    }
 
     const resetErrorMessages = () => {
         setErrorPemeriksaan()
         setErrorDiagnosis([])
+        setErrorPenanganan()
     }
     const handleNext = async () => {
+        resetErrorMessages()
         if (activeStep < steps.length - 1) {
             let result = false
             if (activeStep === 0) {
@@ -105,13 +146,18 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
         }
     }
     const handleBack = () => {
+        resetErrorMessages()
         if (activeStep > 0) {
             setActiveStep((prevActiveState) => prevActiveState - 1);
         }
     }
-    const handleReset = () => {
-        setActiveStep(0);
-        restProps.onClose()
+    const handleReset = async () => {
+        resetErrorMessages()
+        const result = await handleSubmitPenanganan()
+        if (result) {
+            setActiveStep(0);
+            restProps.onClose()
+        }
     }
     const fetchPemeriksaan = (id) => {
         const params = {
@@ -161,6 +207,9 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
             fetchPemeriksaan(selectedAppointment.id)
         }
     }, [selectedAppointment])
+    useEffect(() => {
+        console.log(errorPenanganan);
+    }, [errorPenanganan])
     return (
         <Dialog
             {...restProps}
@@ -207,6 +256,7 @@ const FormDiagnosis = ({ selectedAppointment, fetchAppointment, handleShowAlert,
                         setPenanganan={setPenanganan}
                         obat={obat}
                         setObat={setObat}
+                        errorPenanganan={errorPenanganan}
                     />
                 )}
             </DialogContent>

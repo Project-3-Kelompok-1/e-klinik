@@ -1,5 +1,5 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 const Booking = ({ ...restProps }) => {
     return (
         <Dialog

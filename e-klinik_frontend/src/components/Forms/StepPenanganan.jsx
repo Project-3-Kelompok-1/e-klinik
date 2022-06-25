@@ -1,7 +1,8 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, FormHelperText, Grid, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react"
 import { v4 as uuidv4 } from "uuid";
-const StepPenanganan = ({ penanganan, setPenanganan, obat, setObat, ...restProps }) => {
+import { helperTextPenanganan } from "../../Helpers/HelperText";
+const StepPenanganan = ({ penanganan, setPenanganan, obat, setObat, errorPenanganan, ...restProps }) => {
     // const [obat, setObat] = useState([{ id: uuidv4(), nama_obat: '', jumlah_obat: 0, dosis_konsumsi: '' }])
     const handlePush = () => {
         const newElement = { id: uuidv4(), nama_obat: '', jumlah_obat: 0, dosis_konsumsi: '' }
@@ -32,7 +33,12 @@ const StepPenanganan = ({ penanganan, setPenanganan, obat, setObat, ...restProps
                                 }
                             })
                         }}
+                        error={errorPenanganan?.tindakan_penanganan}
                     />
+                    {!errorPenanganan?.tindakan_penanganan && <FormHelperText>{helperTextPenanganan.tindakan_penanganan}</FormHelperText>}
+                    {errorPenanganan?.tindakan_penanganan?.map((error, i) => (
+                        <FormHelperText error>{error}</FormHelperText>
+                    ))}
                 </Grid>
             </Grid>
             <Grid container>
@@ -56,7 +62,15 @@ const StepPenanganan = ({ penanganan, setPenanganan, obat, setObat, ...restProps
                                 newArr[index].nama_obat = e.target.value
                                 setObat(newArr)
                             }}
+                            error={errorPenanganan && errorPenanganan[`nama_obat.${index}`]}
                         />
+                        {errorPenanganan && errorPenanganan[`nama_obat.${index}`] ? (
+                            errorPenanganan[`nama_obat.${index}`].map((error, i) => (
+                                <FormHelperText key={i} error>{error}</FormHelperText>
+                            ))
+                        ) : (
+                            <FormHelperText>{helperTextPenanganan.nama_obat}</FormHelperText>
+                        )}
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <TextField
@@ -71,7 +85,15 @@ const StepPenanganan = ({ penanganan, setPenanganan, obat, setObat, ...restProps
                                 newArr[index].jumlah_obat = e.target.value
                                 setObat(newArr)
                             }}
+                            error={errorPenanganan && errorPenanganan[`jumlah_obat.${index}`]}
                         />
+                        {errorPenanganan && errorPenanganan[`jumlah_obat.${index}`] ? (
+                            errorPenanganan[`jumlah_obat.${index}`].map((error, i) => (
+                                <FormHelperText key={i} error>{error}</FormHelperText>
+                            ))
+                        ) : (
+                            <FormHelperText>{helperTextPenanganan.nama_obat}</FormHelperText>
+                        )}
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
@@ -87,7 +109,15 @@ const StepPenanganan = ({ penanganan, setPenanganan, obat, setObat, ...restProps
                                 newArr[index].dosis_konsumsi = e.target.value
                                 setObat(newArr)
                             }}
+                            error={errorPenanganan && errorPenanganan[`dosis_konsumsi.${index}`]}
                         />
+                        {errorPenanganan && errorPenanganan[`dosis_konsumsi.${index}`] ? (
+                            errorPenanganan[`dosis_konsumsi.${index}`].map((error, i) => (
+                                <FormHelperText key={i} error>{error}</FormHelperText>
+                            ))
+                        ) : (
+                            <FormHelperText>{helperTextPenanganan.nama_obat}</FormHelperText>
+                        )}
                         <Box sx={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
                             <Button
                                 component="span"

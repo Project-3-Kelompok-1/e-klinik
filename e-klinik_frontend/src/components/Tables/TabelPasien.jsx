@@ -1,5 +1,5 @@
 import { Box, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import useTablePagination from "../../Helpers/CustomHooks/useTablePagination";
 import TabelPasienFragment from "../Fragments/TabelPasienFragment";
 

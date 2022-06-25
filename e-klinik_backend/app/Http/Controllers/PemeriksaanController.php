@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Traits\ResponseTrait;
 use App\Models\Appointment;
 use App\Models\Pemeriksaan;
+use App\Models\PenangananPasien;
+use App\Models\Resep;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -30,6 +32,30 @@ class PemeriksaanController extends Controller
         ]);
         if ($validation->fails()) {
             return $this->responseErrorMessages($validation->messages());
+        }
+        return true;
+    }
+    public function validaion_penanganan(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'id_pemeriksaan' => ['required', Rule::exists('pemeriksaan', 'id')],
+            'tindakan_penanganan' => ['required', 'string'],
+            'nama_obat' => ['required', 'array', 'min:1'],
+            'jumlah_obat' => ['required', 'array', 'min:1'],
+            'dosis_konsumsi' => ['required', 'array', 'min:1'],
+            'nama_obat.*' => ['required', 'string', 'max:255'],
+            'jumlah_obat.*' => ['required', 'integer', 'min:1'],
+            'dosis_konsumsi.*' => ['required', 'string'],
+        ]);
+        if ($validation->fails()) {
+            return $this->responseErrorMessages($validation->messages());
+        }
+        if (sizeof($request->nama_obat) != sizeof($request->jumlah_obat) || sizeof($request->nama_obat) != sizeof($request->dosis_konsumsi)) {
+            $response = [
+                'status' => 'failed',
+                'message' => 'Semua kolom resep obat wajib diisi'
+            ];
+            return $this->responseFailed($response, 400);
         }
         return true;
     }
@@ -68,5 +94,36 @@ class PemeriksaanController extends Controller
             'id' => $pemeriksaan->id
         ];
         return $this->responseSuccess($response);
+    }
+    public function penanganan(Request $request)
+    {
+        // 1. Validasi request
+        $isValid = $this->validaion_penanganan($request);
+        // Jika validasi gagal
+        if ($isValid !== true) {
+            return $isValid;
+        }
+        // 2. Menyimpan tindakan penanganan
+        PenangananPasien::updateOrCreate(
+            ['id_pemeriksaan' => $request->id_pemeriksaan],
+            $request->all()
+        );
+        // 3. Menyimpan semua data resep obat
+        // Hapus semua resep berdasarkan id_pemeriksaan
+        Resep::where('id_pemeriksaan', $request->id_pemeriksaan)->delete();
+        for ($i = 0; $i < sizeof($request->nama_obat); $i++) {
+            Resep::create([
+                'id_pemeriksaan' => $request->id_pemeriksaan,
+                'nama_obat' => $request->nama_obat[$i],
+                'jumlah_obat' => $request->jumlah_obat[$i],
+                'dosis_konsumsi' => $request->dosis_konsumsi[$i]
+            ]);
+        }
+        // 4. Response
+        $response = [
+            'status' => 'success',
+            'message' => 'Berhasil menyimpan pemeriksaan'
+        ];
+        return $this->responseSuccess($response);;
     }
 }
